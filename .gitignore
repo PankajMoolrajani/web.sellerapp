@@ -2,3 +2,4 @@
 .mymetadata
 .project
 .tern-project
+.settings/*
