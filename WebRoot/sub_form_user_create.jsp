@@ -9,8 +9,7 @@
 	</div>	
 	<div id="div-form-user-create-category" class="form-group col-sm-12 col-md-4 col-xs-12">			
 		<label for="sel1">Category</label>
-		<select id="input-select-form-user-create-category" class="form-control" > <!-- 'selectpicker show-tick' to be tested-->
-			<option>--------Select Category--------</option>
+		<select id="input-select-form-user-create-category" class="form-control selectpicker" title="--------Select Category-------"> <!-- 'selectpicker show-tick' to be tested-->			
 			<option id="a-create-user-caterogy" data-toggle='modal' data-target='#myModal'><a>CreateCategory</a></option>
 			<option value="demo-category">demo-category</option>
 					<%

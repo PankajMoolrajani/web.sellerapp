@@ -275,12 +275,21 @@ nav.sidebar ul >li > ul > li
 {
 	border:1px dotted gray;padding:10px; margin-top:2%; display:none; border-radius:4px;	
 }
+
 /*...............order_management script OPEN..........................*/
 #div-form-order-create
 {
 	border:1px dotted gray;padding:10px; margin-top:2%; display:none; border-radius:4px;	
 }
 
+#div-order-table-order-line
+{
+	border:2px solid #CCC; padding:10px; margin-top:2%; border-radius:4px;height:40%;
+}
+#div-order-table-order-line-inner
+{
+	height:90%;
+}
 #thead-table-orders th{
 	font-size:small;
 }

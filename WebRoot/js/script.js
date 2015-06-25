@@ -1315,11 +1315,8 @@ function invoicePageScript(domainName)
 	/*.......launch the invoice form.......*/
 	$("#btn-invoice-create").click(function(){			
 		$("#div-form-invoice-create").toggle();
-	});	
-                
-	$('#input-date-form-order-create-order-date').datepicker({
-		format: "dd/mm/yyyy"
-	}); 
+	});	                	
+	
 }
 
 function invoiceCreateFormVal(domainName)
@@ -1415,11 +1412,15 @@ $("#btn-form-user-create-submit").click(function(){
 }
 
 function orderPageScript(domainName)
-{
+{	
 	/*.......launch the order form.......*/
 	$("#btn-order-create").click(function(){			
 		$("#div-form-order-create").toggle();
 	});
+	
+	$('#input-date-form-order-create-order-date').datepicker({
+		format: "dd/mm/yyyy"
+	}); 
 	
 	/*...........Demo Table script OPEN...........*/
 	var orderTableDemoData="<tr><td><input type='checkbox' id='td-orders-temp-1' value=''></input></td><td>1245855685522</td><td>Amit Sharma</td><td>Amazon.in</td><td>poi314577455</td><td>10/05/2012</td><td>pending</td></tr>";
@@ -1427,13 +1428,8 @@ function orderPageScript(domainName)
 	$("#tbody-table-orders").html(ordersTableDemoData);	
 	
 	
-	$("#td-orders-temp-1").click(function(){	
-		$("<link/>", {
-			   rel: "stylesheet",
-			   type: "text/css",
-			   href: "http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css"
-			}).appendTo("head");
-				
+	$("#td-orders-temp-1").click(function(){			
+		
 		ordersTableRowEdit();
 		$("#td-orders-temp-1-next").toggle();
 	});
@@ -1441,25 +1437,31 @@ function orderPageScript(domainName)
 	var ordersTableRowEdit;
 	ordersTableRowEdit = function(){			
 		$("#td-orders-temp-1-next").load('form_order_create.jsp',function(){
-			userCreateFormVal(domainName);
-			$("#td-orders-temp-1-next #div-form-user-create-heading").css("display","none");
-//			$("#td-order-temp-1-next #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-fname #input-text-form-user-create-fname").val("Amit");			
-//			$("#td-order-temp-1-next #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-lname #input-text-form-user-create-lname").val("Sharma");
-//			$("#td-order-temp-1-next #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-category #input-select-form-user-create-category").val("demo-category");
-//			$("#td-order-temp-1-next #div-create-user-sub-form #div-form-user-create-line-2 #div-form-user-create-phone #input-text-form-user-create-phone").val("9549554645");
-//			$("#td-order-temp-1-next #div-create-user-sub-form #div-form-user-create-line-2 #div-form-user-create-email #input-text-form-user-create-email").val("amit@demo.com");
+			
+			$("#td-orders-temp-1-next #div-form-order-create-heading").css("display","none");
+			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("1245855685522");			
+			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("Sharma");
+			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("demo-category");
+			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("9549554645");
+			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("amit@demo.com");
 
-			$("#td-user-temp-1-next #div-form-user-create-line-5 #div-form-user-create-reset #btn-form-user-create-reset").click(function(){
+			
+			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-order-date #input-date-form-order-create-order-date").datepicker({
+				format: "dd/mm/yyyy"
+		    }); 			
+			//$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("hello ji");
+			
+			/* $("#td-user-temp-1-next #div-form-user-create-line-5 #div-form-user-create-reset #btn-form-user-create-reset").click(function(){
 				resetOrderFun();
+			}); */
+			$('.selectpicker').selectpicker();	
+			
+			$('.selectpicker').selectpicker({
+				style: 'btn-info',
+				size: 4
 			});
 		});	
-		$.ajax({
-			  url: "http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js",
-			  dataType: "script"			  
-			});
-		$('#input-date-form-order-create-order-date').datepicker({
-			format: "dd/mm/yyyy"
-	    }); 			
+		
 	};
 
 	var resetOrderFun = function(){
