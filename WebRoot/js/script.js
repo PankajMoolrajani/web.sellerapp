@@ -1,4 +1,5 @@
-$(document).ready(function(){
+$(document).ready(function(){	
+		
 	var domainName = "http://dev.monoxor.com/";
 
 	/*................... Javascript for Index page ......................*/
@@ -1413,6 +1414,7 @@ $("#btn-form-user-create-submit").click(function(){
 
 function orderPageScript(domainName)
 {	
+	var orderLineCount = 0;
 	/*.......launch the order form.......*/
 	$("#btn-order-create").click(function(){			
 		$("#div-form-order-create").toggle();
@@ -1420,7 +1422,21 @@ function orderPageScript(domainName)
 	
 	$('#input-date-form-order-create-order-date').datepicker({
 		format: "dd/mm/yyyy"
+	
 	}); 
+	$("#btn-form-order-line-create-add-line").click(function(){	
+		orderLineCount= orderLineCount+1;
+		$("#tbody-table-order-line").append("<tr><td id='td-form-order-create-order-line-sno-'"+orderLineCount+">"+orderLineCount+"</td>" +
+												"<td id='td-form-order-create-order-line-title-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-title-'"+orderLineCount+" class='form-control'/></td>" +
+												"<td id='td-form-order-create-order-line-qty-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-qty-'"+orderLineCount+" class='form-control'/></td>" +
+												"<td id='td-form-order-create-order-line-unit-price-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-unit-price-'"+orderLineCount+" class='form-control'/></td>" +
+												"<td id='td-form-order-create-order-line-taxable-amount-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-amount-'"+orderLineCount+" class='form-control'/></td>" +
+												"<td id='td-form-order-create-order-line-tax-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-tax-'"+orderLineCount+" class='form-control'/></td>" +
+												"<td id='td-form-order-create-order-line-subtotal-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-subtotal-'"+orderLineCount+" class='form-control'/></td></tr>");				
+	});	
+	$("#btn-form-order-create-order-line-total").click(function(){
+		alert('now count is '+orderLineCount);		
+	});
 	
 	/*...........Demo Table script OPEN...........*/
 	var orderTableDemoData="<tr><td><input type='checkbox' id='td-orders-temp-1' value=''></input></td><td>1245855685522</td><td>Amit Sharma</td><td>Amazon.in</td><td>poi314577455</td><td>10/05/2012</td><td>pending</td></tr>";

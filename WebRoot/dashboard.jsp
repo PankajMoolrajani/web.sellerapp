@@ -1,8 +1,7 @@
 <html>
-<head>
-<title>dashboard page</title>
-	  	
-<head>
+	<head>
+		<title>dashboard page</title>		  	
+
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 	  	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">  
@@ -172,7 +171,6 @@
 		</ul>
 	</nav>   
 </div>
-
 	<div id="div-dashboard-content" class="container-fluid">
 		<div id="div-page-content" class="row">
 		 	<div class="col-md-12 col-sm-12 col-xs-12 tab-content">
