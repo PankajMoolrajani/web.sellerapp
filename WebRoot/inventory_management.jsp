@@ -24,9 +24,13 @@
 					<br/><br/>								
 					<table class="table table-striped table-hover table-condensed ">
 						<thead id="thead-table-inventory">  <!-- made changes in id -->
-						
+					    	<tr><th>Select</th><th>User Id</th><th>Username</th><th>EmailID</th><th>Phone</th></tr>
+					    	<!--  Here table header names will be shown according to the screen size -->					      						
 						</thead>
-						<tbody id="tbody-table-inventory"></tbody> <!-- made changes in id -->
+						<tbody id="tbody-table-inventory">
+					    	<tr><td><input type='checkbox' value=""></input>
+				    		</td><td>1</td><td>Amit</td><td>amit.sharma@monoxor.com</td><td>9549554645</td></tr>							    							
+						</tbody> <!-- made changes in id -->						
 					</table>
 				</div>					
 			</div>						

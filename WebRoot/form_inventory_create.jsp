@@ -3,10 +3,11 @@
 			<center><h2 style="border-bottom:1px solid #D2D2D2;">Inventory Form</h2></center>
 		</div>						
 	</div>
+	
 	<div id="div-sub-form-inventory-create">
 		<jsp:include page="sub_form_inventory_create.jsp"></jsp:include>
 	</div>					
-	<br/>
+	
 	<div id="div-form-inventory-create-marketplace" class="row">
 		<div class="col-sm-3 col-md-3 col-sm-offset-9 col-md-offset-9">
 			<button type="button" id="input-btn-inventory-create-table-add-marketplace" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target=".marketplace-create-modal">
@@ -77,4 +78,4 @@
 			</table>		 					
 		</div>    
 	</div>
-		
+	

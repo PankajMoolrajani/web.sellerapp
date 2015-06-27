@@ -57,7 +57,7 @@
 		</div>
 		<br/>
 		<div class="row">		
-			<div id="div-form-inventory-create-tab" class="col-md-10 col-sm-10">
+			<div id="div-form-inventory-create-tab" class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
 				    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
 				        <li class="active"><a href="#div-form-inventory-create-stock" data-toggle="tab">Stock</a></li>
 				        <li><a href="#div-form-inventory-create-procurement" data-toggle="tab">Procurement</a></li>
@@ -68,23 +68,32 @@
 			</div>
 		</div>	
 		<div id="row">	
-			<div id="div-form-inventory-create-tab-pages" class="tab-content col-md-10 col-sm-10 ">
+			<div id="div-form-inventory-create-tab-pages" class="tab-content col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
 				<div class="tab-pane active" id="div-form-inventory-create-stock">
-		            <h1>Stock</h1>		            
+		            <jsp:include page="form_inventory_create_stock.jsp"></jsp:include>		           
 		        </div>
 		        <div class="tab-pane" id="div-form-inventory-create-procurement">
-		            <h1>Procurement</h1>		            
+		            <jsp:include page="form_inventory_create_procurement.jsp"></jsp:include>
 		        </div>
 		        <div class="tab-pane" id="div-tab-form-inventory-create-sales">
-		            <h1>Sales</h1>		            
+		          
 		        </div>
 		        <div class="tab-pane" id="div-tab-form-inventory-create-variants">
-		            <h1>Variants</h1>		            
+		        	
 		        </div>
 		        <div class="tab-pane" id="div-tab-form-inventory-create-accounting">
-		            <h1>Accounting</h1>		            
+		            <jsp:include page="form_inventory_create_accounting.jsp"></jsp:include>
 		        </div>
 		    </div>
 		</div>				
 	</div>	
 </div>
+<br/>
+<div class="row">		
+	<div id="div-form-inventory-create-save" class="col-md-2 col-sm-2 col-xs-6 col-sm-offset-4 col-md-offset-4">
+		<button type="button" id="input-btn-submit-form-inventory-create" class="btn btn-primary">Save Inventory</button>
+	</div>
+	<div id="div-form-inventory-create-edit" class="form-group col-md-2 col-sm-2">
+		<button type="button" id="input-btn-edit-form-inventory-create" class="btn btn-primary">Edit Inventory</button>
+	</div>
+</div>			
