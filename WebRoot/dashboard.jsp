@@ -143,8 +143,8 @@
 		<li>
 			<div class="parent div-sidemenu-menuitem">
 				<a class='expandable' href="#">
-					<span class='span-sidemenu-menuitem-text'>Accounts</span>
-					<span class='glyphicon glyphicon-cog collapsed-element span-sidemenu-menuitem-icon'></span>
+					<span class='span-sidemenu-menuitem-text'>Invoice</span>
+					<span class='glyphicon glyphicon-transfer collapsed-element span-sidemenu-menuitem-icon'></span>
 				</a>
 			</div>
 			<ul class="bs-docs-sidenav" style="display:none">

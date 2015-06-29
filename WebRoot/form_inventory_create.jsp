@@ -7,7 +7,7 @@
 	<div id="div-sub-form-inventory-create">
 		<jsp:include page="sub_form_inventory_create.jsp"></jsp:include>
 	</div>					
-	
+	<br/>
 	<div id="div-form-inventory-create-marketplace" class="row">
 		<div class="col-sm-3 col-md-3 col-sm-offset-9 col-md-offset-9">
 			<button type="button" id="input-btn-inventory-create-table-add-marketplace" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target=".marketplace-create-modal">
@@ -66,11 +66,11 @@
 							</div>
 						</td>
 						<td id="td-form-invenotry-create-table-submit-edit">									
-							<div class="col-md-1 col-sm-2 col-xs-5">
-								<button type="button" id="input-btn-edit-form-inventory-create" class="btn btn-primary">Save</button>
+							<div class="form-group col-md-6 col-sm-6 col-xs-6">
+								<button type="button" id="input-btn-edit-form-inventory-create" class="form-control btn btn-primary">Save</button>
 							</div>	
-							<div class="col-md-1 col-sm-2 col-xs-5" style="margin-left:25%;">
-								<button type="button" id="input-btn-edit-form-inventory-create" class="btn btn-primary" style="margin-left:10%;">Edit</button>
+							<div class="form-group col-md-6 col-sm-6 col-xs-6">
+								<button type="button" id="input-btn-edit-form-inventory-create" class="form-control btn btn-primary">Edit</button>
 							</div>											
 						</td>
 					</tr>

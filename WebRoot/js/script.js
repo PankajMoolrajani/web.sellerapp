@@ -114,7 +114,7 @@ $(document).ready(function(){
 			}
 			else
 			{
-				$("#div-page-content").css("padding-left","140px");
+				$("#div-page-content").css("padding-left","190px");
 			}
 		}
     	else if ($("nav.sidebar").hasClass("sidebar-menu-expanded"))
@@ -233,6 +233,13 @@ function userCreatePageScript(domainName)
 			$("#td-user-temp-1-next #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-state #input-text-form-user-state").val("rajasthan");
 			$("#td-user-temp-1-next #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-zip #input-text-form-user-create-zip").val("301001");
 
+			$('.selectpicker').selectpicker();	
+			
+			$('.selectpicker').selectpicker({
+				style: 'btn-info',
+				size: 4
+			});
+			
 			$("#td-user-temp-1-next #div-form-user-create-line-5 #div-form-user-create-reset #btn-form-user-create-reset").click(function(){
 				resetUserFun();
 			});
@@ -581,13 +588,13 @@ function userCatCreatePageScript(domainName)
 	/*...apply table headers of user-cat according to the screen-size....*/
 	if($(window).width()>=750)
 	{		
-		var header="<tr><th>Select</th><th>Category Id</th><th>Catname</th></tr>";			
+		var header="<tr><th>Select</th><th>Category Id</th><th>CatName</th></tr>";			
 		$("#thead-table-user-category").html(header);
 	}
 	else
 	{
 		var header="<tr><th>Select</th><th>Cat Id</th><th>CatName</th></tr>";							      
-		$("#thead-usercat-table-header").html(header);
+		$("#thead-table-user-category").html(header);
 	}	
 	
 	/*...........Demo Table script OPEN...........*/
@@ -776,7 +783,9 @@ function userCatCreateFormVal(domainName)
 
 /*............................user-create script OPEN......................... */	
 function inventoryPageScript(domainName)
-{		
+{	
+	$("#tbody-table-inventory").html("<tr><td><input type='checkbox' value=''></input></td><td>A Black And Silver Case Watch</td><td>10</td><td>10010458</td><td>745</td><td>Jaipur</td></tr>");
+	
 	/*.......launch the inventory form.......*/
 	$("#btn-inventory-create").click(function(){			
 		$("#div-form-inventory-create").toggle();
@@ -1316,8 +1325,14 @@ function invoicePageScript(domainName)
 	/*.......launch the invoice form.......*/
 	$("#btn-invoice-create").click(function(){			
 		$("#div-form-invoice-create").toggle();
-	});	                	
-	
+	});	   
+	$('#input-date-form-invoice-create-invoice-date').datepicker({
+		format: "dd/mm/yyyy"
+	}); 	
+	$('#input-text-forminvoice-create-record-date').datepicker({
+		format: "dd/mm/yyyy"
+	});
+	$("#tbody-table-invoice").html("<tr><td><input type='checkbox' value=''></input></td><td>inv_12345</td><td>Amit Sharma</td><td>ord_12345</td><td>745</td><td>50</td><td>25</td><td>delivered</td></tr>");
 }
 
 function invoiceCreateFormVal(domainName)
@@ -1415,16 +1430,21 @@ $("#btn-form-user-create-submit").click(function(){
 function orderPageScript(domainName)
 {	
 	var orderLineCount = 0;
+	var orderLineCountEdit = 0;
 	/*.......launch the order form.......*/
 	$("#btn-order-create").click(function(){			
 		$("#div-form-order-create").toggle();
 	});
+	$('.selectpicker').selectpicker();	
 	
+	$('.selectpicker').selectpicker({
+		style: 'btn-info',
+		size: 4
+	});
 	$('#input-date-form-order-create-order-date').datepicker({
 		format: "dd/mm/yyyy"
-	
 	}); 
-	$("#btn-form-order-line-create-add-line").click(function(){	
+	$.fn.orderLineFormScript = function(){			
 		orderLineCount= orderLineCount+1;
 		$("#tbody-table-order-line").append("<tr><td id='td-form-order-create-order-line-sno-'"+orderLineCount+">"+orderLineCount+"</td>" +
 												"<td id='td-form-order-create-order-line-title-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-title-'"+orderLineCount+" class='form-control'/></td>" +
@@ -1433,9 +1453,33 @@ function orderPageScript(domainName)
 												"<td id='td-form-order-create-order-line-taxable-amount-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-amount-'"+orderLineCount+" class='form-control'/></td>" +
 												"<td id='td-form-order-create-order-line-tax-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-tax-'"+orderLineCount+" class='form-control'/></td>" +
 												"<td id='td-form-order-create-order-line-subtotal-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-subtotal-'"+orderLineCount+" class='form-control'/></td></tr>");				
+
+	};
+	$.fn.orderLineFormTableEditScript = function(){			
+		orderLineCountEdit= orderLineCountEdit+1;
+		$("#div-order-line-table-inner #table-order-line #tbody-table-order-line").append("<tr><td id='td-form-order-create-order-line-sno-'"+orderLineCount+">"+orderLineCountEdit+"</td>" +
+												"<td id='td-form-order-create-order-line-title-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-title-'"+orderLineCountEdit+" class='form-control'/></td>" +
+												"<td id='td-form-order-create-order-line-qty-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-qty-'"+orderLineCountEdit+" class='form-control'/></td>" +
+												"<td id='td-form-order-create-order-line-unit-price-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-unit-price-'"+orderLineCountEdit+" class='form-control'/></td>" +
+												"<td id='td-form-order-create-order-line-taxable-amount-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-amount-'"+orderLineCountEdit+" class='form-control'/></td>" +
+												"<td id='td-form-order-create-order-line-tax-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-tax-'"+orderLineCountEdit+" class='form-control'/></td>" +
+												"<td id='td-form-order-create-order-line-subtotal-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-subtotal-'"+orderLineCountEdit+" class='form-control'/></td></tr>");				
+
+	};
+	
+	
+	$("#btn-form-order-line-create-add-line").click(function(){
+		$.fn.orderLineFormScript();
 	});	
 	$("#btn-form-order-create-order-line-total").click(function(){
 		alert('now count is '+orderLineCount);		
+	});
+	
+	$("#btn-form-order-create-reset").click(function(){
+		$("#div-create-order-sub-form").load('sub_form_order_create.jsp',function(){
+			orderPageScript(domainName);
+		});
+		
 	});
 	
 	/*...........Demo Table script OPEN...........*/
@@ -1453,7 +1497,7 @@ function orderPageScript(domainName)
 	var ordersTableRowEdit;
 	ordersTableRowEdit = function(){			
 		$("#td-orders-temp-1-next").load('form_order_create.jsp',function(){
-			
+						
 			$("#td-orders-temp-1-next #div-form-order-create-heading").css("display","none");
 			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("1245855685522");			
 			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("Sharma");
@@ -1476,6 +1520,14 @@ function orderPageScript(domainName)
 				style: 'btn-info',
 				size: 4
 			});
+			
+			$("#div-create-order-sub-form #div-form-order-create-line-2 #div-order-line-table #btn-form-order-line-create-add-line").click(function(){
+				$.fn.orderLineFormTableEditScript();
+			});
+			$("#div-create-order-sub-form #div-form-order-create-line-2 #div-order-line-table #btn-form-order-create-order-line-total").click(function(){
+				alert('now count is '+orderLineCountEdit);		
+			});
+			
 		});	
 		
 	};

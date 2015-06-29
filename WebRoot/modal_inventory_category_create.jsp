@@ -26,7 +26,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div id="div-modal-sub-form-inventory-create-category" class="col-sm-10 col-md-10 col-md-offset-1 col-sm-offset-1">
+				<div id="div-modal-sub-form-inventory-category-create" class="col-sm-10 col-md-10 col-md-offset-1 col-sm-offset-1 to-none">
 					<jsp:include page="sub_modal_inventory_category_create.jsp"/>
 				</div>					
 			</div>		      	      	      							

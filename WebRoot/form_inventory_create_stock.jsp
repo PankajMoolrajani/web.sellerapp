@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-sm-3 col-md-3 col-md-offset-4 col-sm-offset-4">
-		<h2>Stock Form</h2>
+		<center><h2>Stock Form</h2></center>
 	</div>
 </div>
 <div class="row">	

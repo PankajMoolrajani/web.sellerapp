@@ -38,6 +38,11 @@
 		<div id="div-order-line-table-inner" class="row">
 			<div class="col-md-12 col-sm-12">
 				<div class="row">
+					<div class="col-md-4 col-sm-4 col-xs-11 col-md-offset-5 col-sm-offset-5 col-xs-offset-1">
+						<h2>Line Orders</h2>
+					</div>					
+				</div>
+				<div class="row">
 					<div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
 						<table id="table-order-line" class="table table-striped table-hover table-condensed ">
 							<thead id="thead-table-order-line">  <!-- made changes in id -->
@@ -68,33 +73,33 @@
 </div>
 <br/>
 <div id="div-form-order-create-line-2" class="row">
-	<div id="div-form-order-create-order-shipping-date" class="col-md-2 col-sm-3">
+	<div id="div-form-order-create-order-shipping-date" class="form-group col-md-2 col-sm-3">
 		<label class="control-label" for="inputWarning1">Shopping Date</label>
 		<select id="input-select-form-order-create-shipping-date" class="form-control selectpicker show-tick" title="Select Marketplace">
 			<option>Demo Marketplace</option>		
 		</select>
 	</div>
-	<div id="div-form-order-create-order-shipping-service" class="col-md-2 col-sm-3">
+	<div id="div-form-order-create-order-shipping-service" class="form-group col-md-2 col-sm-3">
 		<label class="control-label" for="inputWarning1">Shipping Service</label>
 		<select id="input-select-form-order-create-shipping-service" class="form-control selectpicker show-tick" title="Select Marketplace">
 			<option></option>		
 		</select>
 	</div>
-	<div id="div-form-order-create-tracking-number" class="col-md-2 col-sm-3">
+	<div id="div-form-order-create-tracking-number" class="form-group col-md-2 col-sm-3">
 		<label class="control-label" for="inputWarning1">Tracking Number</label>
 		<input type="text" id="input-text-form-order-create-tracking-number" class="form-control val-empty" >	
 	</div>
-	<div id="div-form-order-create-delivery-status" class="col-md-2 col-sm-3">
+	<div id="div-form-order-create-delivery-status" class="form-group col-md-2 col-sm-3">
 		<label class="control-label" for="inputWarning1">Delivery Status</label>
 		<select id="input-select-form-order-create-delivery-status" class="form-control selectpicker show-tick" title="Select Marketplace">
 			<option></option>		
 		</select>
 	</div>
-	<div id="div-form-order-create-expected-delivery" class="col-md-2 col-sm-3">
+	<div id="div-form-order-create-expected-delivery" class="form-group col-md-2 col-sm-3">
 		<label class="control-label" for="inputWarning1">Expected Delivery</label>
 		<input type="text" id="input-text-form-order-create-expected-delivery" class="form-control val-empty" >	
 	</div>
-	<div id="div-form-order-create-delivery-date" class="col-md-2 col-sm-3">
+	<div id="div-form-order-create-delivery-date" class="form-group col-md-2 col-sm-3">
 		<label class="control-label" for="inputWarning1">Delivery Date</label>
 		<select id="input-select-form-order-create-delivery-date" class="form-control selectpicker show-tick" title="Select Marketplace">
 			<option></option>		

@@ -17,7 +17,7 @@
 	<div id="div-order-table" class="row">
 		<div class="col-sm-12 col-md-12 col-xs-12">
 			<br/><br/>
-			<table class="table table-striped table-hover table-condensed ">
+			<table class="table table-striped table-condensed ">
 				<thead id="thead-table-orders">  <!-- made changes in id -->
 					<th>Select</th><th>Order_Id</th><th>Customer Name</th><th>marketplace</th><th>marketplace_order_id</th><th>date_order</th><th>status_order</th>				      
 				</thead>

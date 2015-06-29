@@ -33,12 +33,12 @@
 					<br/><br/>		
 					<table class="table table-striped table-hover table-condensed" >
 					    <thead id="thead-table-invoice">
-					    	<tr><th>Select</th><th>User Id</th><th>Username</th><th>EmailID</th><th>Phone</th></tr>
+					    	<tr><th>Select</th><th>Invoice Id</th><th>Customer Name</th><th>Order Id</th><th>Order Total</th><th>commission</th><th>invoice amount tax</th><th>INvoice Status</th></tr>
 					    	<!--  Here table header names will be shown according to the screen size -->					      
 					    </thead>
 					    <tbody id="tbody-table-invoice">
 					    	<tr><td><input type='checkbox' value=""></input>
-				    		</td><td>1</td><td>Amit</td><td>amit.sharma@monoxor.com</td><td>9549554645</td></tr>							    	
+				    									    	
 					    </tbody>
 			    	</table>		 					
 				</div>								
