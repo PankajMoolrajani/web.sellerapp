@@ -1,9 +1,4 @@
-
-<div id="div-form-user-create-heading" class="row">
-	<div class="col-md-4 col-md-offset-4 page-header">
-		<center><h1>User Form</h1></center>
-	</div>						
-</div>
+<br/>
 <div id="div-create-user-sub-form">
 	<jsp:include page="sub_form_user_create.jsp"></jsp:include>
 </div>

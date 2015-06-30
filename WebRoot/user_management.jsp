@@ -31,7 +31,7 @@
 			<div id="div-user-table" class="row">							
 				<div class="col-sm-12 col-md-12 col-xs-12">
 					<br/><br/>		
-					<table class="table table-striped table-hover table-condensed">
+					<table class="table table-striped table-condensed">
 					    <thead id="thead-table-user">					    	
 					    	<!--  Here table header names will be shown according to the screen size -->					      
 					    </thead>

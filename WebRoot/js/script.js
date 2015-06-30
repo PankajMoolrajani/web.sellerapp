@@ -12,33 +12,44 @@ $(document).ready(function(){
 /*................... Javascript for login page ......................*/
 
 	var submitLoginForm;	
-	submitLoginForm = function(login_username , login_password){		
+	submitLoginForm = function(login_username , login_password){	
+		alert(login_username);
+		var jsonData = {"login_username": login_username, "login_password":login_password };
 		var $btn = $("#btn-submit-login-form").button('loading'); //explain button('loading')				
 		$.ajax({
-			type: "GET", //get request
-			url: "Authentication",
-			data: {"action": "authenticateUser", "login_username": login_username, "login_password":login_password }, //use pass instead of hash user_
-			dataType: "json",
+			type: "POST", //get request
+			url: "http://abc:8080/rest.sellerapp/rest/auth/login",
+			async: false,
+			data: JSON.stringify(jsonData), //use pass instead of hash user_
+			dataType: "html",
+			contentType: "application/json; charset=utf-8",
 			success: function(responseText){
 				$btn.button('reset'); //check issues 	
-				var error_code = responseText["error_code"];
-				if(error_code=="")
-				{					
-					var pageURL = responseText["page-to-load"];						
-					window.location.assign(pageURL);									
-				}
-				else
-				{														
-					var error_message=getErrorMessage(error_code);
-					$("#div-login-profile-status").html("<p class='login-error-msg'>"+error_message+"</p>");															
-				}		
-			} 
+				alert(responseText);
+//				var error_code = responseText["error_code"];
+//				if(error_code=="")
+//				{					
+//					var pageURL = responseText["page-to-load"];						
+//					window.location.assign(pageURL);									
+//				}
+//				else
+//				{														
+//					var error_message=getErrorMessage(error_code);
+//					$("#div-login-profile-status").html("<p class='login-error-msg'>"+error_message+"</p>");															
+//				}		
+			},
+			error: function(request,error,data)
+			{
+				alert(request);
+				alert(error);
+				alert(data);
+			}
 		});
 	};
 	
 	$("#btn-submit-login-form").click(function(){	
-		var login_username = $("#login-username").val(); // changed variable name to login_username
-		var login_password = $("#login-password").val(); 
+		var login_username = $("#input-text-login-username").val(); // changed variable name to login_username
+		var login_password = $("#input-text-login-password").val(); 
 		submitLoginForm(login_username,login_password);		
 	});
 	/*.....if enter pressed on password textbox..........*/
@@ -239,10 +250,7 @@ function userCreatePageScript(domainName)
 				style: 'btn-info',
 				size: 4
 			});
-			
-			$("#td-user-temp-1-next #div-form-user-create-line-5 #div-form-user-create-reset #btn-form-user-create-reset").click(function(){
-				resetUserFun();
-			});
+			$("#td-user-temp-1-next #div-form-user-create-line-5 #div-form-user-create-reset #btn-form-user-create-reset").css("display","none");						
 		});						
 	};
 
@@ -616,9 +624,7 @@ function userCatCreatePageScript(domainName)
 			$("#td-user-cat-temp-1-next #div-create-user-category-sub-form #div-form-user-category-create-name #input-text-form-user-category-create-name").val("Demo Customer");			
 			$("#td-user-cat-temp-1-next #div-create-user-category-sub-form #div-form-user-category-create-description #input-text-form-user-category-create-description").val("Demo Description");
 
-			$("#td-user-cat-temp-1-next #div-form-user-category-create-footer #div-form-user-category-create-reset #btn-form-user-category-create-reset").click(function(){
-				resetUserCatFun();
-			});
+			$("#td-user-cat-temp-1-next #div-form-user-category-create-footer #div-form-user-category-create-reset #btn-form-user-category-create-reset").css("display","none");
 		});						
 	};
 
@@ -789,6 +795,7 @@ function inventoryPageScript(domainName)
 	/*.......launch the inventory form.......*/
 	$("#btn-inventory-create").click(function(){			
 		$("#div-form-inventory-create").toggle();
+		$("#input-btn-edit-form-inventory-create").css("display","none");
 	});
 	
 	if($(window).width()<=380)
