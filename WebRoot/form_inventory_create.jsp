@@ -1,9 +1,4 @@
-	<div id="div-form-inventory-create-heading" class="row">
-		<div class="col-md-4 col-md-offset-4">
-			<center><h2 style="border-bottom:1px solid #D2D2D2;">Inventory Form</h2></center>
-		</div>						
-	</div>
-	
+	<br/>
 	<div id="div-sub-form-inventory-create">
 		<jsp:include page="sub_form_inventory_create.jsp"></jsp:include>
 	</div>					
@@ -36,44 +31,7 @@
 					</tr>									      
 				</thead>
 				<tbody id="tbody-table-form-inventory-create">
-					<tr>
-						<td id="td-form-invenotry-create-table-marketplace">
-							<select id="input-select-form-invenotry-create-table-marketplace" class="form-control selectpicker">
-								<option>Select Marketplace</option>
-							</select>
-						</td>
-						<td id="td-form-invenotry-create-table-link">
-							<input type="text" id="input-text-form-invenotry-create-table-link" class="form-control val-empty"/>
-						</td>
-						<td id="td-form-invenotry-create-table-sellprice">
-							<input type="text" id="input-text-form-invenotry-create-table-sellprice" class="form-control val-empty"/>
-						</td>
-						<td id="td-form-invenotry-create-table-stock">
-							<input type="text" id="input-text-form-invenotry-create-table-stock" class="form-control val-empty"/>
-						</td>
-						<td id="td-form-invenotry-create-table-status">
-							<select id="input-select-form-invenotry-create-table-status" class="form-control val-empty" >										
-								<option>Active</option>       						        
-								<option>InActive</option>					
-							</select>				  
-						</td>
-						<td id="td-form-invenotry-create-table-health">
-							<div class="progress">
-							  <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-							  aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
-							    40% Complete (success)
-							  </div>
-							</div>
-						</td>
-						<td id="td-form-invenotry-create-table-submit-edit">									
-							<div class="form-group col-md-6 col-sm-6 col-xs-6">
-								<button type="button" id="input-btn-edit-form-inventory-create" class="form-control btn btn-primary">Save</button>
-							</div>	
-							<div class="form-group col-md-6 col-sm-6 col-xs-6">
-								<button type="button" id="input-btn-edit-form-inventory-create" class="form-control btn btn-primary">Edit</button>
-							</div>											
-						</td>
-					</tr>
+					
 				</tbody>
 			</table>		 					
 		</div>    

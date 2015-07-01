@@ -22,7 +22,7 @@
 			<div id="div-inventory-table" class="row">
 				<div class="col-sm-12 col-md-12 col-xs-12">
 					<br/><br/>								
-					<table class="table table-striped table-hover table-condensed ">
+					<table class="table table-striped table-condensed ">
 						<thead id="thead-table-inventory">  <!-- made changes in id -->
 					    	<tr><th>Select</th><th>Base_Sku</th><th>Inventory_Name</th><th>Stock</th><th>Price</th><th>Location</th></tr>
 					    	<!--  Here table header names will be shown according to the screen size -->					      						

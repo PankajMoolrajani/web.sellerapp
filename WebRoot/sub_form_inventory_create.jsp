@@ -24,40 +24,37 @@
 			</div>		
 		</div>
 		<div id="div-form-inventory-create-line-1" class="row">
-			<div class="col-md-5 col-sm-5 col-xs-12">
-				<div class="row">
-					<div id="div-form-inventory-create-base-sku" class="form-group col-md-6 col-sm-6">
-						<label class="control-label" for="inputInventorySku">SKU Number</label>
-			  			<input type="text" id="input-text-form-inventory-create-base-sku" class="form-control val-empty"/>																							
-					</div>
-					<div id="div-form-inventory-create-name" class="form-group col-md-6 col-sm-6">
-			  			<label class="control-label" for="inputInventorySku">Inventory Category</label>
-			  			<button type="button" id="input-btn-form-inventory-create-category" class="form-control btn btn-default" data-toggle="modal" data-target="#div-modal-form-inventory-create-category">
-                          Select Inventory Category
-                      </button>	  														  											
-					</div>					
-				</div>
+			<div id="div-form-inventory-create-name" class="form-group col-md-8 col-sm-8">
+				<label class="control-label" for="inputInventoryName">Inventory Name</label>
+		  		<input type="text" id="input-text-form-inventory-create-name" class="form-control val-empty"/>		
 			</div>
-			<div class="col-md-7 col-sm-7 col-xs-12">
-				<div id="div-form-inventory-brand" class="form-group col-md-4 col-sm-4">
-					<label class="control-label" for="inputInventorySku">Brand</label>
-					<select id="input-select-form-invenotry-create-brand" class="form-control val-empty" >
-						<option>Select Brand</option>
-					</select>	
-				</div>
-				<div id="div-form-inventory-create-name" class="col-md-4 col-sm-4">
-					<label class="control-label" for="inputInventoryName">Inventory Name</label>
-		  			<input type="text" id="input-text-form-inventory-create-name" class="form-control val-empty"/>			
-				</div>
-				<div id="div-form-inventory-create-weight" class="form-group col-md-4 col-sm-4">
-					<label class="control-label" for="inputInventorySku">Weight</label>
-		  			<input type="text" id="input-text-form-inventory-create-weight" class="form-control val-empty"/>											
-				</div>
+			<div id="div-form-inventory-brand" class="form-group col-md-4 col-sm-4">
+				<label class="control-label" for="inputInventorySku">Brand</label>
+				<select id="input-select-form-invenotry-create-brand" class="form-control selectpicker show-tick val-empty" >
+					<option>Demo Brand-1</option>
+				</select>							
+			</div>				
+		</div>
+		<div id="div-form-inventory-create-line-2" class="row">
+			<div id="div-form-inventory-create-base-sku" class="form-group col-md-4 col-sm-4">
+				<label class="control-label" for="inputInventorySku">SKU Number</label>
+			  	<input type="text" id="input-text-form-inventory-create-base-sku" class="form-control val-empty"/>				
+			</div>
+			<div id="div-form-inventory-create-category" class="form-group col-md-4 col-sm-4">
+				<label class="control-label" for="inputInventorySku">Inventory Category</label>
+			  	<button type="button" id="input-btn-form-inventory-create-category" class="form-control btn btn-default" data-toggle="modal" data-target="#div-modal-form-inventory-create-category">
+                	Select Inventory Category
+                </button>	  		
+			</div>
+			<div id="div-form-inventory-create-weight" class="form-group col-md-4 col-sm-4">
+				<label class="control-label" for="inputInventorySku">Weight</label>
+	  			<input type="text" id="input-text-form-inventory-create-weight" class="form-control val-empty"/>
 			</div>			
 		</div>
+		
 		<br/>
 		<div class="row">		
-			<div id="div-form-inventory-create-tab" class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
+			<div id="div-form-inventory-create-tab" class="col-md-12 col-sm-12 ">
 				    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
 				        <li class="active"><a href="#div-form-inventory-create-stock" data-toggle="tab">Stock</a></li>
 				        <li><a href="#div-form-inventory-create-procurement" data-toggle="tab">Procurement</a></li>
@@ -68,7 +65,7 @@
 			</div>
 		</div>	
 		<div id="row">	
-			<div id="div-form-inventory-create-tab-pages" class="tab-content col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
+			<div id="div-form-inventory-create-tab-pages" class="tab-content col-md-12 col-sm-12">
 				<div class="tab-pane active" id="div-form-inventory-create-stock">
 		            <jsp:include page="form_inventory_create_stock.jsp"></jsp:include>		           
 		        </div>

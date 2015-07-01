@@ -1,8 +1,3 @@
-<div class="row">
-	<div class="col-sm-3 col-md-3 col-md-offset-4 col-sm-offset-4">
-		<center><h2>Stock Form</h2></center>
-	</div>
-</div>
 <div class="row">	
 	<div id="div-form-inventory-create-stock-in-hand" class="col-sm-3 col-md-3 col-xs-6">
 		<label class="control-label" for="inputInventorySku">In-Hand</label>

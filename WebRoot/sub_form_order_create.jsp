@@ -72,7 +72,7 @@
 	</div>
 </div>
 <br/>
-<div id="div-form-order-create-line-2" class="row">
+<div id="div-form-order-create-line-3" class="row">
 	<div id="div-form-order-create-order-shipping-date" class="form-group col-md-2 col-sm-3">
 		<label class="control-label" for="inputWarning1">Shopping Date</label>
 		<select id="input-select-form-order-create-shipping-date" class="form-control selectpicker show-tick" title="Select Marketplace">

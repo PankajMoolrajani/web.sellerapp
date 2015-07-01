@@ -790,14 +790,43 @@ function userCatCreateFormVal(domainName)
 /*............................user-create script OPEN......................... */	
 function inventoryPageScript(domainName)
 {	
-	$("#tbody-table-inventory").html("<tr><td><input type='checkbox' value=''></input></td><td>A Black And Silver Case Watch</td><td>10</td><td>10010458</td><td>745</td><td>Jaipur</td></tr>");
+	$("#tbody-table-inventory").html("<tr><td><input id='td-inventory-temp-1' type='checkbox' value=''></input></td><td>10010458</td><td>A Black And Silver Case Watch</td><td>10</td><td>745</td><td>Jaipur</td></tr>" +
+									"<tr><td id='td-inventory-temp-1-next' colspan='6'></td></tr>");
 	
 	/*.......launch the inventory form.......*/
 	$("#btn-inventory-create").click(function(){			
-		$("#div-form-inventory-create").toggle();
+		$("#div-form-inventory-create").toggle();			 	
+		$( "#div-form-inventory-create-save" ).removeClass("col-md-offset-4 col-sm-offset-4").addClass( "col-md-offset-5 col-sm-offset-5" );
 		$("#input-btn-edit-form-inventory-create").css("display","none");
+		
 	});
+	$("#td-inventory-temp-1").click(function(){			
+			
+			inventoryTableRowEdit();
+			$("#td-inventory-temp-1-next").toggle();
+		});
+		
+		var inventoryTableRowEdit;
+		inventoryTableRowEdit = function(){			
+			$("#td-inventory-temp-1-next").load('form_inventory_create.jsp',function(){
+											
+//				$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("1245855685522");			
+//				$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("Sharma");
+//				$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("demo-category");
+//				$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("9549554645");
+//				$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("amit@demo.com");
 	
+				
+				//$("#td-orders-temp-1-next #div-form-order-create-line-4 #div-form-order-create-reset #btn-form-order-create-reset").css("display","none");
+				
+				$('.selectpicker').selectpicker();	
+				
+				$('.selectpicker').selectpicker({
+					style: 'btn-info',
+					size: 4
+				});
+			});				
+		};
 	if($(window).width()<=380)
 	{				
 		$("#div-form-inventory-create-save").removeClass("col-md-3 col-sm-2 col-xs-6 col-md-offset-1 col-sm-offset-1").addClass('row');		
@@ -961,8 +990,7 @@ function inventoryPageScript(domainName)
 		var txt = $(e.target).text();		
 		$("#input-select-form-inventory-create-category").val(txt);
 	}
-	
-	
+		
 	//inventrory-Category creat form taxPercent appearance
 	$.fn.setTaxPercentTxtScript = function(e){		
 		$( "#input-select-inventory-category-create-parent-category" ).change(function () {			
@@ -1065,10 +1093,9 @@ function inventoryPageScript(domainName)
 	}
 		
 	// submit create market place form
-	 $("#btn-form-invMarketplace-submit").click(function(){		
-		
-		var selector = ["#select-form-pMarketplace-name",
-		                "#input-form-pMarketplace-url"];	
+	 $("#btn-form-marketplace-create-submit").click(function(){				
+		var selector = ["#input-select-form-marketplace-create-marketplace-name",
+		                "#input-text-form-marketplace-create-marketplace-url"];
 		$.fn.createMarketplaceFormValid(selector);		
 	});	
 	 
@@ -1100,31 +1127,41 @@ function inventoryPageScript(domainName)
 			var mplaceId = $(selector[0]).val();
 			var mplaceUrl = $(selector[1]).val();
 			//alert(mplaceName+ " "+ mplaceUrl);
-//			var RowShow = "<tr class='active to-diplay'>" +
-//			"<td><input type='checkbox' value="+marketplaceCount+" onClick='checkboxInventoryTable(this)'/></td>" +
-//				"<td>"+mplaceName+"</td><td>"+mplaceUrl+"</td>" +
-//				"<td><input type='text' id='input-form-inventory-sellPrice"+marketplaceCount+"' class='form-control val-empty'/></td>" +
-//				"<td><input type='text' id='input-text-form-invenotry-create-stock"+marketplaceCount+"' class='form-control val-empty'/></td>" +
-//				"<td><td><select id='input-form-inventory-status"+marketplaceCount+"' class='form-control val-empty'><option>Active</option><option>Inactive</option></td>" +
-//				"<td></td>" +
-//			"</tr>";
+//			var RowShow = "<tr class='active to-diplay'>" +			
+//							"<td>"+mplaceName+"</td>" +
+//							"<td>"+mplaceUrl+"</td>" +							
+//							"<td><input type='text' id='input-form-inventory-sellPrice"+marketplaceCount+"' class='form-control val-empty'/></td>" +
+//							"<td><input type='text' id='input-text-form-invenotry-create-stock"+marketplaceCount+"' class='form-control val-empty'/></td>" +
+//							"<td><td><select id='input-form-inventory-status"+marketplaceCount+"' class='form-control val-empty'><option>Active</option><option>Inactive</option></td>" +
+//							"<td></td>" +
+//						"</tr>";
+			
 			var RowEdit = "<tr class='active to-diplay'>" +
-					"<td><input type='checkbox' value="+marketplaceCount+" onClick='checkboxInventoryTable(this)'/></td>" +
-						"<td><span id='span-form-inventory-mplaceName"+marketplaceCount+"' data-form-mplace"+marketplaceCount+"='"+mplaceId+"'>"+mplaceName+"</span></td><td><span id='span-form-inventory-mplaceUrl"+marketplaceCount+"'>"+mplaceUrl+"</span></td>" +
-						"<td><input type='text' id='input-form-inventory-sellPrice"+marketplaceCount+"' class='form-control val-empty'/></td>" +
-						"<td><input type='text' id='input-text-form-invenotry-create-stock"+marketplaceCount+"' class='form-control val-empty'/></td>" +
-						"<td><select id='input-form-inventory-status"+marketplaceCount+"' class='form-control val-empty'><option>Active</option><option>Inactive</option></td>" +
-						"<td></td>" +
-					"</tr>";			
+								"<td id='td-form-invenotry-create-table-marketplace"+marketplaceCount+"'><select id='input-select-form-invenotry-create-table-marketplace"+marketplaceCount+"' class='form-control selectpicker'><option selected>"+mplaceName+"</option></select></td>" +
+								"<td id='td-form-invenotry-create-table-link"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-link"+marketplaceCount+"' class='form-control' value='"+mplaceUrl+"'/></td>" +
+								"<td id='td-form-invenotry-create-table-sellprice"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-sellprice"+marketplaceCount+"' class='form-control val-empty'/></td>" +
+								"<td id='td-form-invenotry-create-table-stock"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-stock"+marketplaceCount+"' class='form-control val-empty'/></td>" +
+								"<td id='td-form-invenotry-create-table-status"+marketplaceCount+"'><select id='input-select-form-invenotry-create-table-status"+marketplaceCount+"' class='form-control selectpicker' ><option>Active</option><option>InActive</option></select></td>" +
+								"<td id='td-form-invenotry-create-table-health"+marketplaceCount+"'><div class='progress'><div class='progress-bar progress-bar-success progress-bar-striped"+marketplaceCount+"' role='progressbar'aria-valuenow='40' aria-valuemin='0' aria-valuemax='100' style='width:40%'>40% Complete (success)</div></div></td>" +
+								"<td id='td-form-invenotry-create-table-submit-edit"+marketplaceCount+"'>" +
+										"<div class='form-group col-md-6 col-sm-6 col-xs-6'><button type='button' id='input-btn-edit-form-inventory-create"+marketplaceCount+"' class='form-control btn btn-primary'>Edit</button></div>" +
+										"<div class='form-group col-md-6 col-sm-6 col-xs-6'><button type='button' id='input-btn-save-form-inventory-create"+marketplaceCount+"' class='form-control btn btn-primary'>Save</button></div></td>" +								
+						   "</tr>";			
 			$('.marketplace-create-modal').modal('hide');
 			
 			//refresh modal content after successfully submission
 			$("#div-form-invMarketplace-fields").load('sub_form_create_marketplace.jsp');
 			
 			//assign scirpt again to refreshed elements  
-			inventoryFormValid();
+			inventoryFormValid();						
 			
-			$("#inventoryTable #tbody-table-form-inventory-create").append(RowEdit);					
+			$("#tbody-table-form-inventory-create").append(RowEdit);
+			$('.selectpicker').selectpicker();	
+			
+			$('.selectpicker').selectpicker({
+				style: 'btn-info',
+				size: 4
+			});
 						
 //			$(".class-inventory-checkbox").click(function(){
 //				alert('hello2');
@@ -1292,7 +1329,7 @@ function inventoryPageScript(domainName)
 function inventoryFormValid()
 {		
 	/*......check inventory form fields are not empty.........*/
-	$("#input-text-form-inventory-create-base-sku, #input-text-form-inventory-create-name,#input-txt-form-inventory-create-category,#input-text-form-invenotry-create-stock, #input-text-form-inventory-create-maxprice, #input-text-form-invenotry-create-minprice,#input-text-form-invenotry-create-weight,#input-text-form-invenotry-create-procurement-time, #input-text-form-invenotry-create-stock, #input-text-form-inventory-create-tags, #input-form-pMarketplace-name, #input-form-pMarketplace-url, #input-modal-inventory-category-create-name, #input-form-inventory-category-create-tax-percent").on('input', function() {
+	$("#input-text-form-inventory-create-base-sku, #input-text-form-inventory-create-name,#input-txt-form-inventory-create-category,#input-text-form-invenotry-create-stock, #input-text-form-inventory-create-maxprice, #input-text-form-invenotry-create-minprice,#input-text-form-invenotry-create-weight,#input-text-form-invenotry-create-procurement-time, #input-text-form-invenotry-create-stock, #input-text-form-inventory-create-tags, #input-text-form-marketplace-create-marketplace-url, #input-select-form-marketplace-create-marketplace-name, #input-modal-inventory-category-create-name, #input-form-inventory-category-create-tax-percent").on('input', function() {
 		var input=$(this);
 		var is_name=input.val();			
 		if(is_name)
@@ -1306,7 +1343,7 @@ function inventoryFormValid()
 	});	
 	
 	/*......check inventory form fields are empty.........*/	
-	$("#input-text-form-inventory-create-base-sku, #input-text-form-inventory-create-name,#input-txt-form-inventory-create-category,#input-text-form-invenotry-create-stock, #input-text-form-inventory-create-maxprice, #input-text-form-invenotry-create-minprice,#input-text-form-invenotry-create-weight,#input-text-form-invenotry-create-procurement-time, #input-text-form-invenotry-create-stock, #input-text-form-inventory-create-tags, #input-form-pMarketplace-name, #input-form-pMarketplace-url, #input-modal-inventory-category-create-name, #input-form-inventory-category-create-tax-percent").blur(function(){		
+	$("#input-text-form-inventory-create-base-sku, #input-text-form-inventory-create-name,#input-txt-form-inventory-create-category,#input-text-form-invenotry-create-stock, #input-text-form-inventory-create-maxprice, #input-text-form-invenotry-create-minprice,#input-text-form-invenotry-create-weight,#input-text-form-invenotry-create-procurement-time, #input-text-form-invenotry-create-stock, #input-text-form-inventory-create-tags, #input-text-form-marketplace-create-marketplace-url, #input-select-form-marketplace-create-marketplace-name, #input-modal-inventory-category-create-name, #input-form-inventory-category-create-tax-percent").blur(function(){		
 		if(!$(this).val())
 		{
 			$(this).parent().addClass("has-error");
@@ -1515,12 +1552,11 @@ function orderPageScript(domainName)
 			
 			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-order-date #input-date-form-order-create-order-date").datepicker({
 				format: "dd/mm/yyyy"
-		    }); 			
+		    }); 				
 			//$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("hello ji");
+						
+			$("#td-orders-temp-1-next #div-form-order-create-line-4 #div-form-order-create-reset #btn-form-order-create-reset").css("display","none");
 			
-			/* $("#td-user-temp-1-next #div-form-user-create-line-5 #div-form-user-create-reset #btn-form-user-create-reset").click(function(){
-				resetOrderFun();
-			}); */
 			$('.selectpicker').selectpicker();	
 			
 			$('.selectpicker').selectpicker({
