@@ -1366,6 +1366,7 @@ function inventoryFormValid()
 /*..........................Invoice Script OPEN...........................*/
 function invoicePageScript(domainName)
 {
+	var invoiceLineCount = 0;
 	/*.......launch the invoice form.......*/
 	$("#btn-invoice-create").click(function(){			
 		$("#div-form-invoice-create").toggle();
@@ -1376,7 +1377,59 @@ function invoicePageScript(domainName)
 	$('#input-text-forminvoice-create-record-date').datepicker({
 		format: "dd/mm/yyyy"
 	});
+	
+
+	$('#input-text-form-invoice-create-order-date').datepicker({
+		format: "dd/mm/yyyy"
+	}); 
+
+	$.fn.invoiceLineFormScript = function(){			
+		invoiceLineCount= invoiceLineCount+1;
+		$("#tbody-table-invoice-line").append("<tr><td id='td-form-invoice-create-invoice-line-sno-'"+invoiceLineCount+">"+invoiceLineCount+"</td>" +
+													"<td id='td-form-invoice-create-invoice-line-product-name-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-product-name-'"+invoiceLineCount+" class='form-control'/></td>" +
+													"<td id='td-form-invoice-create-invoice-line-unit-price-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-unit-price'"+invoiceLineCount+" class='form-control'/></td>" +
+													"<td id='td-form-invoice-create-invoice-line-qty-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-qty'"+invoiceLineCount+" class='form-control'/></td>" +
+													"<td id='td-form-invoice-create-invoice-line-tax-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-tax-'"+invoiceLineCount+" class='form-control'/></td>" +
+													"<td id='td-form-invoice-create-invoice-line-amount-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-amount-'"+invoiceLineCount+" class='form-control'/></td>" +
+												"</tr>");				
+
+		};
+//	$.fn.orderLineFormTableEditScript = function(){			
+//		orderLineCountEdit= orderLineCountEdit+1;
+//		$("#div-order-line-table-inner #table-order-line #tbody-table-order-line").append("<tr><td id='td-form-order-create-order-line-sno-'"+orderLineCount+">"+orderLineCountEdit+"</td>" +
+//												"<td id='td-form-order-create-order-line-title-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-title-'"+orderLineCountEdit+" class='form-control'/></td>" +
+//												"<td id='td-form-order-create-order-line-qty-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-qty-'"+orderLineCountEdit+" class='form-control'/></td>" +
+//												"<td id='td-form-order-create-order-line-unit-price-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-unit-price-'"+orderLineCountEdit+" class='form-control'/></td>" +
+//												"<td id='td-form-order-create-order-line-taxable-amount-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-amount-'"+orderLineCountEdit+" class='form-control'/></td>" +
+//												"<td id='td-form-order-create-order-line-tax-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-tax-'"+orderLineCountEdit+" class='form-control'/></td>" +
+//												"<td id='td-form-order-create-order-line-subtotal-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-subtotal-'"+orderLineCountEdit+" class='form-control'/></td></tr>");				
+//
+//	};
+	
+	
+	$("#btn-form-invoice-create-add-line").click(function(){
+		$.fn.invoiceLineFormScript();
+	});	
+//	$("#btn-form-invoice-create-order-line-total").click(function(){
+//		alert('now count is '+invoiceLineCount);		
+//	});
+
+	$.fn.invoicePaymentLineFormScript = function(){			
+		invoicePaymentLineCount= invoicePaymentLineCount+1;
+		$("#tbody-table-invoice-payment-line").append("<tr><td id='td-form-invoice-create-payment-line-sno-'"+invoiceLineCount+">"+invoiceLineCount+"</td>" +
+														"<td id='td-form-invoice-create-payment-line-date-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-payment-line-product-name-'"+invoiceLineCount+" class='form-control'/></td>" +
+														"<td id='td-form-invoice-create-payment-line-amount-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-payment-line-unit-price'"+invoiceLineCount+" class='form-control'/></td>" +
+														"<td id='td-form-invoice-create-payment-line-transaction-id-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-payment-line-qty'"+invoiceLineCount+" class='form-control'/></td>" +													
+													   "</tr>");				
+
+	};
+	$("#btn-form-invoice-create-add-payment-line").click(function(){
+		$.fn.invoicePaymentLineFormScript();
+	});	
+	
+	
 	$("#tbody-table-invoice").html("<tr><td><input type='checkbox' value=''></input></td><td>inv_12345</td><td>Amit Sharma</td><td>ord_12345</td><td>745</td><td>50</td><td>25</td><td>delivered</td></tr>");
+	
 }
 
 function invoiceCreateFormVal(domainName)
@@ -1588,5 +1641,5 @@ function orderPageScript(domainName)
 }
 function orderFormValid(domainName)
 {
-
+	
 }

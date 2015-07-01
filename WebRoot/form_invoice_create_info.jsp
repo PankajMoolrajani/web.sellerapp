@@ -1,28 +1,10 @@
-<%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-  <head>
-    <base href="<%=basePath%>">
-    
-    <title>My JSP 'form_invoice_create_info.jsp' starting page</title>
-    
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
-
-  </head>
-  
-  <body>
-    This is my JSP page. <br>
-  </body>
-</html>
+<div class="row">
+	<div id="div-form-invoice-create-marketplace-name" class="col-md-4 col-sm-4">
+		<label class="control-label">Marketplace Name</label>
+		<input type="text" id="input-text-form-invoice-create-marketplace-name" class="form-control val-empty"/>
+	</div>
+	<div id="div-form-invoice-create-order-date" class="col-md-4 col-sm-4 col-md-offset-1 col-sm-offset-1">
+		<label class="control-label">Order Date</label>
+		<input type="text" id="input-text-form-invoice-create-order-date" class="form-control val-empty"/>
+	</div>
+</div>

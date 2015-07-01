@@ -22,7 +22,7 @@
 			</div>
 			<div id="div-form-order-create-order-date" class="col-md-4 col-sm-6">
 				<label class="control-label" for="inputWarning1">Order Date</label>
-				<input  type="text" id="input-date-form-order-create-order-date" class="form-control val-empty">
+				<input type="text" id="input-date-form-order-create-order-date" class="form-control val-empty">
 			</div>
 			<div id="div-form-order-create-order-status" class="col-md-4 col-sm-6">
 				<label class="control-label" for="inputWarning1">Customer Name</label>
