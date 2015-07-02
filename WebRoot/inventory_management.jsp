@@ -16,12 +16,15 @@
 			</div>	
 		</div>			
 	</div>		
-	
+	<br/><br/>	
 	<div id="div-inventory-browse" class="row"> 
 		<div class="col-sm-12 col-md-12 col-xs-12">
+			<div id="div-user-search" class="row">
+				<jsp:include page="search_box_main.jsp"></jsp:include>										
+			</div>	
+			<br/>
 			<div id="div-inventory-table" class="row">
-				<div class="col-sm-12 col-md-12 col-xs-12">
-					<br/><br/>								
+				<div class="col-sm-12 col-md-12 col-xs-12">										
 					<table class="table table-striped table-condensed ">
 						<thead id="thead-table-inventory">  <!-- made changes in id -->
 					    	<tr><th>Select</th><th>Base_Sku</th><th>Inventory_Name</th><th>Stock</th><th>Price</th><th>Location</th></tr>

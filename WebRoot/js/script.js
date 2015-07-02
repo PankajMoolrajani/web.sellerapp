@@ -61,7 +61,7 @@ $(document).ready(function(){
 			submitLoginForm(login_username,login_password);	
 		}
 	});
-	
+	$('.tooltip-dash').tooltip();   
 	$('.parent').click(function() {		
 		var subMenu = $(this).siblings('ul');		
 		if ($(subMenu).hasClass('open')) {
@@ -1549,7 +1549,8 @@ function orderPageScript(domainName)
 												"<td id='td-form-order-create-order-line-unit-price-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-unit-price-'"+orderLineCount+" class='form-control'/></td>" +
 												"<td id='td-form-order-create-order-line-taxable-amount-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-amount-'"+orderLineCount+" class='form-control'/></td>" +
 												"<td id='td-form-order-create-order-line-tax-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-tax-'"+orderLineCount+" class='form-control'/></td>" +
-												"<td id='td-form-order-create-order-line-subtotal-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-subtotal-'"+orderLineCount+" class='form-control'/></td></tr>");				
+												"<td id='td-form-order-create-order-line-subtotal-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-subtotal-'"+orderLineCount+" class='form-control'/></td>" +
+												"<td id='td-form-order-create-order-line-remove-line-'"+orderLineCount+"><button type='button' id='"+orderLineCount+"' class='form-control btn btn-primary btn-sm '><span class='glyphicon glyphicon-remove'></span></button></td></tr>");				
 
 	};
 	$.fn.orderLineFormTableEditScript = function(){			

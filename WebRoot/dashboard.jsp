@@ -52,122 +52,121 @@
 
 <div>
 	<nav class='sidebar sidebar-menu-collapsed'>
-	 <ul id="nav" class="nav nav-list bs-docs-sidenav sidebar">
-		<li id="li-sidemenu-menuitem-toggle">
-			<div class="parent div-sidemenu-menuitem">
-				<a class='expandable' id='a-toggle-button-sidebar'>
-					<span class='span-sidemenu-menuitem-text'>Move Bar</span>
-					<span class='glyphicon glyphicon-chevron-right span-sidemenu-menuitem-icon'></span>
-				</a>
-			</div>
-		</li>	 	
-		<li>
-			<div class="parent div-sidemenu-menuitem">
-				<a class='expandable' href="#">
-					<span class='span-sidemenu-menuitem-text'>User</span>
-					<span class='glyphicon glyphicon-user collapsed-element span-sidemenu-menuitem-icon'></span>
-				</a>
-			</div>
-			<ul class="bs-docs-sidenav" style="display:none">
-				<li>
-					<div class="div-sidemenu-menuitem">
-						<a class='expandable' id="a-sidemenu-item-user-management" href="#div-user-management-page" data-toggle="tab">
-							<span class='span-sidemenu-menuitem-text'>User-Management</span>
-							<span class='glyphicon glyphicon-pencil collapsed-element span-sidemenu-menuitem-icon'></span>
-						</a>
-					</div>				
-				</li>
-				<li>
-					<div class="div-sidemenu-menuitem">
-						<a class='expandable' id="a-sidemenu-item-user-category" href="#div-user-categories-page" data-toggle="tab">
-							<span class='span-sidemenu-menuitem-text'>User-Category</span>
-							<span class='glyphicon glyphicon-user collapsed-element span-sidemenu-menuitem-icon'></span>
-						</a>
-					</div>	
-				</li>
-			</ul>
-		</li>
-		<li>
-			<div class="parent div-sidemenu-menuitem">
-				<a class='expandable' href="#">
-					<span class='span-sidemenu-menuitem-text'>Inventory</span>
-					<span class='glyphicon glyphicon-gift collapsed-element span-sidemenu-menuitem-icon'></span>
-				</a>
-			</div>
-			<ul class="bs-docs-sidenav" style="display:none">
-				<li>
-					<div class="div-sidemenu-menuitem">
-						<a class='expandable' id="a-sidemenu-item-inventory" href="#div-inventory-management-page" data-toggle="tab">
-							<span class='span-sidemenu-menuitem-text'>Management</span>
-							<span class='glyphicon glyphicon-pencil collapsed-element span-sidemenu-menuitem-icon'></span>
-						</a>
-					</div>				
-				</li>
-				<li>
-					<div class="div-sidemenu-menuitem">
-						<a class='expandable' id="" href="#" data-toggle="tab">
-							<span class='span-sidemenu-menuitem-text'>Bulk Upload</span>
-							<span class='glyphicon glyphicon-upload collapsed-element span-sidemenu-menuitem-icon'></span>
-						</a>
-					</div>	
-				</li>
-			</ul>
-		</li>
-
-		<li>
-			<div class="parent div-sidemenu-menuitem">
-				<a class='expandable' href="#">
-					<span class='span-sidemenu-menuitem-text'>Order</span>
-					<span class='glyphicon glyphicon glyphicon-record collapsed-element span-sidemenu-menuitem-icon'></span>
-				</a>
-			</div>
-			<ul class="bs-docs-sidenav" style="display:none">
-				<li>
-					<div class="div-sidemenu-menuitem">
-						<a class='expandable' id="a-sidemenu-item-order" href="#div-order-management-page" data-toggle="tab">
-							<span class='span-sidemenu-menuitem-text'>Management</span>
-							<span class='glyphicon glyphicon-pencil collapsed-element span-sidemenu-menuitem-icon'></span>
-						</a>
-					</div>				
-				</li>
-				<li>
-					<div class="div-sidemenu-menuitem">
-						<a class='expandable' href="#" data-toggle="tab">
-							<span class='span-sidemenu-menuitem-text'>Bulk Upload</span>
-							<span class='glyphicon glyphicon-upload collapsed-element span-sidemenu-menuitem-icon'></span>
-						</a>
-					</div>	
-				</li>
-			</ul>
-		</li>
-		<li>
-			<div class="parent div-sidemenu-menuitem">
-				<a class='expandable' href="#">
-					<span class='span-sidemenu-menuitem-text'>Invoice</span>
-					<span class='glyphicon glyphicon-transfer collapsed-element span-sidemenu-menuitem-icon'></span>
-				</a>
-			</div>
-			<ul class="bs-docs-sidenav" style="display:none">
-				<li>
-					<div class="div-sidemenu-menuitem">
-						<a class='expandable' href="#div-invoice-management-page" data-toggle="tab">
-							<span class='span-sidemenu-menuitem-text'>Management</span>
-							<span class='glyphicon glyphicon-pencil collapsed-element span-sidemenu-menuitem-icon'></span>
-						</a>
-					</div>				
-				</li>
-				<li>
-					<div class="div-sidemenu-menuitem">
-						<a class='expandable' href="#div-accounts-management-page" data-toggle="tab">
-							<span class='span-sidemenu-menuitem-text'>Bulk Upload</span>
-							<span class='glyphicon glyphicon-upload collapsed-element span-sidemenu-menuitem-icon'></span>
-						</a>
-					</div>				
-				</li>
-				
-			</ul>
-		</li>
+		<ul id="nav" class="nav nav-list bs-docs-sidenav sidebar">
+			<li id="li-sidemenu-menuitem-toggle">
+				<div class="parent div-sidemenu-menuitem">
+					<a class='expandable' id='a-toggle-button-sidebar'>
+						<span class='span-sidemenu-menuitem-text'>Move Bar</span>
+						<span class='glyphicon glyphicon-chevron-right span-sidemenu-menuitem-icon'></span>
+					</a>
+				</div>
+			</li>	 	
+			<li>
+				<div class="parent div-sidemenu-menuitem">
+					<a class='expandable tooltip-dash' href="#" data-placement="right" title="User">
+						<span class='span-sidemenu-menuitem-text'>User</span>
+						<span class='glyphicon glyphicon-user collapsed-element span-sidemenu-menuitem-icon'></span>
+					</a>
+				</div>
+				<ul class="bs-docs-sidenav" style="display:none">
+					<li>
+						<div class="div-sidemenu-menuitem">
+							<a class='expandable tooltip-dash' id="a-sidemenu-item-user-management" href="#div-user-management-page" data-toggle="tab" data-placement="right" title="user management">
+								<span class='span-sidemenu-menuitem-text'>User-Management</span>
+								<span class='glyphicon glyphicon-pencil collapsed-element span-sidemenu-menuitem-icon'></span>
+							</a>
+						</div>				
+					</li>
+					<li>
+						<div class="div-sidemenu-menuitem">
+							<a class='expandable tooltip-dash' id="a-sidemenu-item-user-category" href="#div-user-categories-page" data-toggle="tab" data-placement="right" title="user category">
+								<span class='span-sidemenu-menuitem-text'>User-Category</span>
+								<span class='glyphicon glyphicon-user collapsed-element span-sidemenu-menuitem-icon'></span>
+							</a>
+						</div>	
+					</li>
+				</ul>
+			</li>
+			<li>
+				<div class="parent div-sidemenu-menuitem">
+					<a class='expandable tooltip-dash' href="#" data-placement="right" title="Inventory">
+						<span class='span-sidemenu-menuitem-text'>Inventory</span>
+						<span class='glyphicon glyphicon-gift collapsed-element span-sidemenu-menuitem-icon'></span>
+					</a>
+				</div>
+				<ul class="bs-docs-sidenav" style="display:none">
+					<li>
+						<div class="div-sidemenu-menuitem">
+							<a class='expandable tooltip-dash' id="a-sidemenu-item-inventory" href="#div-inventory-management-page" data-toggle="tab" data-placement="right" title="inventory management">
+								<span class='span-sidemenu-menuitem-text'>Management</span>
+								<span class='glyphicon glyphicon-pencil collapsed-element span-sidemenu-menuitem-icon'></span>
+							</a>
+						</div>				
+					</li>
+					<li>
+						<div class="div-sidemenu-menuitem">
+							<a class='expandable tooltip-dash' id="" href="#" data-toggle="tab" data-placement="right" title="inventory upload">
+								<span class='span-sidemenu-menuitem-text'>Bulk Upload</span>
+								<span class='glyphicon glyphicon-upload collapsed-element span-sidemenu-menuitem-icon'></span>
+							</a>
+						</div>	
+					</li>
+				</ul>
+			</li>
 	
+			<li>
+				<div class="parent div-sidemenu-menuitem">
+					<a class='expandable tooltip-dash' href="#" data-placement="right" title="Order">
+						<span class='span-sidemenu-menuitem-text'>Order</span>
+						<span class='glyphicon glyphicon glyphicon-record collapsed-element span-sidemenu-menuitem-icon'></span>
+					</a>
+				</div>
+				<ul class="bs-docs-sidenav" style="display:none">
+					<li>
+						<div class="div-sidemenu-menuitem">
+							<a class='expandable tooltip-dash' id="a-sidemenu-item-order" href="#div-order-management-page" data-toggle="tab" data-placement="right" title="order management">
+								<span class='span-sidemenu-menuitem-text'>Management</span>
+								<span class='glyphicon glyphicon-pencil collapsed-element span-sidemenu-menuitem-icon'></span>
+							</a>
+						</div>				
+					</li>
+					<li>
+						<div class="div-sidemenu-menuitem">
+							<a class='expandable tooltip-dash' href="#" data-toggle="tab" data-placement="right" title="order upload">
+								<span class='span-sidemenu-menuitem-text'>Bulk Upload</span>
+								<span class='glyphicon glyphicon-upload collapsed-element span-sidemenu-menuitem-icon'></span>
+							</a>
+						</div>	
+					</li>
+				</ul>
+			</li>
+			<li>
+				<div class="parent div-sidemenu-menuitem">
+					<a class='expandable tooltip-dash' href="#" data-placement="right" title="Invoice">
+						<span class='span-sidemenu-menuitem-text'>Invoice</span>
+						<span class='glyphicon glyphicon-transfer collapsed-element span-sidemenu-menuitem-icon'></span>
+					</a>
+				</div>
+				<ul class="bs-docs-sidenav" style="display:none">
+					<li>
+						<div class="div-sidemenu-menuitem">
+							<a class='expandable tooltip-dash' href="#div-invoice-management-page" data-toggle="tab" data-placement="right" title="invoice management">
+								<span class='span-sidemenu-menuitem-text'>Management</span>
+								<span class='glyphicon glyphicon-pencil collapsed-element span-sidemenu-menuitem-icon'></span>
+							</a>
+						</div>				
+					</li>
+					<li>
+						<div class="div-sidemenu-menuitem">
+							<a class='expandable tooltip-dash' href="#div-accounts-management-page" data-toggle="tab" data-placement="right" title="invoice upload">
+								<span class='span-sidemenu-menuitem-text'>Bulk Upload</span>
+								<span class='glyphicon glyphicon-upload collapsed-element span-sidemenu-menuitem-icon'></span>
+							</a>
+						</div>				
+					</li>
+					
+				</ul>
+			</li>	
 		</ul>
 	</nav>   
 </div>

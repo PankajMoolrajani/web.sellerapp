@@ -14,16 +14,24 @@
 			</div>
 		</div>		
 	</div>
-	<div id="div-order-table" class="row">
-		<div class="col-sm-12 col-md-12 col-xs-12">
-			<br/><br/>
-			<table class="table table-striped table-condensed ">
-				<thead id="thead-table-orders">  <!-- made changes in id -->
-					<th>Select</th><th>Order_Id</th><th>Customer Name</th><th>marketplace</th><th>marketplace_order_id</th><th>date_order</th><th>status_order</th>				      
-				</thead>
-				<tbody id="tbody-table-orders">
-				</tbody> <!-- made changes in id -->
-			</table>		
+	<br/>
+	<div id="div-order-browse" class="row">
+		<div class="col-sm-12 col-md-12">
+			<div id="div-order-search" class="row">
+				<jsp:include page="search_box_main.jsp"></jsp:include>										
+			</div>			
+			<div id="div-order-table" class="row">
+				<div class="col-sm-12 col-md-12 col-xs-12">
+					<br/><br/>
+					<table class="table table-striped table-condensed ">
+						<thead id="thead-table-orders">  <!-- made changes in id -->
+							<th>Select</th><th>Order_Id</th><th>Customer Name</th><th>marketplace</th><th>marketplace_order_id</th><th>date_order</th><th>status_order</th>				      
+						</thead>
+						<tbody id="tbody-table-orders">
+						</tbody> <!-- made changes in id -->
+					</table>		
+				</div>
+			</div>		
 		</div>
 	</div>
 </div>

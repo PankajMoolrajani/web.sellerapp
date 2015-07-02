@@ -85,15 +85,6 @@
 		</div>				
 	</div>	
 </div>
-<br/>
-<div class="row">		
-	<div id="div-form-inventory-create-save" class="col-md-2 col-sm-2 col-xs-6 col-sm-offset-4 col-md-offset-4">
-		<button type="button" id="input-btn-submit-form-inventory-create" class="form-control btn btn-primary">Save Inventory</button>
-	</div>
-	<div id="div-form-inventory-create-edit" class="form-group col-md-2 col-sm-2 col-xs-6">
-		<button type="button" id="input-btn-edit-form-inventory-create" class="form-control btn btn-primary">Edit Inventory</button>
-	</div>
-</div>			
 
 <div id="div-modal-form-inventory-create-category" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">    
         <jsp:include page="modal_inventory_category_create.jsp"></jsp:include>

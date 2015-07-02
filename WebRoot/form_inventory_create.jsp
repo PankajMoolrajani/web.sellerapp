@@ -37,3 +37,7 @@
 		</div>    
 	</div>
 	
+<div id="div-form-inventory-create-state-buttons" class="row">		
+	<jsp:include page="button_edit_save_reset.jsp"></jsp:include>
+</div>			
+	

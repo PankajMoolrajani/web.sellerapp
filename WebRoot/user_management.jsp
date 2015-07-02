@@ -20,13 +20,8 @@
 	<div id="div-user-browse" class="row">			
 	<br/><br/>			
 		<div class="col-sm-12 col-md-12 col-xs-12" >
-			<div id="div-user-search" class="row">										
-				<div class="col-md-3 col-sm-4 col-xs-10 col-md-offset-8 col-sm-offset-7 col-xs-offset-1 input-group">
-	    			<input type="text" class="form-control" id="input-text-user-search" placeholder="Search User"/>
-					<span class="input-group-addon">
-					<i class="fa fa-search"></i>
-		   			</span>						
-				</div>								
+			<div id="div-user-search" class="row">
+				<jsp:include page="search_box_main.jsp"></jsp:include>										
 			</div>	
 			<div id="div-user-table" class="row">							
 				<div class="col-sm-12 col-md-12 col-xs-12">

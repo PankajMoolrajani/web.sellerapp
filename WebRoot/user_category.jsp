@@ -19,13 +19,8 @@
 	<div id="div-user-category-browse" class="row" > 
 		<div class="col-sm-12 col-md-12 col-xs-12">
 			<div id="div-user-category-search" class="row">
-			<br/><br/>					
-				<div class="col-md-3 col-sm-4 col-xs-10 col-md-offset-8 col-sm-offset-7 col-xs-offset-1 input-group">
-					<input type="text" id="input-text-user-category-search" class="form-control"  placeholder="Search User"/>
-					<span class="input-group-addon">
-						<i class="fa fa-search"></i>
-					</span>						
-				</div>					
+			<br/><br/>
+				<jsp:include page="search_box_main.jsp"></jsp:include>					
 			</div>
 			<div id="div-user-category-table" class="row">
 				<div class="col-sm-12 col-md-12 col-xs-12 ">
