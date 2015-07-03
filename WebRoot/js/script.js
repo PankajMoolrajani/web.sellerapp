@@ -12,31 +12,44 @@ $(document).ready(function(){
 /*................... Javascript for login page ......................*/
 
 	var submitLoginForm;	
-	submitLoginForm = function(login_username , login_password){	
-		alert(login_username);
+	submitLoginForm = function(login_username , login_password){			
 		var jsonData = {"login_username": login_username, "login_password":login_password };
-		var $btn = $("#btn-submit-login-form").button('loading'); //explain button('loading')				
+		var $btn = $("#btn-submit-login-form").button('loading');		
+		
+		
 		$.ajax({
-			type: "POST", //get request
-			url: "http://abc:8080/rest.sellerapp/rest/auth/login",
-			async: false,
-			data: JSON.stringify(jsonData), //use pass instead of hash user_
-			dataType: "html",
+			type: "GET",
+			url: "http://dev.monoxor.com:8080/rest.sellerapp/rest/auth/auth_token_url",
+			async: false,			
+			dataType: "json",			
+			contentType: "application/json; charset=utf-8",
+			success: function(responseText){	
+				alert(responseText.login_token_url);
+				 //var login_token_url = responseText.login_token_url;
+				 //getAccessToken(login_token_url);				
+			},
+			error: function(request,error,data)
+			{
+				alert(request);
+				alert(error);
+				alert(data);
+			}
+		});		
+	};
+	
+	function getAccessToken(access_token_url){	
+		alert(access_token_url+' came here');
+		$.ajax({
+			type: "GET",
+			url: access_token_url,
+			async: false,			
+			dataType: "jsons",
 			contentType: "application/json; charset=utf-8",
 			success: function(responseText){
-				$btn.button('reset'); //check issues 	
-				alert(responseText);
-//				var error_code = responseText["error_code"];
-//				if(error_code=="")
-//				{					
-//					var pageURL = responseText["page-to-load"];						
-//					window.location.assign(pageURL);									
-//				}
-//				else
-//				{														
-//					var error_message=getErrorMessage(error_code);
-//					$("#div-login-profile-status").html("<p class='login-error-msg'>"+error_message+"</p>");															
-//				}		
+			alert(responseText.access_token);
+			var access_token = responseText.access_token;
+				var token_check_url = getAuthTokenCheckURL();
+				checkAuthToken(token_check_url,access_token);
 			},
 			error: function(request,error,data)
 			{
@@ -45,7 +58,47 @@ $(document).ready(function(){
 				alert(data);
 			}
 		});
-	};
+	}
+	
+	function getAuthTokenCheckURL(){
+		$.ajax({
+				type: "GET",
+				url: "http://dev.monoxor.com:8080/rest.sellerapp/rest/auth/auth_token_check_url",
+				async: false,			
+				dataType: "jsons",
+				contentType: "application/json; charset=utf-8",
+				success: function(responseText){
+				var login_token_check_url = responseText.login_token_check_url;					
+				return login_token_check_url;				
+			},
+			error: function(request,error,data)
+			{
+				alert(request);
+				alert(error);
+				alert(data);
+			}
+		});
+	}
+	
+	function checkAuthToken(token_check_url,access_token){
+		$.ajax({
+			type: "GET",
+			url: token_check_url,
+			async: false,			
+			dataType: "jsons",
+			contentType: "application/json; charset=utf-8",
+			success: function(responseText){
+			var authentication_state = responseText.check_access_token;
+				alert(authentication_state);
+			},
+			error: function(request,error,data)
+			{
+				alert(request);
+				alert(error);
+				alert(data);
+			}
+		});
+	}
 	
 	$("#btn-submit-login-form").click(function(){	
 		var login_username = $("#input-text-login-username").val(); // changed variable name to login_username
@@ -1391,6 +1444,7 @@ function invoicePageScript(domainName)
 													"<td id='td-form-invoice-create-invoice-line-qty-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-qty'"+invoiceLineCount+" class='form-control'/></td>" +
 													"<td id='td-form-invoice-create-invoice-line-tax-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-tax-'"+invoiceLineCount+" class='form-control'/></td>" +
 													"<td id='td-form-invoice-create-invoice-line-amount-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-amount-'"+invoiceLineCount+" class='form-control'/></td>" +
+													"<td id='td-form-invoice-create-invoice-line-remove-'"+invoiceLineCount+"><button type='button' id='"+invoiceLineCount+"' class='form-control btn btn-primary btn-sm '><span class='glyphicon glyphicon-remove'></span></button></td>" +
 												"</tr>");				
 
 		};
@@ -1419,7 +1473,8 @@ function invoicePageScript(domainName)
 		$("#tbody-table-invoice-payment-line").append("<tr><td id='td-form-invoice-create-payment-line-sno-'"+invoiceLineCount+">"+invoiceLineCount+"</td>" +
 														"<td id='td-form-invoice-create-payment-line-date-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-payment-line-product-name-'"+invoiceLineCount+" class='form-control'/></td>" +
 														"<td id='td-form-invoice-create-payment-line-amount-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-payment-line-unit-price'"+invoiceLineCount+" class='form-control'/></td>" +
-														"<td id='td-form-invoice-create-payment-line-transaction-id-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-payment-line-qty'"+invoiceLineCount+" class='form-control'/></td>" +													
+														"<td id='td-form-invoice-create-payment-line-transaction-id-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-payment-line-qty'"+invoiceLineCount+" class='form-control'/></td>" +
+														"<td id='td-form-invoice-create-payment-line-transaction-id-'"+invoiceLineCount+"><button type='button' id='"+invoiceLineCount+"' class='form-control btn btn-primary btn-sm '><span class='glyphicon glyphicon-remove'></span></button></td>" +													
 													   "</tr>");				
 
 	};

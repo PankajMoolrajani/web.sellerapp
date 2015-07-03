@@ -23,6 +23,10 @@
 {
 	border:2px solid #ddd;padding:10px; margin-top:2%; display:none; border-radius:4px;
 }
+#div-user-cateogry-create div #div-form-user-category-create div #div-form-user-category-create-state-buttons div #btn-page-state-edit-main
+{
+	display:none;
+}
 
 #td-user-temp-1-next
 {
@@ -43,9 +47,12 @@
 /*..........................user-create-page-OPEN..........................*/
 #div-form-user-create
 {
-	border:1px dotted gray;display:none; margin-top:2%;border-radius:4px;
+	border:1px dotted gray;padding:10px;display:none; margin-top:2%;border-radius:4px;
 }
-
+#div-user #div-user-create div #div-form-user-create div #div-form-user-create-state-buttons div #btn-page-state-edit-main
+{
+	display:none;
+}
 nav.sidebar 
 {
   z-index:1000;
@@ -163,10 +170,9 @@ ul
 }
 
 /*..........................for inventory page OPEN................................*/
-.category
-{	
-	height:18%;
-	overflow-y:auto;
+#div-inventory #div-inventory-create div #div-form-inventory-create-state-buttons div #btn-page-state-edit-main
+{
+	display:none;
 }
 .left-padd
 {
@@ -306,8 +312,20 @@ nav.sidebar ul >li > ul > li
 	font-size:small;
 }
 
-/*..............invoice_management.jsp...............*/
+#div-orders #div-order-create-orders div #div-form-order-create div #div-form-order-create-state-buttons div #btn-page-state-edit-main
+{
+	display:none;
+}
+/*..............invoice_management...............*/
+#div-invoice #div-invoice-create div #div-form-invoice-create div #div-form-invoice-create-pay-invoice div div #btn-page-state-edit-main
+{
+	display:none;
+}
 #div-form-invoice-create
 {
 	border:1px dotted gray; padding:10px;margin-top:2%;display:none;border-radius:4px;
+}
+.border-bottom-invoice-line-total
+{
+	 border-bottom: 2px solid #ddd; 
 }
