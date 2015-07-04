@@ -316,7 +316,9 @@ nav.sidebar ul >li > ul > li
 {
 	display:none;
 }
+
 /*..............invoice_management...............*/
+
 #div-invoice #div-invoice-create div #div-form-invoice-create div #div-form-invoice-create-pay-invoice div div #btn-page-state-edit-main
 {
 	display:none;
@@ -328,4 +330,8 @@ nav.sidebar ul >li > ul > li
 .border-bottom-invoice-line-total
 {
 	 border-bottom: 2px solid #ddd; 
+}
+#td-invoice-temp-1-next
+{
+	display:none;
 }

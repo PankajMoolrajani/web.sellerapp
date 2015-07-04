@@ -3,7 +3,7 @@
 	<div class="col-md-12 col-sm-12">
 		<table id="table-invoice-line" class="table table-striped table-hover table-condensed ">
 			<thead id="thead-table-invoice-line">  <!-- made changes in id -->
-				<th>SNO</th><th>Product Name</th><th>Unit Price</th><th>Qty</th><th>Tax</th><th>Amount</th><th>remove</th>			      
+				<th>Product Name</th><th>Unit Price</th><th>Qty</th><th>Tax</th><th>Amount</th><th>remove</th>			      
 			</thead>
 			<tbody id="tbody-table-invoice-line">
 					

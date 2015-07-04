@@ -46,7 +46,7 @@
 					<div class="col-md-12 col-sm-12">
 						<table id="table-order-line" class="table table-striped table-hover table-condensed ">
 							<thead id="thead-table-order-line">  <!-- made changes in id -->
-								<th>SNO</th><th>Title</th><th>Qty</th><th>Unit Price</th><th>Taxable Amount</th><th>Tax</th><th>SubTotal</th><th>remove</th>				      
+								<th>Title</th><th>Qty</th><th>Unit Price</th><th>Taxable Amount</th><th>Tax</th><th>SubTotal</th><th>remove</th>				      
 							</thead>
 							<tbody id="tbody-table-order-line">
 									

@@ -1420,6 +1420,11 @@ function inventoryFormValid()
 function invoicePageScript(domainName)
 {
 	var invoiceLineCount = 0;
+	var invoiceLineArray =[];
+	
+	var paymentLineCount = 0;
+	var paymentLineArray =[];
+	
 	/*.......launch the invoice form.......*/
 	$("#btn-invoice-create").click(function(){			
 		$("#div-form-invoice-create").toggle();
@@ -1435,19 +1440,115 @@ function invoicePageScript(domainName)
 	$('#input-text-form-invoice-create-order-date').datepicker({
 		format: "dd/mm/yyyy"
 	}); 
-
-	$.fn.invoiceLineFormScript = function(){			
-		invoiceLineCount= invoiceLineCount+1;
-		$("#tbody-table-invoice-line").append("<tr><td id='td-form-invoice-create-invoice-line-sno-'"+invoiceLineCount+">"+invoiceLineCount+"</td>" +
-													"<td id='td-form-invoice-create-invoice-line-product-name-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-product-name-'"+invoiceLineCount+" class='form-control'/></td>" +
+	
+	$.fn.invoiceLineFormScript = function(){
+		invoiceLineArray.push("btn-form-invoice-create-invoice-line-remove-"+invoiceLineCount);
+		$("#tbody-table-invoice-line").append("<tr><td id='td-form-invoice-create-invoice-line-product-name-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-product-name-'"+invoiceLineCount+" class='form-control'/></td>" +
 													"<td id='td-form-invoice-create-invoice-line-unit-price-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-unit-price'"+invoiceLineCount+" class='form-control'/></td>" +
 													"<td id='td-form-invoice-create-invoice-line-qty-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-qty'"+invoiceLineCount+" class='form-control'/></td>" +
 													"<td id='td-form-invoice-create-invoice-line-tax-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-tax-'"+invoiceLineCount+" class='form-control'/></td>" +
 													"<td id='td-form-invoice-create-invoice-line-amount-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-amount-'"+invoiceLineCount+" class='form-control'/></td>" +
-													"<td id='td-form-invoice-create-invoice-line-remove-'"+invoiceLineCount+"><button type='button' id='"+invoiceLineCount+"' class='form-control btn btn-primary btn-sm '><span class='glyphicon glyphicon-remove'></span></button></td>" +
+													"<td id='td-form-invoice-create-invoice-line-remove-'"+invoiceLineCount+"><button type='button' id='btn-form-invoice-create-invoice-line-remove-"+invoiceLineCount+"' class='invoice-line-remove-button form-control btn btn-primary btn-sm '><span class='glyphicon glyphicon-remove'></span></button></td>" +
 												"</tr>");				
+		invoiceLineCount= invoiceLineCount+1;			
+		removeLineScript();
+		
+	};
+	function removeLineScript()
+	{
+		$(".invoice-line-remove-button").click(function(){			
+			var currentItemId = $(this).attr("id");
+			for(var i=0 ; i< invoiceLineArray.length ; i=i+1){				
+				if(invoiceLineArray[i] == currentItemId)
+				{
+					delete invoiceLineArray[i];
+				}	
+			}
+			$(this).parent().parent().hide();			
+		});
+	}
+		
+	
+	$.fn.invoicePaymentLineScript = function(){		
+		paymentLineArray.push("btn-form-invoice-create-payment-line-remove-"+paymentLineCount);
+		$("#tbody-table-invoice-payment-line").append("<tr><td id='td-form-invoice-create-payment-line-date-'"+paymentLineCount+"><input type='text' id='input-text-form-invoice-create-payment-line-date-'"+paymentLineCount+" class='form-control'/></td>" +
+													"<td id='td-form-invoice-create-payment-line-transaction-id'"+paymentLineCount+"><input type='text' id='input-text-form-invoice-create-payment-line-transaction-id'"+paymentLineCount+" class='form-control'/></td>" +
+													"<td id='td-form-invoice-create-payment-line-amount-'"+paymentLineCount+"><input type='text' id='input-text-form-invoice-create-payment-line-amount'"+paymentLineCount+" class='form-control'/></td>" +
+													"<td id='td-form-invoice-create-payment-line-remove-'"+paymentLineCount+"><button type='button' id='btn-form-invoice-create-payment-line-remove-"+paymentLineCount+"' class='invoice-line-remove-button form-control btn btn-primary btn-sm '><span class='glyphicon glyphicon-remove'></span></button></td>" +
+												"</tr>");				
+		paymentLineCount= paymentLineCount+1;
+		
+//		$("#input-text-form-invoice-create-payment-line-date-"+paymentLineCount).datepicker({
+//			format: "dd/mm/yyyy"
+//		});
+		
+		removePaymentLineScript();
+		
+	};
+	function removePaymentLineScript()
+	{
+		$(".invoice-line-remove-button").click(function(){			
+			var currentItemId = $(this).attr("id");
+			for(var i=0 ; i< paymentLineArray.length ; i=i+1){				
+				if(paymentLineArray[i] == currentItemId)
+				{
+					delete paymentLineArray[i];
+				}	
+			}
+			$(this).parent().parent().hide();			
+		});
+	}
+	
+	$("#tbody-table-invoice").html("<tr><td><input type='checkbox' id='input-check-invoice-temp-1' value=''></input></td><td>inv_12345</td><td>Amit Sharma</td><td>ord_12345</td><td>745</td><td>50</td><td>25</td><td>delivered</td></tr>" +
+	   							   "<tr><td id='td-invoice-temp-1-next' colspan='8'></td></tr>");
+	
+	$("#input-check-invoice-temp-1").click(function(){					
+		invoiceTableRowEdit();
+		$("#td-invoice-temp-1-next").toggle();
+	});
+	
+	var invoiceTableRowEdit;
+	invoiceTableRowEdit = function(){			
+		$("#td-invoice-temp-1-next").load('form_invoice_create.jsp',function(){
+			
+			
+			$("#tbody-table-invoice tr td #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab #tabs li #li-tab-form-invoice-create-info").attr("href","#div-form-invoice-create-info-1");
+			alert($("#tbody-table-invoice tr td #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab-pages #div-form-invoice-create-info"));
+			$("#tbody-table-invoice tr td #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab-pages #div-form-invoice-create-info").attr("id","div-form-invoice-create-info-1");
+			
+//			$("#td-orders-temp-1-next #div-form-order-create-heading").css("display","none");
+//			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("1245855685522");			
+//			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("Sharma");
+//			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("demo-category");
+//			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("9549554645");
+//			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("amit@demo.com");
 
-		};
+			
+//			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-order-date #input-date-form-order-create-order-date").datepicker({
+//				format: "dd/mm/yyyy"
+//		    }); 				
+			//$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("hello ji");
+						
+			//$("#td-orders-temp-1-next #div-form-order-create-line-4 #div-form-order-create-reset #btn-form-order-create-reset").css("display","none");
+			
+//			$('.selectpicker').selectpicker();	
+//			
+//			$('.selectpicker').selectpicker({
+//				style: 'btn-info',
+//				size: 4
+//			});
+			
+//			$("#div-create-order-sub-form #div-form-order-create-line-2 #div-order-line-table #btn-form-order-line-create-add-line").click(function(){
+//				$.fn.orderLineFormTableEditScript();
+//			});
+//			$("#div-create-order-sub-form #div-form-order-create-line-2 #div-order-line-table #btn-form-order-create-order-line-total").click(function(){
+//				alert('now count is '+orderLineCountEdit);		
+//			});
+			
+		});	
+		
+	};
+	
 //	$.fn.orderLineFormTableEditScript = function(){			
 //		orderLineCountEdit= orderLineCountEdit+1;
 //		$("#div-order-line-table-inner #table-order-line #tbody-table-order-line").append("<tr><td id='td-form-order-create-order-line-sno-'"+orderLineCount+">"+orderLineCountEdit+"</td>" +
@@ -1467,23 +1568,10 @@ function invoicePageScript(domainName)
 //	$("#btn-form-invoice-create-order-line-total").click(function(){
 //		alert('now count is '+invoiceLineCount);		
 //	});
-
-	$.fn.invoicePaymentLineFormScript = function(){			
-		invoicePaymentLineCount= invoicePaymentLineCount+1;
-		$("#tbody-table-invoice-payment-line").append("<tr><td id='td-form-invoice-create-payment-line-sno-'"+invoiceLineCount+">"+invoiceLineCount+"</td>" +
-														"<td id='td-form-invoice-create-payment-line-date-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-payment-line-product-name-'"+invoiceLineCount+" class='form-control'/></td>" +
-														"<td id='td-form-invoice-create-payment-line-amount-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-create-payment-line-unit-price'"+invoiceLineCount+" class='form-control'/></td>" +
-														"<td id='td-form-invoice-create-payment-line-transaction-id-'"+invoiceLineCount+"><input type='text' id='input-text-form-invoice-payment-line-qty'"+invoiceLineCount+" class='form-control'/></td>" +
-														"<td id='td-form-invoice-create-payment-line-transaction-id-'"+invoiceLineCount+"><button type='button' id='"+invoiceLineCount+"' class='form-control btn btn-primary btn-sm '><span class='glyphicon glyphicon-remove'></span></button></td>" +													
-													   "</tr>");				
-
-	};
+	
 	$("#btn-form-invoice-create-add-payment-line").click(function(){
-		$.fn.invoicePaymentLineFormScript();
-	});	
-	
-	
-	$("#tbody-table-invoice").html("<tr><td><input type='checkbox' value=''></input></td><td>inv_12345</td><td>Amit Sharma</td><td>ord_12345</td><td>745</td><td>50</td><td>25</td><td>delivered</td></tr>");
+		$.fn.invoicePaymentLineScript();
+	});			
 	
 }
 
@@ -1582,7 +1670,9 @@ $("#btn-form-user-create-submit").click(function(){
 function orderPageScript(domainName)
 {	
 	var orderLineCount = 0;
+	var orderLineArray = [];
 	var orderLineCountEdit = 0;
+	var orderLineEditArray= [];
 	/*.......launch the order form.......*/
 	$("#btn-order-create").click(function(){			
 		$("#div-form-order-create").toggle();
@@ -1596,30 +1686,59 @@ function orderPageScript(domainName)
 	$('#input-date-form-order-create-order-date').datepicker({
 		format: "dd/mm/yyyy"
 	}); 
-	$.fn.orderLineFormScript = function(){			
-		orderLineCount= orderLineCount+1;
-		$("#tbody-table-order-line").append("<tr><td id='td-form-order-create-order-line-sno-'"+orderLineCount+">"+orderLineCount+"</td>" +
-												"<td id='td-form-order-create-order-line-title-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-title-'"+orderLineCount+" class='form-control'/></td>" +
+	$.fn.orderLineFormScript = function(){					
+		$("#tbody-table-order-line").append("<tr><td id='td-form-order-create-order-line-title-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-title-'"+orderLineCount+" class='form-control'/></td>" +
 												"<td id='td-form-order-create-order-line-qty-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-qty-'"+orderLineCount+" class='form-control'/></td>" +
 												"<td id='td-form-order-create-order-line-unit-price-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-unit-price-'"+orderLineCount+" class='form-control'/></td>" +
 												"<td id='td-form-order-create-order-line-taxable-amount-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-amount-'"+orderLineCount+" class='form-control'/></td>" +
 												"<td id='td-form-order-create-order-line-tax-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-tax-'"+orderLineCount+" class='form-control'/></td>" +
 												"<td id='td-form-order-create-order-line-subtotal-'"+orderLineCount+"><input type='text' id='input-text-form-order-create-order-line-subtotal-'"+orderLineCount+" class='form-control'/></td>" +
-												"<td id='td-form-order-create-order-line-remove-line-'"+orderLineCount+"><button type='button' id='"+orderLineCount+"' class='form-control btn btn-primary btn-sm '><span class='glyphicon glyphicon-remove'></span></button></td></tr>");				
-
+												"<td id='td-form-order-create-order-line-remove-line-'"+orderLineCount+"><button type='button' id='btn-form-order-create-order-line-remove-"+orderLineCount+"' class='order-line-remove-button form-control btn btn-primary btn-sm '><span class='glyphicon glyphicon-remove'></span></button></td></tr>");				
+		orderLineArray.push("btn-form-order-create-order-line-remove-"+orderLineCount);
+		orderLineCount= orderLineCount+1;
+		removeOrderLineScript();
 	};
+	
+	function removeOrderLineScript()
+	{
+		$(".order-line-remove-button").click(function(){			
+			var currentItemId = $(this).attr("id");
+			for(var i=0 ; i< orderLineArray.length ; i=i+1){				
+				if(orderLineArray[i] == currentItemId)
+				{
+					delete orderLineArray[i];
+				}	
+			}
+			$(this).parent().parent().hide();			
+		});
+	}
+	
 	$.fn.orderLineFormTableEditScript = function(){			
 		orderLineCountEdit= orderLineCountEdit+1;
-		$("#div-order-line-table-inner #table-order-line #tbody-table-order-line").append("<tr><td id='td-form-order-create-order-line-sno-'"+orderLineCount+">"+orderLineCountEdit+"</td>" +
-												"<td id='td-form-order-create-order-line-title-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-title-'"+orderLineCountEdit+" class='form-control'/></td>" +
+		$("#div-order-line-table-inner #table-order-line #tbody-table-order-line").append("<tr><td id='td-form-order-create-order-line-title-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-title-'"+orderLineCountEdit+" class='form-control'/></td>" +
 												"<td id='td-form-order-create-order-line-qty-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-qty-'"+orderLineCountEdit+" class='form-control'/></td>" +
 												"<td id='td-form-order-create-order-line-unit-price-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-unit-price-'"+orderLineCountEdit+" class='form-control'/></td>" +
 												"<td id='td-form-order-create-order-line-taxable-amount-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-amount-'"+orderLineCountEdit+" class='form-control'/></td>" +
 												"<td id='td-form-order-create-order-line-tax-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-tax-'"+orderLineCountEdit+" class='form-control'/></td>" +
-												"<td id='td-form-order-create-order-line-subtotal-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-subtotal-'"+orderLineCountEdit+" class='form-control'/></td></tr>");				
-
+												"<td id='td-form-order-create-order-line-subtotal-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-subtotal-'"+orderLineCountEdit+" class='form-control'/></td>" +
+												"<td id='td-form-order-create-order-line-remove-'"+orderLineCountEdit+"><button type='button' id='btn-form-order-create-order-line-remove-"+orderLineCount+"' class='order-line-remove-button form-control btn btn-primary btn-sm '><span class='glyphicon glyphicon-remove'></span></button></tr>");				
+		orderLineEditArray.push("btn-form-order-create-order-line-remove-"+orderLineCount);
+		orderLineCount= orderLineCount+1;
+		removeOrderLineEditScript();
 	};
-	
+	function removeOrderLineEditScript()
+	{
+		$("#div-order-line-table-inner div div #table-order-line #tbody-table-order-line tr td .order-line-remove-button").click(function(){			
+			var currentItemId = $(this).attr("id");
+			for(var i=0 ; i< orderLineEditArray.length ; i=i+1){				
+				if(orderLineEditArray[i] == currentItemId)
+				{
+					delete orderLineEditArray[i];
+				}	
+			}
+			$(this).parent().parent().hide();			
+		});
+	}
 	
 	$("#btn-form-order-line-create-add-line").click(function(){
 		$.fn.orderLineFormScript();
@@ -1636,15 +1755,15 @@ function orderPageScript(domainName)
 	});
 	
 	/*...........Demo Table script OPEN...........*/
-	var orderTableDemoData="<tr><td><input type='checkbox' id='td-orders-temp-1' value=''></input></td><td>1245855685522</td><td>Amit Sharma</td><td>Amazon.in</td><td>poi314577455</td><td>10/05/2012</td><td>pending</td></tr>";
-	ordersTableDemoData = orderTableDemoData+"<tr><td id='td-orders-temp-1-next' colspan='7'></td></tr>";	
+	var orderTableDemoData="<tr><td><input type='checkbox' id='input-check-orders-temp-1' value=''></input></td><td>1245855685522</td><td>Amit Sharma</td><td>Amazon.in</td><td>poi314577455</td><td>10/05/2012</td><td>pending</td></tr>";
+	ordersTableDemoData = orderTableDemoData+"<tr><td id='input-check-orders-temp-1-next' colspan='7'></td></tr>";	
 	$("#tbody-table-orders").html(ordersTableDemoData);	
 	
 	
-	$("#td-orders-temp-1").click(function(){			
+	$("#input-check-orders-temp-1").click(function(){			
 		
 		ordersTableRowEdit();
-		$("#td-orders-temp-1-next").toggle();
+		$("#input-check-orders-temp-1-next").toggle();
 	});
 	
 	var ordersTableRowEdit;

@@ -1,9 +1,9 @@
 <div class="row">
 	<div id="div-form-invoice-create-tab" class="col-md-12 col-sm-12 ">
 	    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-	        <li class="active"><a href="#div-form-invoice-create-lines" data-toggle="tab">Invoice Lines</a></li>
-	        <li><a href="#div-form-invoice-create-info" data-toggle="tab">Marketplace Info</a></li>
-	        <li><a href="#div-form-invoice-create-payment" data-toggle="tab">Payment</a></li>	        
+	        <li class="active"><a href="#div-form-invoice-create-lines" id="li-tab-form-invoice-create-line" data-toggle="tab">Invoice Lines</a></li>
+	        <li><a href="#div-form-invoice-create-info" id="li-tab-form-invoice-create-info" data-toggle="tab">Marketplace Info</a></li>
+	        <li><a href="#div-form-invoice-create-payment" id="li-tab-form-invoice-create-payment" data-toggle="tab">Payment</a></li>	        
 	    </ul>											
 	</div>
 </div>
