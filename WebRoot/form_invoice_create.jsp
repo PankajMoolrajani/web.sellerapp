@@ -6,7 +6,5 @@
 </div>
 <br/>
 <div id="div-form-invoice-create-pay-invoice" class="row">
-	<div class="form-group col-sm-12 col-md-12">				
-		<jsp:include page="button_edit_save_reset.jsp"></jsp:include>
-	</div>			
+	<jsp:include page="button_edit_save_reset.jsp"></jsp:include>				
 </div>								

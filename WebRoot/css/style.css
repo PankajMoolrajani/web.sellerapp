@@ -23,7 +23,7 @@
 {
 	border:2px solid #ddd;padding:10px; margin-top:2%; display:none; border-radius:4px;
 }
-#div-user-cateogry-create div #div-form-user-category-create div #div-form-user-category-create-state-buttons div #btn-page-state-edit-main
+#div-user-cateogry-create div #div-form-user-category-create div #div-form-user-category-create-state-buttons div .btn-page-state-edit-main
 {
 	display:none;
 }
@@ -49,7 +49,7 @@
 {
 	border:1px dotted gray;padding:10px;display:none; margin-top:2%;border-radius:4px;
 }
-#div-user #div-user-create div #div-form-user-create div #div-form-user-create-state-buttons div #btn-page-state-edit-main
+#div-user #div-user-create div #div-form-user-create div #div-form-user-create-state-buttons div .btn-page-state-edit-main
 {
 	display:none;
 }
@@ -170,7 +170,7 @@ ul
 }
 
 /*..........................for inventory page OPEN................................*/
-#div-inventory #div-inventory-create div #div-form-inventory-create-state-buttons div #btn-page-state-edit-main
+#div-inventory #div-inventory-create div #div-form-inventory-create-state-buttons div .btn-page-state-edit-main
 {
 	display:none;
 }
@@ -312,14 +312,14 @@ nav.sidebar ul >li > ul > li
 	font-size:small;
 }
 
-#div-orders #div-order-create-orders div #div-form-order-create div #div-form-order-create-state-buttons div #btn-page-state-edit-main
+#div-orders #div-order-create-orders div #div-form-order-create div #div-form-order-create-state-buttons div .btn-page-state-edit-main
 {
 	display:none;
 }
 
 /*..............invoice_management...............*/
 
-#div-invoice #div-invoice-create div #div-form-invoice-create div #div-form-invoice-create-pay-invoice div div #btn-page-state-edit-main
+#div-invoice #div-invoice-create div #div-form-invoice-create div #div-form-invoice-create-pay-invoice div div .btn-page-state-edit-main
 {
 	display:none;
 }

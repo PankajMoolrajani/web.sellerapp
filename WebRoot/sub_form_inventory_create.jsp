@@ -56,11 +56,11 @@
 		<div class="row">		
 			<div id="div-form-inventory-create-tab" class="col-md-12 col-sm-12 ">
 				    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-				        <li class="active"><a href="#div-form-inventory-create-stock" data-toggle="tab">Stock</a></li>
-				        <li><a href="#div-form-inventory-create-procurement" data-toggle="tab">Procurement</a></li>
-				        <li><a href="#div-tab-form-inventory-create-sales" data-toggle="tab">Sales</a></li>
-				        <li><a href="#div-tab-form-inventory-create-variants" data-toggle="tab">Variants</a></li>
-				        <li><a href="#div-tab-form-inventory-create-accounting" data-toggle="tab">Accounting</a></li>
+				        <li class="active"><a href="#div-form-inventory-create-stock" id="a-tab-form-inventory-create-stock" data-toggle="tab">Stock</a></li>
+				        <li><a href="#div-form-inventory-create-procurement" id="a-tab-form-inventory-create-procurement" data-toggle="tab">Procurement</a></li>
+				        <li><a href="#div-tab-form-inventory-create-sales" id="a-tab-form-inventory-create-sales" data-toggle="tab">Sales</a></li>
+				        <li><a href="#div-tab-form-inventory-create-variants" id="a-tab-form-inventory-create-variants" data-toggle="tab">Variants</a></li>
+				        <li><a href="#div-tab-form-inventory-create-accounting" id="a-tab-form-inventory-create-accounting" data-toggle="tab">Accounting</a></li>
 				    </ul>											
 			</div>
 		</div>	

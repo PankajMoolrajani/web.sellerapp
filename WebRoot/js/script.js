@@ -157,7 +157,6 @@ $(document).ready(function(){
     	$( "#a-toggle-button-sidebar  span.glyphicon" ).removeClass("glyphicon-chevron-left");
     	$( "#a-toggle-button-sidebar  span.glyphicon" ).addClass("glyphicon-chevron-right");    	    
     }
-
 	
 	function toggleSidebar()
 	{
@@ -230,7 +229,536 @@ $(document).ready(function(){
 	
 	invoicePageScript(domainName);
 	invoiceCreateFormVal(domainName);
+	
+	saveButtonScript();
+	//editButtonScript();
+	resetButtonScript(domainName);
+	searchBarScript();
+	selectPickerScript();
 });
+
+function selectPickerScript()
+{	
+	$('.selectpicker').selectpicker();	
+	
+	$('.selectpicker').selectpicker({
+		style: 'btn-info',
+		size: 4
+	});
+}
+
+function saveButtonScript()
+{	
+	$(".btn-page-state-save-main").click(function(){			
+		var parentId = $(this).parent().parent().attr("id");					
+		switch(parentId) {
+	    case "div-form-user-create-state-buttons":
+	    	submitUserFormDetails();
+	        break;
+	    case "div-form-user-category-create-state-buttons":
+	        submitUserCatFormDetails();
+	        break;
+	    case "div-form-inventory-create-state-buttons":
+	        submitInventoryFormDetails();
+	        break;
+	    case "div-form-order-create-state-buttons":
+	        submitOrderFormDetails();
+	        break;
+	    case "div-form-invoice-create-pay-invoice":
+	    	submitInvoiceFormDetails();
+	        break;
+	    default:
+	    	
+		}
+	});
+}
+
+/*...............user-create Form Submission.................*/
+
+function submitUserFormDetails(){	
+	var $btn = $("#btn-form-user-create-submit").button('loading');
+	var selector = ["#input-text-form-user-create-fname",
+	                "#input-text-form-user-crate-lname",
+	                "#input-text-form-user-create-phone", 
+	                "#input-text-form-user-create-email", 
+	                "#input-text-form-user-create-add-1", 	  
+	                "#input-text-form-user-create-add-2", 
+	                "#input-text-form-user-create-city", 
+	                "#input-text-form-user-state", 
+	                "#input-text-form-user-create-zip",
+	                "#input-select-form-user-create-category"];
+	var userFormSubmitState="false";
+	for(var i=0 ; i<selector.length ; i=i+1)
+	{		
+		if($(selector[i]).parent().hasClass("has-error") || $(selector[i]).val()=="")
+		{
+			userFormSubmitState= "false";						  
+			break;
+		}
+		else
+		{				 
+			userFormSubmitState="true";			 
+		}
+	}
+	 		
+	if(userFormSubmitState=="true")
+	{					
+//		$.ajax({
+//			type: "POST",
+//			url: "UserFormSubmitServlet",
+//			dataType: "json",
+//			data: {"form_user_fname_text": $(selector[0]).val(),
+//			"form_user_lname_text": $(selector[1]).val() ,
+//			"form_user_phone_text": $(selector[2]).val() ,
+//			"form_user_email_text": $(selector[3]).val(),
+//			"form_user_add1_text": $(selector[4]).val() ,
+//			"form_user_add2_text": $(selector[5]).val() ,
+//			"form_user_city_text": $(selector[6]).val() ,
+//			"form_user_state_text": $(selector[7]).val() ,
+//			"form_user_zip_text": $(selector[8]).val() ,				 							 			
+//			"form_user_category_select": $(selector[9]).val()},				
+//			success: function(responseText){
+//				$btn.button('reset');
+//				alert('in success');
+//				$("#div-form-user-create").load('form_user_create.jsp');
+//				$("#div-form-user-create").toggle();				 				
+//				alert(responseText["userStatus"]);
+//					},
+//			error: function(request, error, data){
+//						alert(error);						
+//						$btn.button('reset');
+//				} 
+//		});
+	}
+	else
+	{
+		alert("First Fill all the fields Properly");		
+		$btn.button('reset');
+	}	
+}
+
+function submitUserCatFormDetails()
+{
+	var $btn = $(this).button('loading');
+	var selector = ["#input-text-form-user-category-create-name",
+	                 "#input-text-form-user-category-create-description"];
+	var userFormSubmitState="false";
+	for(var i=0 ; i<selector.length ; i=i+1)
+	{		
+		if($(selector[i]).parent().hasClass("has-error") || $(selector[i]).val()=="")
+		{				
+			userFormSubmitState = "false";
+			alert("First Fill all the fields Properly");		
+			$btn.button('reset');
+			break;
+		}
+		else
+		{
+			userFormSubmitState="true";			 
+		}
+	}
+	if(userFormSubmitState=="true")
+	{
+		alert('value inserted');	
+//		$.ajax({
+//			type: "POST",
+//			url: "UserCatFormSubmitServlet",
+//			dataType: "html",
+//			data: {"usercat_cname_text": $(selector[0]).val(),
+//					"usercat_cdesc_text": $(selector[1]).val()},				
+//			success: function(responseText){
+//				$("#div-form-user-category-create").toggle();
+//				$("#div-form-user-category-create").load('form_user_category_create.jsp');
+//				$btn.button('reset')				
+//				},
+//			error: function(request, error, data){
+//				alert(error);
+//				$btn.button('reset')
+//				} 
+//			});
+	 }
+}
+
+function submitInventoryFormDetails()
+{						
+	var $btn = $("#input-btn-submit-form-inventory-create").button('loading');
+	
+	var selector = ["#input-text-form-inventory-create-base-sku",
+	                "#input-text-form-inventory-create-name",
+	                "#input-text-form-inventory-create-weight",
+	                "#input-text-form-inventory-create-maxprice", 
+	                "#input-text-form-invenotry-create-minprice", 
+	                "#input-text-form-invenotry-create-stock", 	  
+	                "#input-select-form-inventory-create-category", 
+	                "#input-select-form-inventory-create-category", 
+	                "#input-text-form-inventory-create-tags"];
+		
+	//passing selector and marketplaceCount to the function
+	$.fn.inventoryEntryFormValid(selector,marketplaceCount);		
+	
+	//validation of fields
+	$.fn.inventoryEntryFormValid = function(selector,marketplaceCount){				
+		
+		var inventoryFullSubmitState="false";
+		for(var i=0 ; i<selector.length ; i=i+1)
+		{		
+			if($(selector[i]).parent().hasClass("has-error") || $(selector[i]).val()=="")
+			{				
+				inventoryFullSubmitState= "false";						  
+				break;
+			}
+			else
+			{				 				
+				inventoryFullSubmitState="true";			 
+			}
+		}
+		 		
+		if(inventoryFullSubmitState=="true")
+		{					
+			$.fn.submitInventoryForm(selector,marketplaceCount);
+		}
+		else
+		{
+			alert("First Fill all the fields Properly");		
+			$btn.button('reset');
+		}						
+	}
+	
+	$.fn.submitInventoryForm = function(selector,marketplaceCount){						
+		var inventory_sku = $(selector[0]).val();
+		var inventory_name = $(selector[1]).val();
+		var inventory_maxPrice = $(selector[2]).val();
+		var inventory_minPrice = $(selector[3]).val();
+		var inventory_stock = $(selector[4]).val();
+		var inventory_status = $(selector[5]).val();
+		var category_search = $(selector[6]).val();
+		var inventory_tagId = $(selector[7]).val();
+					
+		var inventoryForm_json_txt = '{"inventory_sku":"'+inventory_sku+'","inventory_name":"'+inventory_name+'","inventory_maxPrice":"'+inventory_maxPrice+'","inventory_minPrice":"'+inventory_minPrice+'","inventory_stock":"'+inventory_stock+'","inventory_status":"'+inventory_status+'","category_search":"'+category_search+'","inventory_tagId":"'+inventory_tagId+'","selected_cat_id":"'+inventory_cat_id+'"}';		
+		var inventoryForm_json_obj = JSON.parse(inventoryForm_json_txt);			
+		
+		var data_jsonPre = '{"marketplaceEntries":[';
+		var data_jsonMid ="";
+		var data_jsonPost = ']}';		
+		for(var i=1 ; i<=marketplaceCount ; i=i+1)
+		{					
+			var pMarketplace_name = $("#span-form-inventory-mplaceName"+i).text();
+			var pMarketplace_id = $("#span-form-inventory-mplaceName"+i).attr("data-form-mplace"+i);			
+			var pMarketplace_url = $("#span-form-inventory-mplaceUrl"+i).text();			
+			var sellPrice = $("#input-form-inventory-sellPrice"+i).val();
+			var stock = $("#input-text-form-invenotry-create-stock"+i).val();
+			var status = $("#input-form-inventory-status"+i).val();				
+			if(i<marketplaceCount)
+			{
+				data_jsonMid = data_jsonMid+'{"pMarketplace_id":"'+pMarketplace_id+'","pMarketplace_name":"'+pMarketplace_name+'","pMarketplace_url":"'+pMarketplace_url+'","sellPrice": "'+sellPrice+'","stockPrice": "'+stock+'","status": "'+status+'"},';
+			}			
+			else // for last line without ','
+			{
+				data_jsonMid = data_jsonMid+'{"pMarketplace_id":"'+pMarketplace_id+'","pMarketplace_name":"'+pMarketplace_name+'","pMarketplace_url":"'+pMarketplace_url+'","sellPrice": "'+sellPrice+'","stockPrice": "'+stock+'","status": "'+status+'"}';
+			}				
+		}		 
+		var marketplaceEntry_json_txt = data_jsonPre+data_jsonMid+data_jsonPost;		
+		var marketplaceEntry_json_obj = JSON.parse(marketplaceEntry_json_txt);							
+		 
+//		$.ajax({
+//			type: "POST",
+//			url: "InventoryAjaxInsert",			
+//			dataType: "json",
+//			data: {"requestType": "makeFinalInventory",
+//					"inventoryForm_json_obj": JSON.stringify(inventoryForm_json_obj),
+//					"marketplaceEntry_json_obj": JSON.stringify(marketplaceEntry_json_obj),
+//					"marketplaceCount" : marketplaceCount
+//				 },
+//			success: function(responseText){			
+//					 var $btn = $("#input-btn-submit-form-inventory-create").button('reset');
+//					 //check if category is available there 
+//					 var error_code = responseText["error_code"];
+//					 if(error_code=="")
+//					 {
+//						 $("#div-inventory-page").load('inventory.jsp');
+//						alert('success');						
+//					 }
+//					 else
+//					 {
+//						 var error_message=getErrorMessage(error_code);
+//						 alert(error_message);
+//					 }
+//			},
+//			error: function(request, error, data){				
+//				alert(error);				
+//			}  						
+//		});	
+	}
+}
+
+function resetButtonScript(domainName)
+{
+	$(".btn-page-state-reset-main").click(function(){					
+		var parentId = $(this).parent().parent().attr("id");		
+		switch(parentId) {
+	    case "div-form-user-create-state-buttons":
+	    	resetUserFormDetails(domainName);
+	        break;
+	    case "div-form-user-category-create-state-buttons":
+	        resetUserCatFormDetails(domainName);
+	        break;
+	    case "div-form-inventory-create-state-buttons":
+	        resetInventoryFormDetails(domainName);
+	        break;
+	    case "div-form-order-create-state-buttons":
+	        resetOrderFormDetails(domainName);
+	        break;
+	    case "div-form-invoice-create-pay-invoice":
+	        resetInvoiceFormDetails(domainName);
+	        break;
+	    default:
+	    	
+		}
+	});
+}
+function resetUserFormDetails(domainName)
+{	
+	$("#div-create-user-sub-form").load('sub_form_user_create.jsp',function(){
+		userCreateFormVal(domainName);
+		selectPickerScript();
+	});
+}
+function resetUserCatFormDetails(domainName)
+{
+	$("#div-create-user-category-sub-form").load('sub_form_user_category_create.jsp',function(){
+		userCatCreateFormVal(domainName);
+	});			
+}
+function resetInventoryFormDetails()
+{}
+function resetOrderFormDetails()
+{}
+function resetInvoiceFormDetails()
+{}
+
+function searchBarScript()
+{	
+	$(".input-text-search-box-main").keyup(function(){			
+		var parentId = $(this).parent().parent().attr("id");		
+		switch(parentId) {
+	    case "div-user-search":
+	    	searchUserFormDetails();
+	        break;
+	    case "div-user-category-search":
+	        //searchUserCatFormDetails();
+	        break;
+	    case "div-inventory-search":
+	    	//searchInventoryFormDetails();
+	        break;
+	    case "div-order-search":
+	    	//searchOrderFormDetails();
+	        break;
+	    case "div-invoice-search":
+	    	//searchInvoiceFormDetails();
+	        break;
+	    default:
+	    	
+		}
+	});
+}
+function searchUserFormDetails()
+{
+//	/*........first it Loads table according to the screen-size.......*/
+//	var userTextChar = $(".input-text-search-box-main").val();
+//	if(($(window).width())>=750) /*......screen width greater than 750px.....*/
+//	{
+//		$.ajax({
+//			type: "GET",
+//			url: "UserTableDataServlet",			
+//			dataType: "json",
+//			data: {"var": "empty", "pageName": "user-create", "screenType": "large"},
+//			success: function(responseText){				
+//				var userTable="";
+//				
+//		    	for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
+//        		{				        		
+//		    		userTable =	userTable+"<tr><td><input type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
+//		    		"</td><td>"+responseText["userTable"][i].id+
+//					"</td><td>"+responseText["userTable"][i].userName+
+//        			"</td><td>"+responseText["userTable"][i].emailId+
+//        			"</td><td>"+responseText["userTable"][i].phoneNo+
+//        			"</td></tr>";
+//				}		    	
+//				$("#tbody-table-user").html(userTable);					
+//			},
+//			error: function(request, error, data){
+//				alert(error);				
+//			}  						
+//		});
+//		
+//		/*........searching time table load according to the search result.......*/				
+//		$("#input-text-user-search").keyup(function(){			
+//
+//			var userTextChar1 = $("#input-text-user-search").val();	 				
+//			if(!(userTextChar1==""))  //if a character typed in search-bar
+//			{	 	 				 					  					
+//				$.ajax({ 						
+//					type: "GET",
+//					url: "UserTableDataServlet",			
+//					dataType: "json",
+//					data: {"var": "filled","pageName": "user-create", "textChar": userTextChar1, "screenType": "large" },
+//					success: function(responseText){							
+//						var userTable="";
+//						for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
+//		        		{				        		
+//				    		userTable =	userTable+"<tr><td><input type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
+//				    		"</td><td>"+responseText["userTable"][i].id+
+//							"</td><td>"+responseText["userTable"][i].userName+
+//		        			"</td><td>"+responseText["userTable"][i].emailId+
+//		        			"</td><td>"+responseText["userTable"][i].phoneNo+
+//		        			"</td></tr>";
+//						}		  						
+//						$("#tbody-table-user").html(userTable);	
+//						//$("#tbody-table-user").html(responseText);						
+//					},
+//					error: function(request, error, data){
+//						alert(error);
+//						alert(data);
+//					}  						
+//				});		
+//			}
+//			else  // if search bar is empty even after button typed (back-button,space)
+//			{		 					
+//				$.ajax({
+//					type: "GET",
+//					url: "UserTableDataServlet",			
+//					dataType: "json",
+//					data: {"var": "empty", "pageName": "user-create", "screenType": "large"},
+//					success: function(responseText){
+//						var userTable="";
+//						for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
+//		        		{				        		
+//				    		userTable =	userTable+"<tr><td><input type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
+//				    		"</td><td>"+responseText["userTable"][i].id+
+//							"</td><td>"+responseText["userTable"][i].userName+
+//		        			"</td><td>"+responseText["userTable"][i].emailId+
+//		        			"</td><td>"+responseText["userTable"][i].phoneNo+
+//		        			"</td></tr>";
+//						}		    	
+//						$("#tbody-table-user").html(userTable);							
+//					},
+//					error: function(request, error, data){
+//						alert(error);				
+//					}  						
+//				});
+//			}	 			
+//		});
+//	}
+//	else	  /*......screen width less than 750px.....*/
+//	{	
+//		$.ajax({
+//			type: "GET",
+//			url: "UserTableDataServlet",			
+//			dataType: "html",
+//			data: {"var": "empty", "pageName": "user-create", "screenType": "small"},
+//			success: function(responseText){				
+//				$("#tbody-table-user").html(responseText);						
+//				},
+//			error: function(request, error, data){
+//					alert(error);				
+//				}  						
+//			});
+//			
+//		/*........searching time table load according to the search result.......*/				
+//		$("#input-text-user-search").keyup(function(){	 					 				
+//			var userTextChar1 = $("#input-text-user-search-text-box").val();	 				
+//			if(!(userTextChar1==""))  //if a character typed in search-bar
+//			{	 	 				 					  					
+//				$.ajax({ 						
+//					type: "GET",
+//					url: "UserTableDataServlet",			
+//					dataType: "html",
+//					data: {"var": "filled","pageName": "user-create", "textChar": userTextChar1, "screenType": "small"},
+//					success: function(responseText){										
+//						$("#tbody-table-user").html(responseText);						
+//							},
+//					error: function(request, error, data){
+//								alert(error);				
+//							}  						
+//					 });		
+//			}
+//			else  // if search bar is empty even after button typed (back-button,space)
+//			{		 					
+//				$.ajax({
+//					type: "GET",
+//					url: "UserTableDataServlet",			
+//					dataType: "html",
+//					data: {"var": "empty", "pageName": "user-create", "screenType": "small"},
+//					success: function(responseText){				
+//						$("#tbody-table-user").html(responseText);						
+//						},
+//					error: function(request, error, data){
+//							alert(error);				
+//						}  						
+//					});
+//			}	 			
+//		});
+//	}
+}
+
+
+function searchUserCatFormDetails()
+{			 				
+	var userTextChar1 = $(".input-text-search-box-main").val();			
+//	if(!(userTextChar1==""))
+//	{
+//		$.ajax({ 						
+//			type: "GET",
+//			url: "UserTableDataServlet",			
+//			dataType: "json",							
+//			data: {"var": "filled","pageName": "user-category", "textChar": userTextChar1},
+//			success: function(responseText){	
+//				
+//				var userCatTable="";				
+//				for(var i=0 ; i<responseText["usercatTable"].length ; i=i+1)
+//				{				        		
+//					userCatTable =	userCatTable+"<tr><td><input type='checkbox' value="+responseText["usercatTable"][i].id+"></input>"+
+//					"</td><td>"+responseText["usercatTable"][i].id+
+//					"</td><td>"+responseText["usercatTable"][i].name+
+//					"</td></tr>";
+//				}		        		    	
+//				$("#tbody-usercat-table-data").html(userCatTable);						
+//			},
+//			error: function(request, error, data){
+//				alert(error);				
+//			}  						
+//		});
+//	}
+//	else
+//	{
+//		$.ajax({
+//			type: "GET",
+//			url: "UserTableDataServlet",			
+//			dataType: "json",
+//			data: {"var": "empty", "pageName": "user-category"},
+//			success: function(responseText){				
+//				var userCatTable="";				
+//				for(var i=0 ; i<responseText["usercatTable"].length ; i=i+1)
+//				{				        		
+//					userCatTable =	userCatTable+"<tr><td><input type='checkbox' value="+responseText["usercatTable"][i].id+"></input>"+
+//					"</td><td>"+responseText["usercatTable"][i].id+
+//					"</td><td>"+responseText["usercatTable"][i].name+
+//					"</td></tr>";
+//				}		        		    	
+//				$("#tbody-usercat-table-data").html(userCatTable);						
+//			},
+//			error: function(request, error, data){
+//				alert(error);				
+//			}  						
+//		});
+//	}	
+}
+function searchInventoryFormDetails()
+{}
+function searchOrderFormDetails()
+{}
+function searchInvoiceFormDetails()
+{}
 
 /* error handling for whole script page*/
 function getErrorMessage(error_code)
@@ -252,12 +780,6 @@ function getErrorMessage(error_code)
 /*............................user-create script OPEN......................... */
 function userCreatePageScript(domainName)
 {			
-	$("#btn-form-user-create-reset").click(function(){				
-		$("#div-create-user-sub-form").load('sub_form_user_create.jsp',function() {
-			userCreateFormVal(domainName);
-		});						
-	});
-	
 	$( "#input-select-form-user-create-category" ).change(function () {	
 		var text = $("#input-select-form-user-create-category option:selected").text();
 		if(text=="CreateCategory")
@@ -306,16 +828,6 @@ function userCreatePageScript(domainName)
 			$("#td-user-temp-1-next #div-form-user-create-line-5 #div-form-user-create-reset #btn-form-user-create-reset").css("display","none");						
 		});						
 	};
-
-	var resetUserFun = function(){
-		$("#td-user-temp-1-next").load('form_user_create.jsp',function(){
-			$("#td-user-temp-1-next #div-form-user-create-heading").css("display","none");
-			userCreateFormVal(domainName);
-			$("#td-user-temp-1-next #div-form-user-create-line-5 #div-form-user-create-reset #btn-form-user-create-reset").click(function(){
-				resetUserFun();
-			});
-		});
-	};
 	/*.......Demo table row edit script CLOSE......*/
 	
 	/*...apply table headers of user-create page according to the screen-size....*/	
@@ -328,144 +840,7 @@ function userCreatePageScript(domainName)
 	{
 		var header="<tr><th>Select</th><th>Username</th><th>Phone</th></tr>";							      
 		$("#tbody-table-user").html(header);
-	}
-	
-	/*........first it Loads table according to the screen-size.......*/
-	var userTextChar = $("#input-text-user-search").val();  
-	if(($(window).width())>=750) /*......screen width greater than 750px.....*/
-	{
-//		$.ajax({
-//			type: "GET",
-//			url: "UserTableDataServlet",			
-//			dataType: "json",
-//			data: {"var": "empty", "pageName": "user-create", "screenType": "large"},
-//			success: function(responseText){				
-//				var userTable="";
-//				
-//		    	for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
-//        		{				        		
-//		    		userTable =	userTable+"<tr><td><input type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
-//		    		"</td><td>"+responseText["userTable"][i].id+
-//					"</td><td>"+responseText["userTable"][i].userName+
-//        			"</td><td>"+responseText["userTable"][i].emailId+
-//        			"</td><td>"+responseText["userTable"][i].phoneNo+
-//        			"</td></tr>";
-//				}		    	
-//				$("#tbody-table-user").html(userTable);					
-//			},
-//			error: function(request, error, data){
-//				alert(error);				
-//			}  						
-//		});
-		
-		/*........searching time table load according to the search result.......*/				
-		$("#input-text-user-search").keyup(function(){			
-
-			var userTextChar1 = $("#input-text-user-search").val();	 				
-			if(!(userTextChar1==""))  //if a character typed in search-bar
-			{	 	 				 					  					
-//				$.ajax({ 						
-//					type: "GET",
-//					url: "UserTableDataServlet",			
-//					dataType: "json",
-//					data: {"var": "filled","pageName": "user-create", "textChar": userTextChar1, "screenType": "large" },
-//					success: function(responseText){							
-//						var userTable="";
-//						for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
-//		        		{				        		
-//				    		userTable =	userTable+"<tr><td><input type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
-//				    		"</td><td>"+responseText["userTable"][i].id+
-//							"</td><td>"+responseText["userTable"][i].userName+
-//		        			"</td><td>"+responseText["userTable"][i].emailId+
-//		        			"</td><td>"+responseText["userTable"][i].phoneNo+
-//		        			"</td></tr>";
-//						}		  						
-//						$("#tbody-table-user").html(userTable);	
-//						//$("#tbody-table-user").html(responseText);						
-//					},
-//					error: function(request, error, data){
-//						alert(error);
-//						alert(data);
-//					}  						
-//				});		
-			}
-			else  // if search bar is empty even after button typed (back-button,space)
-			{		 					
-//				$.ajax({
-//					type: "GET",
-//					url: "UserTableDataServlet",			
-//					dataType: "json",
-//					data: {"var": "empty", "pageName": "user-create", "screenType": "large"},
-//					success: function(responseText){
-//						var userTable="";
-//						for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
-//		        		{				        		
-//				    		userTable =	userTable+"<tr><td><input type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
-//				    		"</td><td>"+responseText["userTable"][i].id+
-//							"</td><td>"+responseText["userTable"][i].userName+
-//		        			"</td><td>"+responseText["userTable"][i].emailId+
-//		        			"</td><td>"+responseText["userTable"][i].phoneNo+
-//		        			"</td></tr>";
-//						}		    	
-//						$("#tbody-table-user").html(userTable);							
-//					},
-//					error: function(request, error, data){
-//						alert(error);				
-//					}  						
-//				});
-			}	 			
-		});
-	}
-	else	  /*......screen width less than 750px.....*/
-	{	
-//		$.ajax({
-//			type: "GET",
-//			url: "UserTableDataServlet",			
-//			dataType: "html",
-//			data: {"var": "empty", "pageName": "user-create", "screenType": "small"},
-//			success: function(responseText){				
-//				$("#tbody-table-user").html(responseText);						
-//				},
-//			error: function(request, error, data){
-//					alert(error);				
-//				}  						
-//			});
-			
-		/*........searching time table load according to the search result.......*/				
-		$("#input-text-user-search").keyup(function(){	 					 				
-			var userTextChar1 = $("#input-text-user-search-text-box").val();	 				
-			if(!(userTextChar1==""))  //if a character typed in search-bar
-			{	 	 				 					  					
-//				$.ajax({ 						
-//					type: "GET",
-//					url: "UserTableDataServlet",			
-//					dataType: "html",
-//					data: {"var": "filled","pageName": "user-create", "textChar": userTextChar1, "screenType": "small"},
-//					success: function(responseText){										
-//						$("#tbody-table-user").html(responseText);						
-//							},
-//					error: function(request, error, data){
-//								alert(error);				
-//							}  						
-//					 });		
-			}
-			else  // if search bar is empty even after button typed (back-button,space)
-			{		 					
-//				$.ajax({
-//					type: "GET",
-//					url: "UserTableDataServlet",			
-//					dataType: "html",
-//					data: {"var": "empty", "pageName": "user-create", "screenType": "small"},
-//					success: function(responseText){				
-//						$("#tbody-table-user").html(responseText);						
-//						},
-//					error: function(request, error, data){
-//							alert(error);				
-//						}  						
-//					});
-			}	 			
-		});
-	}
+	}	
 	
 	/*.......launch the user form.......*/
 	$("#btn-user-create").click(function(){			
@@ -560,92 +935,17 @@ function userCreateFormVal(domainName)
 			$(this).parent().removeClass("has-error").addClass("has-success");
 		}
 	});
-
-
-/*...............user-create Form Submission.................*/
-var submitUserFormDetails;
-
-submitUserFormDetails = function(){
-	var $btn = $("#btn-form-user-create-submit").button('loading');
-	var selector = ["#input-text-form-user-create-fname",
-	                "#input-text-form-user-crate-lname",
-	                "#input-text-form-user-create-phone", 
-	                "#input-text-form-user-create-email", 
-	                "#input-text-form-user-create-add-1", 	  
-	                "#input-text-form-user-create-add-2", 
-	                "#input-text-form-user-create-city", 
-	                "#input-text-form-user-state", 
-	                "#input-text-form-user-create-zip",
-	                "#input-select-form-user-create-category"];
-	var userFormSubmitState="false";
-	for(var i=0 ; i<selector.length ; i=i+1)
-	{		
-		if($(selector[i]).parent().hasClass("has-error") || $(selector[i]).val()=="")
-		{
-			userFormSubmitState= "false";						  
-			break;
-		}
-		else
-		{				 
-			userFormSubmitState="true";			 
-		}
-	}
-	 		
-	if(userFormSubmitState=="true")
-	{					
-//		$.ajax({
-//			type: "POST",
-//			url: "UserFormSubmitServlet",
-//			dataType: "json",
-//			data: {"form_user_fname_text": $(selector[0]).val(),
-//			"form_user_lname_text": $(selector[1]).val() ,
-//			"form_user_phone_text": $(selector[2]).val() ,
-//			"form_user_email_text": $(selector[3]).val(),
-//			"form_user_add1_text": $(selector[4]).val() ,
-//			"form_user_add2_text": $(selector[5]).val() ,
-//			"form_user_city_text": $(selector[6]).val() ,
-//			"form_user_state_text": $(selector[7]).val() ,
-//			"form_user_zip_text": $(selector[8]).val() ,				 							 			
-//			"form_user_category_select": $(selector[9]).val()},				
-//			success: function(responseText){
-//				$btn.button('reset');
-//				alert('in success');
-//				$("#div-form-user-create").load('form_user_create.jsp');
-//				$("#div-form-user-create").toggle();				 				
-//				alert(responseText["userStatus"]);
-//					},
-//			error: function(request, error, data){
-//						alert(error);						
-//						$btn.button('reset');
-//				} 
-//		});
-	}
-	else
-	{
-		alert("First Fill all the fields Properly");		
-		$btn.button('reset');
-	}	
-};
-
-$("#btn-form-user-create-submit").click(function(){
-	submitUserFormDetails();
-});	
 }
 
 /*............................user category-create OPEN......................... */
 
 function userCatCreatePageScript(domainName)
-{	
+{		
 	if($(window).width()<=380)
 	{				
 		$("#div-form-user-category-create-submit").removeClass("col-xs-5");
 	}
 	
-	$("#btn-form-user-category-create-reset").click(function(){		
-		$("#div-create-user-category-sub-form").load('sub_form_user_category_create.jsp');		
-		userCatCreateFormVal(domainName);
-	});
-		
 	/*...apply table headers of user-cat according to the screen-size....*/
 	if($(window).width()>=750)
 	{		
@@ -715,57 +1015,7 @@ function userCatCreatePageScript(domainName)
 //			}  						
 //		});
 	
-
-	$("#input-text-user-category-search").keyup(function(){ 			 				
-		var userTextChar1 = $("#input-text-user-category-search").val();			
-		if(!(userTextChar1==""))
-		{
-//			$.ajax({ 						
-//				type: "GET",
-//				url: "UserTableDataServlet",			
-//				dataType: "json",							
-//				data: {"var": "filled","pageName": "user-category", "textChar": userTextChar1},
-//				success: function(responseText){	
-//					
-//					var userCatTable="";				
-//			    	for(var i=0 ; i<responseText["usercatTable"].length ; i=i+1)
-//	        		{				        		
-//			    		userCatTable =	userCatTable+"<tr><td><input type='checkbox' value="+responseText["usercatTable"][i].id+"></input>"+
-//						"</td><td>"+responseText["usercatTable"][i].id+
-//	        			"</td><td>"+responseText["usercatTable"][i].name+
-//	        			"</td></tr>";
-//					}		        		    	
-//					$("#tbody-usercat-table-data").html(userCatTable);						
-//				},
-//				error: function(request, error, data){
-//					alert(error);				
-//				}  						
-//			});
-		}
-		else
-		{
-//				$.ajax({
-//				type: "GET",
-//				url: "UserTableDataServlet",			
-//				dataType: "json",
-//				data: {"var": "empty", "pageName": "user-category"},
-//				success: function(responseText){				
-//					var userCatTable="";				
-//			    	for(var i=0 ; i<responseText["usercatTable"].length ; i=i+1)
-//	        		{				        		
-//			    		userCatTable =	userCatTable+"<tr><td><input type='checkbox' value="+responseText["usercatTable"][i].id+"></input>"+
-//						"</td><td>"+responseText["usercatTable"][i].id+
-//	        			"</td><td>"+responseText["usercatTable"][i].name+
-//	        			"</td></tr>";
-//					}		        		    	
-//					$("#tbody-usercat-table-data").html(userCatTable);						
-//				},
-//				error: function(request, error, data){
-//					alert(error);				
-//				}  						
-//			});
-		}
-	});	
+	
 	
 	/*.......launch the user-category form.......*/
 	$("#btn-user-category-create").click(function(){		
@@ -778,6 +1028,7 @@ function userCatCreatePageScript(domainName)
 		$("#div-form-user-category-create").load('form_user_category_create.jsp');
 	});
 }
+
 /*.......user category form validation and submission........*/
 function userCatCreateFormVal(domainName)
 {	
@@ -796,47 +1047,7 @@ function userCatCreateFormVal(domainName)
 		  }		  
 	});
 
-	
-	$("#btn-form-user-category-create-submit").click(function(){
-		var $btn = $(this).button('loading');
-		var selector = ["#input-text-form-user-category-create-name",
-		                 "#input-text-form-user-category-create-description"];
-		var userFormSubmitState="false";
-		for(var i=0 ; i<selector.length ; i=i+1)
-		{		
-			if($(selector[i]).parent().hasClass("has-error") || $(selector[i]).val()=="")
-			{				
-				userFormSubmitState = "false";
-				alert("First Fill all the fields Properly");		
-				$btn.button('reset');
-				break;
-			}
-			else
-			{
-				userFormSubmitState="true";			 
-			}
-		}
-		if(userFormSubmitState=="true")
-		{
-			alert('value inserted');	
-//			$.ajax({
-//				type: "POST",
-//				url: "UserCatFormSubmitServlet",
-//				dataType: "html",
-//				data: {"usercat_cname_text": $(selector[0]).val(),
-//						"usercat_cdesc_text": $(selector[1]).val()},				
-//				success: function(responseText){
-//					$("#div-form-user-category-create").toggle();
-//					$("#div-form-user-category-create").load('form_user_category_create.jsp');
-//					$btn.button('reset')				
-//					},
-//				error: function(request, error, data){
-//					alert(error);
-//					$btn.button('reset')
-//					} 
-//				});
-		 }
-	}); 	
+		
 }
 /*............................usercat-create2 CLOSE......................... */	 
 
@@ -862,15 +1073,6 @@ function inventoryPageScript(domainName)
 		var inventoryTableRowEdit;
 		inventoryTableRowEdit = function(){			
 			$("#td-inventory-temp-1-next").load('form_inventory_create.jsp',function(){
-											
-//				$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("1245855685522");			
-//				$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("Sharma");
-//				$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("demo-category");
-//				$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("9549554645");
-//				$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("amit@demo.com");
-	
-				
-				//$("#td-orders-temp-1-next #div-form-order-create-line-4 #div-form-order-create-reset #btn-form-order-create-reset").css("display","none");
 				
 				$('.selectpicker').selectpicker();	
 				
@@ -878,6 +1080,23 @@ function inventoryPageScript(domainName)
 					style: 'btn-info',
 					size: 4
 				});
+				
+				//change tab href and associated div id's 
+				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab #tabs li #a-tab-form-inventory-create-stock").attr("href","#div-form-inventory-create-stock-edit");				
+				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock").attr("id","div-form-inventory-create-stock-edit");
+				
+				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab #tabs li #a-tab-form-inventory-create-procurement").attr("href","#div-form-inventory-create-procurement-edit");				
+				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-procurement").attr("id","div-form-inventory-create-procurement-edit");
+
+				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab #tabs li #a-tab-form-inventory-create-sales").attr("href","#div-tab-form-inventory-create-sales-edit");				
+				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-sales").attr("id","div-tab-form-inventory-create-sales-edit");
+
+				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab #tabs li #a-tab-form-inventory-create-variants").attr("href","#div-tab-form-inventory-create-variants-edit");				
+				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-variants").attr("id","div-tab-form-inventory-create-variants-edit");
+
+				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab #tabs li #a-tab-form-inventory-create-accounting").attr("href","#div-tab-form-inventory-create-accounting-edit");				
+				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting").attr("id","div-tab-form-inventory-create-accounting-edit");
+
 			});				
 		};
 	if($(window).width()<=380)
@@ -1209,17 +1428,7 @@ function inventoryPageScript(domainName)
 			inventoryFormValid();						
 			
 			$("#tbody-table-form-inventory-create").append(RowEdit);
-			$('.selectpicker').selectpicker();	
-			
-			$('.selectpicker').selectpicker({
-				style: 'btn-info',
-				size: 4
-			});
-						
-//			$(".class-inventory-checkbox").click(function(){
-//				alert('hello2');
-//			});
-			//$("#div-create-marketplace-form").load('form_create_marketplace.jsp'); 									
+			selectPickerScript();						 								
 		}
 		else
 		{
@@ -1265,125 +1474,14 @@ function inventoryPageScript(domainName)
 		$("#input-text-form-inventory-create-tags").val(txt);
 		$("#div-inventory-create-tag-fetch-list").html("");
 	}
-	
-	$("#input-btn-submit-form-inventory-create").click(function(){					
-		var $btn = $("#input-btn-submit-form-inventory-create").button('loading');
-		
-		var selector = ["#input-text-form-inventory-create-base-sku",
-		                "#input-text-form-inventory-create-name",
-		                "#input-text-form-inventory-create-maxprice", 
-		                "#input-text-form-invenotry-create-minprice", 
-		                "#input-text-form-invenotry-create-stock", 	  
-		                "#input-select-form-inventory-create-category", 
-		                "#input-select-form-inventory-create-category", 
-		                "#input-text-form-inventory-create-tags"];
-		
-		//passing selector and marketplaceCount to the function
-		$.fn.inventoryEntryFormValid(selector,marketplaceCount);		
-		
-	});	
-	
-	//validation of fields
-	$.fn.inventoryEntryFormValid = function(selector,marketplaceCount){				
-		
-		var inventoryFullSubmitState="false";
-		for(var i=0 ; i<selector.length ; i=i+1)
-		{		
-			if($(selector[i]).parent().hasClass("has-error") || $(selector[i]).val()=="")
-			{				
-				inventoryFullSubmitState= "false";						  
-				break;
-			}
-			else
-			{				 				
-				inventoryFullSubmitState="true";			 
-			}
-		}
-		 		
-		if(inventoryFullSubmitState=="true")
-		{					
-			$.fn.submitInventoryForm(selector,marketplaceCount);
-		}
-		else
-		{
-			alert("First Fill all the fields Properly");		
-			$btn.button('reset');
-		}						
-	}
-	
-	$.fn.submitInventoryForm = function(selector,marketplaceCount){						
-		var inventory_sku = $(selector[0]).val();
-		var inventory_name = $(selector[1]).val();
-		var inventory_maxPrice = $(selector[2]).val();
-		var inventory_minPrice = $(selector[3]).val();
-		var inventory_stock = $(selector[4]).val();
-		var inventory_status = $(selector[5]).val();
-		var category_search = $(selector[6]).val();
-		var inventory_tagId = $(selector[7]).val();
-					
-		var inventoryForm_json_txt = '{"inventory_sku":"'+inventory_sku+'","inventory_name":"'+inventory_name+'","inventory_maxPrice":"'+inventory_maxPrice+'","inventory_minPrice":"'+inventory_minPrice+'","inventory_stock":"'+inventory_stock+'","inventory_status":"'+inventory_status+'","category_search":"'+category_search+'","inventory_tagId":"'+inventory_tagId+'","selected_cat_id":"'+inventory_cat_id+'"}';		
-		var inventoryForm_json_obj = JSON.parse(inventoryForm_json_txt);			
-		
-		var data_jsonPre = '{"marketplaceEntries":[';
-		var data_jsonMid ="";
-		var data_jsonPost = ']}';		
-		for(var i=1 ; i<=marketplaceCount ; i=i+1)
-		{					
-			var pMarketplace_name = $("#span-form-inventory-mplaceName"+i).text();
-			var pMarketplace_id = $("#span-form-inventory-mplaceName"+i).attr("data-form-mplace"+i);			
-			var pMarketplace_url = $("#span-form-inventory-mplaceUrl"+i).text();			
-			var sellPrice = $("#input-form-inventory-sellPrice"+i).val();
-			var stock = $("#input-text-form-invenotry-create-stock"+i).val();
-			var status = $("#input-form-inventory-status"+i).val();				
-			if(i<marketplaceCount)
-			{
-				data_jsonMid = data_jsonMid+'{"pMarketplace_id":"'+pMarketplace_id+'","pMarketplace_name":"'+pMarketplace_name+'","pMarketplace_url":"'+pMarketplace_url+'","sellPrice": "'+sellPrice+'","stockPrice": "'+stock+'","status": "'+status+'"},';
-			}			
-			else // for last line without ','
-			{
-				data_jsonMid = data_jsonMid+'{"pMarketplace_id":"'+pMarketplace_id+'","pMarketplace_name":"'+pMarketplace_name+'","pMarketplace_url":"'+pMarketplace_url+'","sellPrice": "'+sellPrice+'","stockPrice": "'+stock+'","status": "'+status+'"}';
-			}				
-		}		 
-		var marketplaceEntry_json_txt = data_jsonPre+data_jsonMid+data_jsonPost;		
-		var marketplaceEntry_json_obj = JSON.parse(marketplaceEntry_json_txt);							
-		 
-//		$.ajax({
-//			type: "POST",
-//			url: "InventoryAjaxInsert",			
-//			dataType: "json",
-//			data: {"requestType": "makeFinalInventory",
-//					"inventoryForm_json_obj": JSON.stringify(inventoryForm_json_obj),
-//					"marketplaceEntry_json_obj": JSON.stringify(marketplaceEntry_json_obj),
-//					"marketplaceCount" : marketplaceCount
-//				 },
-//			success: function(responseText){			
-//					 var $btn = $("#input-btn-submit-form-inventory-create").button('reset');
-//					 //check if category is available there 
-//					 var error_code = responseText["error_code"];
-//					 if(error_code=="")
-//					 {
-//						 $("#div-inventory-page").load('inventory.jsp');
-//						alert('success');						
-//					 }
-//					 else
-//					 {
-//						 var error_message=getErrorMessage(error_code);
-//						 alert(error_message);
-//					 }
-//			},
-//			error: function(request, error, data){				
-//				alert(error);				
-//			}  						
-//		});	
-	}
-
 }
 
 function inventoryFormValid()
 {		
 	/*......check inventory form fields are not empty.........*/
-	$("#input-text-form-inventory-create-base-sku, #input-text-form-inventory-create-name,#input-txt-form-inventory-create-category,#input-text-form-invenotry-create-stock, #input-text-form-inventory-create-maxprice, #input-text-form-invenotry-create-minprice,#input-text-form-invenotry-create-weight,#input-text-form-invenotry-create-procurement-time, #input-text-form-invenotry-create-stock, #input-text-form-inventory-create-tags, #input-text-form-marketplace-create-marketplace-url, #input-select-form-marketplace-create-marketplace-name, #input-modal-inventory-category-create-name, #input-form-inventory-category-create-tax-percent").on('input', function() {
+	$("#input-text-form-inventory-create-base-sku, #input-text-form-inventory-create-name,#input-text-form-inventory-create-weight, #input-txt-form-inventory-create-category,#input-text-form-invenotry-create-stock, #input-text-form-inventory-create-maxprice, #input-text-form-invenotry-create-minprice,#input-text-form-invenotry-create-weight,#input-text-form-invenotry-create-procurement-time, #input-text-form-invenotry-create-stock, #input-text-form-inventory-create-tags, #input-text-form-marketplace-create-marketplace-url, #input-select-form-marketplace-create-marketplace-name, #input-modal-inventory-category-create-name, #input-form-inventory-category-create-tax-percent").on('input', function() {
 		var input=$(this);
+		alert(input);
 		var is_name=input.val();			
 		if(is_name)
 		{
@@ -1396,7 +1494,7 @@ function inventoryFormValid()
 	});	
 	
 	/*......check inventory form fields are empty.........*/	
-	$("#input-text-form-inventory-create-base-sku, #input-text-form-inventory-create-name,#input-txt-form-inventory-create-category,#input-text-form-invenotry-create-stock, #input-text-form-inventory-create-maxprice, #input-text-form-invenotry-create-minprice,#input-text-form-invenotry-create-weight,#input-text-form-invenotry-create-procurement-time, #input-text-form-invenotry-create-stock, #input-text-form-inventory-create-tags, #input-text-form-marketplace-create-marketplace-url, #input-select-form-marketplace-create-marketplace-name, #input-modal-inventory-category-create-name, #input-form-inventory-category-create-tax-percent").blur(function(){		
+	$("#input-text-form-inventory-create-base-sku, #input-text-form-inventory-create-name, #input-text-form-inventory-create-weight, #input-txt-form-inventory-create-category,#input-text-form-invenotry-create-stock, #input-text-form-inventory-create-maxprice, #input-text-form-invenotry-create-minprice,#input-text-form-invenotry-create-weight,#input-text-form-invenotry-create-procurement-time, #input-text-form-invenotry-create-stock, #input-text-form-inventory-create-tags, #input-text-form-marketplace-create-marketplace-url, #input-select-form-marketplace-create-marketplace-name, #input-modal-inventory-category-create-name, #input-form-inventory-category-create-tax-percent").blur(function(){						
 		if(!$(this).val())
 		{
 			$(this).parent().addClass("has-error");
@@ -1404,7 +1502,7 @@ function inventoryFormValid()
 	});	
 	
 	/*......validation on inve field select category......*/
-	$("#input-select-form-invenotry-create-brand,#input-select-form-invenotry-create-tax,#input-select-form-inventory-create-supplier,#input-select-form-invenotry-create-status,#input-select-form-invenotry-create-warehouse,#input-select-form-invenotry-create-aisle,#input-select-form-invenotry-create-location,#input-select-form-invenotry-create-shelf,#input-select-form-invenotry-create-box").blur(function(){		 
+	$("#input-select-form-invenotry-create-brand,#input-select-form-invenotry-create-tax, #input-select-form-inventory-create-supplier,#input-select-form-invenotry-create-status,#input-select-form-invenotry-create-warehouse,#input-select-form-invenotry-create-aisle,#input-select-form-invenotry-create-location,#input-select-form-invenotry-create-shelf,#input-select-form-invenotry-create-box").blur(function(){		 
 		if($(this).val()=="Select Brand" || $(this).val()=="Select Tax" || $(this).val()=="Select Supplier" || $(this).val()=="Select Status"|| $(this).val()=="Select Warehouse"|| $(this).val()=="Select Aisle"|| $(this).val()=="Select Location"|| $(this).val()=="Select Shelf"|| $(this).val()=="Select Box")
 		{
 			$(this).parent().addClass("has-error");
@@ -1425,6 +1523,12 @@ function invoicePageScript(domainName)
 	var paymentLineCount = 0;
 	var paymentLineArray =[];
 	
+	var invoiceLineEditCount = 0;
+	var invoiceLineEditArray =[];
+	
+	var paymentLineEditCount = 0;
+	var paymentLineEditArray =[];
+	
 	/*.......launch the invoice form.......*/
 	$("#btn-invoice-create").click(function(){			
 		$("#div-form-invoice-create").toggle();
@@ -1440,6 +1544,11 @@ function invoicePageScript(domainName)
 	$('#input-text-form-invoice-create-order-date').datepicker({
 		format: "dd/mm/yyyy"
 	}); 
+	
+	// add-line main form script starts from here
+	$("#btn-form-invoice-create-add-line").click(function(){
+		$.fn.invoiceLineFormScript();
+	});	
 	
 	$.fn.invoiceLineFormScript = function(){
 		invoiceLineArray.push("btn-form-invoice-create-invoice-line-remove-"+invoiceLineCount);
@@ -1478,10 +1587,6 @@ function invoicePageScript(domainName)
 												"</tr>");				
 		paymentLineCount= paymentLineCount+1;
 		
-//		$("#input-text-form-invoice-create-payment-line-date-"+paymentLineCount).datepicker({
-//			format: "dd/mm/yyyy"
-//		});
-		
 		removePaymentLineScript();
 		
 	};
@@ -1498,11 +1603,12 @@ function invoicePageScript(domainName)
 			$(this).parent().parent().hide();			
 		});
 	}
+	// add-line main form script ends from here
+	
 	
 	$("#tbody-table-invoice").html("<tr><td><input type='checkbox' id='input-check-invoice-temp-1' value=''></input></td><td>inv_12345</td><td>Amit Sharma</td><td>ord_12345</td><td>745</td><td>50</td><td>25</td><td>delivered</td></tr>" +
 	   							   "<tr><td id='td-invoice-temp-1-next' colspan='8'></td></tr>");
-	
-	$("#input-check-invoice-temp-1").click(function(){					
+	$("#input-check-invoice-temp-1").click(function(){	
 		invoiceTableRowEdit();
 		$("#td-invoice-temp-1-next").toggle();
 	});
@@ -1510,66 +1616,86 @@ function invoicePageScript(domainName)
 	var invoiceTableRowEdit;
 	invoiceTableRowEdit = function(){			
 		$("#td-invoice-temp-1-next").load('form_invoice_create.jsp',function(){
+		//add-line edit form script starts from here
+			$("#tbody-table-invoice tr #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab #tabs li #li-tab-form-invoice-create-line").attr("href","#div-form-invoice-create-lines-edit");			
+			$("#tbody-table-invoice tr #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab-pages #div-form-invoice-create-lines").attr("id","div-form-invoice-create-lines-edit");
 			
-			
-			$("#tbody-table-invoice tr td #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab #tabs li #li-tab-form-invoice-create-info").attr("href","#div-form-invoice-create-info-1");
-			alert($("#tbody-table-invoice tr td #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab-pages #div-form-invoice-create-info"));
-			$("#tbody-table-invoice tr td #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab-pages #div-form-invoice-create-info").attr("id","div-form-invoice-create-info-1");
-			
-//			$("#td-orders-temp-1-next #div-form-order-create-heading").css("display","none");
-//			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("1245855685522");			
-//			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("Sharma");
-//			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("demo-category");
-//			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("9549554645");
-//			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("amit@demo.com");
+			$("#tbody-table-invoice tr #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab #tabs li #li-tab-form-invoice-create-info").attr("href","#div-form-invoice-create-info-edit");			
+			$("#tbody-table-invoice tr #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab-pages #div-form-invoice-create-info").attr("id","div-form-invoice-create-info-edit");
 
+			$("#tbody-table-invoice tr #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab #tabs li #li-tab-form-invoice-create-payment").attr("href","#div-form-invoice-create-payment-edit");			
+			$("#tbody-table-invoice tr #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab-pages #div-form-invoice-create-payment").attr("id","div-form-invoice-create-payment-edit");
+
+			$("#td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab-pages #div-form-invoice-create-lines-edit div div #btn-form-invoice-create-add-line").click(function(){		
+				$.fn.invoiceLineEditFormScript();
+			});
 			
-//			$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-order-date #input-date-form-order-create-order-date").datepicker({
-//				format: "dd/mm/yyyy"
-//		    }); 				
-			//$("#td-orders-temp-1-next #div-create-order-sub-form #div-form-order-create-line-1 #div-form-order-create-marketplace-order-id #input-text-form-order-create-marketplace-order-id").val("hello ji");
-						
-			//$("#td-orders-temp-1-next #div-form-order-create-line-4 #div-form-order-create-reset #btn-form-order-create-reset").css("display","none");
+			$.fn.invoiceLineEditFormScript = function(){				
+				invoiceLineEditArray.push("btn-form-invoice-create-invoice-line-remove-"+invoiceLineEditCount);
+				$("#td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab-pages #div-form-invoice-create-lines-edit div div #table-invoice-line #tbody-table-invoice-line").append("<tr><td id='td-form-invoice-create-invoice-line-product-name-'"+invoiceLineEditCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-product-name-'"+invoiceLineEditCount+" class='form-control'/></td>" +
+															"<td id='td-form-invoice-create-invoice-line-unit-price-'"+invoiceLineEditCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-unit-price'"+invoiceLineEditCount+" class='form-control'/></td>" +
+															"<td id='td-form-invoice-create-invoice-line-qty-'"+invoiceLineEditCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-qty'"+invoiceLineEditCount+" class='form-control'/></td>" +
+															"<td id='td-form-invoice-create-invoice-line-tax-'"+invoiceLineEditCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-tax-'"+invoiceLineEditCount+" class='form-control'/></td>" +
+															"<td id='td-form-invoice-create-invoice-line-amount-'"+invoiceLineEditCount+"><input type='text' id='input-text-form-invoice-create-invoice-line-amount-'"+invoiceLineEditCount+" class='form-control'/></td>" +
+															"<td id='td-form-invoice-create-invoice-line-remove-'"+invoiceLineEditCount+"><button type='button' id='btn-form-invoice-create-invoice-line-remove-"+invoiceLineEditCount+"' class='invoice-line-remove-button form-control btn btn-primary btn-sm '><span class='glyphicon glyphicon-remove'></span></button></td>" +
+														"</tr>");				
+				invoiceLineEditCount= invoiceLineEditCount+1;			
+				$.fn.removeLineEditScript();
+				
+			};
 			
-//			$('.selectpicker').selectpicker();	
-//			
-//			$('.selectpicker').selectpicker({
-//				style: 'btn-info',
-//				size: 4
-//			});
+			$.fn.removeLineEditScript = function(){
+				$(".invoice-line-remove-button").click(function(){			
+					var currentItemId = $(this).attr("id");
+					for(var i=0 ; i< invoiceLineEditArray.length ; i=i+1){				
+						if(invoiceLineEditArray[i] == currentItemId)
+						{
+							delete invoiceLineEditArray[i];
+						}	
+					}
+					$(this).parent().parent().hide();			
+				});
+			};
 			
-//			$("#div-create-order-sub-form #div-form-order-create-line-2 #div-order-line-table #btn-form-order-line-create-add-line").click(function(){
-//				$.fn.orderLineFormTableEditScript();
-//			});
-//			$("#div-create-order-sub-form #div-form-order-create-line-2 #div-order-line-table #btn-form-order-create-order-line-total").click(function(){
-//				alert('now count is '+orderLineCountEdit);		
-//			});
+			$("#td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab-pages #div-form-invoice-create-payment-edit div div #btn-form-invoice-create-add-payment-line").click(function(){
+				$.fn.invoicePaymentLineEditScript();
+			});
 			
-		});	
-		
-	};
+			$.fn.invoicePaymentLineEditScript = function(){		
+				paymentLineEditArray.push("btn-form-invoice-create-payment-line-remove-"+paymentLineEditCount);
+				$("#td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab-pages #div-form-invoice-create-payment-edit div div #table-invoice-line #tbody-table-invoice-payment-line").append("<tr><td id='td-form-invoice-create-payment-line-date-'"+paymentLineEditCount+"><input type='text' id='input-text-form-invoice-create-payment-line-date-'"+paymentLineEditCount+" class='form-control'/></td>" +
+															"<td id='td-form-invoice-create-payment-line-transaction-id'"+paymentLineEditCount+"><input type='text' id='input-text-form-invoice-create-payment-line-transaction-id'"+paymentLineEditCount+" class='form-control'/></td>" +
+															"<td id='td-form-invoice-create-payment-line-amount-'"+paymentLineEditCount+"><input type='text' id='input-text-form-invoice-create-payment-line-amount'"+paymentLineEditCount+" class='form-control'/></td>" +
+															"<td id='td-form-invoice-create-payment-line-remove-'"+paymentLineEditCount+"><button type='button' id='btn-form-invoice-create-payment-line-remove-"+paymentLineEditCount+"' class='invoice-line-remove-button form-control btn btn-primary btn-sm '><span class='glyphicon glyphicon-remove'></span></button></td>" +
+														"</tr>");				
+				paymentLineEditCount= paymentLineEditCount+1;
+				
+//				$("#input-text-form-invoice-create-payment-line-date-"+paymentLineCount).datepicker({
+//					format: "dd/mm/yyyy"
+//				});
+				
+				removePaymentLineScript();
+				
+			};
+			function removePaymentLineScript()
+			{
+				$(".invoice-line-remove-button").click(function(){			
+					var currentItemId = $(this).attr("id");
+					for(var i=0 ; i< paymentLineEditArray.length ; i=i+1){				
+						if(paymentLineEditArray[i] == currentItemId)
+						{
+							delete paymentLineEditArray[i];
+						}	
+					}
+					$(this).parent().parent().hide();			
+				});
+			}
+			//add-line main form script ends from here	
+		});			
+	};	
 	
-//	$.fn.orderLineFormTableEditScript = function(){			
-//		orderLineCountEdit= orderLineCountEdit+1;
-//		$("#div-order-line-table-inner #table-order-line #tbody-table-order-line").append("<tr><td id='td-form-order-create-order-line-sno-'"+orderLineCount+">"+orderLineCountEdit+"</td>" +
-//												"<td id='td-form-order-create-order-line-title-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-title-'"+orderLineCountEdit+" class='form-control'/></td>" +
-//												"<td id='td-form-order-create-order-line-qty-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-qty-'"+orderLineCountEdit+" class='form-control'/></td>" +
-//												"<td id='td-form-order-create-order-line-unit-price-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-unit-price-'"+orderLineCountEdit+" class='form-control'/></td>" +
-//												"<td id='td-form-order-create-order-line-taxable-amount-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-amount-'"+orderLineCountEdit+" class='form-control'/></td>" +
-//												"<td id='td-form-order-create-order-line-tax-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-tax-'"+orderLineCountEdit+" class='form-control'/></td>" +
-//												"<td id='td-form-order-create-order-line-subtotal-'"+orderLineCountEdit+"><input type='text' id='input-text-form-order-create-order-line-subtotal-'"+orderLineCountEdit+" class='form-control'/></td></tr>");				
-//
-//	};
 	
-	
-	$("#btn-form-invoice-create-add-line").click(function(){
-		$.fn.invoiceLineFormScript();
-	});	
-//	$("#btn-form-invoice-create-order-line-total").click(function(){
-//		alert('now count is '+invoiceLineCount);		
-//	});
-	
-	$("#btn-form-invoice-create-add-payment-line").click(function(){
+	$("#btn-form-invoice-create-add-payment-line").click(function(){		
 		$.fn.invoicePaymentLineScript();
 	});			
 	

@@ -19,7 +19,7 @@
 	<br/><br/>	
 	<div id="div-inventory-browse" class="row"> 
 		<div class="col-sm-12 col-md-12 col-xs-12">
-			<div id="div-user-search" class="row">
+			<div id="div-inventory-search" class="row">
 				<jsp:include page="search_box_main.jsp"></jsp:include>										
 			</div>	
 			<br/>
