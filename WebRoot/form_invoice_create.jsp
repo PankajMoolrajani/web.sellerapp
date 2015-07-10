@@ -1,5 +1,5 @@
 <br/>
-<div id="div-create-invoice-sub-form" class="row">
+<div id="div-invoice-create-sub-form" class="row">
 	<div class="col-sm-12 col-md-12 col-xs-12">
 		<jsp:include page="sub_form_invoice_create.jsp"></jsp:include>
 	</div>	

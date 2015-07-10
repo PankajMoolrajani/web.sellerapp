@@ -1,5 +1,5 @@
 <br/>
-<div id="div-create-order-sub-form">
+<div id="div-form-order-create-sub-form">
 	<jsp:include page="sub_form_order_create.jsp"></jsp:include>
 </div>
 <br/>

@@ -1617,13 +1617,13 @@ function invoicePageScript(domainName)
 	invoiceTableRowEdit = function(){			
 		$("#td-invoice-temp-1-next").load('form_invoice_create.jsp',function(){
 		//add-line edit form script starts from here
-			$("#tbody-table-invoice tr #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab #tabs li #li-tab-form-invoice-create-line").attr("href","#div-form-invoice-create-lines-edit");			
+			$("#tbody-table-invoice tr #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab #tabs li #a-tab-form-invoice-create-line").attr("href","#div-form-invoice-create-lines-edit");			
 			$("#tbody-table-invoice tr #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab-pages #div-form-invoice-create-lines").attr("id","div-form-invoice-create-lines-edit");
 			
-			$("#tbody-table-invoice tr #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab #tabs li #li-tab-form-invoice-create-info").attr("href","#div-form-invoice-create-info-edit");			
+			$("#tbody-table-invoice tr #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab #tabs li #a-tab-form-invoice-create-info").attr("href","#div-form-invoice-create-info-edit");			
 			$("#tbody-table-invoice tr #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab-pages #div-form-invoice-create-info").attr("id","div-form-invoice-create-info-edit");
 
-			$("#tbody-table-invoice tr #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab #tabs li #li-tab-form-invoice-create-payment").attr("href","#div-form-invoice-create-payment-edit");			
+			$("#tbody-table-invoice tr #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab #tabs li #a-tab-form-invoice-create-payment").attr("href","#div-form-invoice-create-payment-edit");			
 			$("#tbody-table-invoice tr #td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab-pages #div-form-invoice-create-payment").attr("id","div-form-invoice-create-payment-edit");
 
 			$("#td-invoice-temp-1-next #div-create-invoice-sub-form div div #div-form-invoice-create-tab-pages #div-form-invoice-create-lines-edit div div #btn-form-invoice-create-add-line").click(function(){		

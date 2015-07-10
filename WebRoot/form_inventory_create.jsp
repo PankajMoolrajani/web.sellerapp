@@ -4,7 +4,7 @@
 	</div>					
 	<br/>
 	<div id="div-form-inventory-create-marketplace" class="row">
-		<div class="col-sm-3 col-md-3 col-sm-offset-9 col-md-offset-9">
+		<div id="div-inventory-create-table-add-marketplace" class="col-sm-3 col-md-3 col-sm-offset-9 col-md-offset-9">
 			<button type="button" id="input-btn-inventory-create-table-add-marketplace" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target=".marketplace-create-modal">
 				Create Marketplace
 			</button>

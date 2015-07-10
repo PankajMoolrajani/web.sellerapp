@@ -26,7 +26,7 @@
 			<div id="div-invoice-table" class="row">							
 				<div class="col-sm-12 col-md-12 col-xs-12">
 					<br/><br/>		
-					<table id="" class="table table-striped table-condensed" >
+					<table id="table-invoice" class="table table-striped table-condensed" >
 					    <thead id="thead-table-invoice">
 					    	<tr><th>Select</th><th>Invoice Id</th><th>Customer Name</th><th>Order Id</th><th>Order Total</th><th>commission</th><th>invoice amount tax</th><th>INvoice Status</th></tr>
 					    	<!--  Here table header names will be shown according to the screen size -->					      

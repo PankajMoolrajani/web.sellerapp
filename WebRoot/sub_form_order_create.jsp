@@ -35,10 +35,10 @@
 </div>
 <div id="div-form-order-create-line-2" class="row">	
 	<div id="div-order-line-table" class="col-md-12 col-sm-12">
-		<div id="div-order-line-table-inner" class="row">
+		<div class="row">
 			<div class="col-md-12 col-sm-12">
 				<div class="row">
-					<div class="col-md-4 col-sm-4 col-xs-11 col-md-offset-5 col-sm-offset-5 col-xs-offset-1">
+					<div id="div-form-order-create-order-line-heading" class="col-md-4 col-sm-4 col-xs-11 col-md-offset-5 col-sm-offset-5 col-xs-offset-1">
 						<h2>Line Orders</h2>
 					</div>					
 				</div>
@@ -53,19 +53,14 @@
 							</tbody> <!-- made changes in id -->
 						</table>	
 					</div>
-				</div>		
-				<div class="row">
-					<div class="col-md-3 col-sm-4">
-						
-					</div>
-				</div>
+				</div>						
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-3 col-sm-4 col-xs-3">
-				<button id="btn-form-order-line-create-add-line" class="btn btn-default btn-sm">add order line</button>
+			<div id="div-form-order-create-add-order-line" class="col-md-3 col-sm-4 col-xs-3">
+				<button id="btn-form-order-create-add-order-line" class="btn btn-default btn-sm">add order line</button>
 			</div>
-			<div class="form-group col-md-2 col-sm-2 col-xs-3 col-sm-offset-2 col-md-offset-2 col-xs-offset-2">
+			<div id="div-form-order-create-order-line-total" class="form-group col-md-2 col-sm-2 col-xs-3 col-sm-offset-2 col-md-offset-2 col-xs-offset-2">
 				<button type="button" id="btn-form-order-create-order-line-total" class="btn btn-primary btn-sm btn-block">Total</button>
 			</div>
 		</div>
