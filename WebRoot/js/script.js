@@ -1,7 +1,8 @@
 $(document).ready(function(){	
 		
-	var domainName = "http://dev.monoxor.com/";
-
+	//var domainName = "localhost";
+	var domainName = "dev.monoxor.com"
+		
 	/*................... Javascript for Index page ......................*/
 
 	$(".login-link").click(function(){	
@@ -10,103 +11,105 @@ $(document).ready(function(){
 	});
 
 /*................... Javascript for login page ......................*/
-
-	var submitLoginForm;	
-	submitLoginForm = function(login_username , login_password){			
-		var jsonData = {"login_username": login_username, "login_password":login_password };
-		var $btn = $("#btn-submit-login-form").button('loading');		
-		
-		
-		$.ajax({
-			type: "GET",
-			url: "http://dev.monoxor.com:8080/rest.sellerapp/rest/auth/auth_token_url",
-			async: false,			
-			dataType: "json",			
-			contentType: "application/json; charset=utf-8",
-			success: function(responseText){	
-				alert(responseText.login_token_url);
-				 //var login_token_url = responseText.login_token_url;
-				 //getAccessToken(login_token_url);				
-			},
-			error: function(request,error,data)
-			{
-				alert(request);
-				alert(error);
-				alert(data);
-			}
-		});		
-	};
-	
-	function getAccessToken(access_token_url){	
-		alert(access_token_url+' came here');
-		$.ajax({
-			type: "GET",
-			url: access_token_url,
-			async: false,			
-			dataType: "jsons",
-			contentType: "application/json; charset=utf-8",
-			success: function(responseText){
-			alert(responseText.access_token);
-			var access_token = responseText.access_token;
-				var token_check_url = getAuthTokenCheckURL();
-				checkAuthToken(token_check_url,access_token);
-			},
-			error: function(request,error,data)
-			{
-				alert(request);
-				alert(error);
-				alert(data);
-			}
-		});
+	function submitLoginForm(login_username , login_password){
+		var access_token_url = 	getAccessTokenUrl(login_username , login_password);		
+		var access_token = getAccessToken(access_token_url, login_username , login_password);		
+		var access_token_check_url = getAccessTokenCheckURL();		
+		var authentication_state = checkAccessToken(access_token_check_url,access_token);		
+		if(authentication_state == 'True'){
+			window.location.assign("dashboard.jsp");
+		}
 	}
 	
-	function getAuthTokenCheckURL(){
+	function getAccessTokenUrl(login_username , login_password){
+		var access_token_url;
 		$.ajax({
 				type: "GET",
-				url: "http://dev.monoxor.com:8080/rest.sellerapp/rest/auth/auth_token_check_url",
+				url: "http://"+domainName+":8080/rest.sellerapp/rest/auth/access_token_url",
 				async: false,			
-				dataType: "jsons",
+				dataType: "json",				
+				success: function(responseText){
+				access_token_url = responseText.access_token_url;											
+					
+				//return login_token_url;				
+			},
+			error: function(request,error,data)
+			{
+				alert(request);
+				alert(error);
+				alert(data);
+			}			
+		});
+		return access_token_url;
+	};
+	
+	function getAccessToken(access_token_url, login_username , login_password){		
+		var access_token;
+		var jsonData = new Object();		
+		jsonData.login_username = login_username;	
+		jsonData.login_password = login_password;		
+		var jsonText = JSON.stringify(jsonData);				
+		
+		$.ajax({
+			type: "POST", //get request			
+			url: access_token_url,
+			async: false,
+			data: jsonText,
+			dataType: "json",					
+			success: function(responseText){	
+				access_token = responseText.access_token;											
+			},
+			error: function(request, error, data){
+				alert(request+" "+error+" "+data);
+			} 			
+		});	
+		return access_token;
+	}
+	
+	function getAccessTokenCheckURL(){
+		var access_token_check_url;
+		$.ajax({
+				type: "GET",
+				url: "http://"+domainName+":8080/rest.sellerapp/rest/auth/access_token_check_url",
+				async: false,			
+				dataType: "json",				
+				success: function(responseText){				
+				access_token_check_url = responseText.access_token_check_url;													
+			},
+			error: function(request,error,data)
+			{
+				alert(data);
+			}
+		});
+		return access_token_check_url;
+	}
+	
+	function checkAccessToken(token_check_url,access_token){
+		var authentication_state;		
+		$.ajax({
+				type: "GET",
+				url: token_check_url,
+				async: false,			
+				dataType: "json",
 				contentType: "application/json; charset=utf-8",
 				success: function(responseText){
-				var login_token_check_url = responseText.login_token_check_url;					
-				return login_token_check_url;				
+				authentication_state = responseText.check_access_token;								
 			},
 			error: function(request,error,data)
 			{
-				alert(request);
-				alert(error);
-				alert(data);
+				alert(request);				
 			}
 		});
+		return authentication_state;
 	}
 	
-	function checkAuthToken(token_check_url,access_token){
-		$.ajax({
-			type: "GET",
-			url: token_check_url,
-			async: false,			
-			dataType: "jsons",
-			contentType: "application/json; charset=utf-8",
-			success: function(responseText){
-			var authentication_state = responseText.check_access_token;
-				alert(authentication_state);
-			},
-			error: function(request,error,data)
-			{
-				alert(request);
-				alert(error);
-				alert(data);
-			}
-		});
-	}
-	
-	$("#btn-submit-login-form").click(function(){	
+	$("#btn-submit-login-form").click(function(){			
 		var login_username = $("#input-text-login-username").val(); // changed variable name to login_username
 		var login_password = $("#input-text-login-password").val(); 
 		submitLoginForm(login_username,login_password);		
 	});
 	/*.....if enter pressed on password textbox..........*/
-	$("#login-password").keypress(function(event){
+	$("#input-text-login-password").keypress(function(event){
 		var login_username = $("#login-username").val(); // changed variable name to login_username
 		var login_password = $("#login-password").val(); 
 		var keycode = (event.keyCode ? event.keyCode : event.which);

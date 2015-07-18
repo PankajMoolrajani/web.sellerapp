@@ -12,7 +12,7 @@
         <div id="div-form-invoice-create-lines" class="tab-pane active">
             <jsp:include page="form_invoice_create_lines.jsp"></jsp:include>
         </div>
-        <div id="div-form-invoice-create-info" class="tab-pane">
+        <div id="div-form-invoice-create-info" class="tab-pane row">
 			<jsp:include page="form_invoice_create_marketplace_info.jsp"></jsp:include>
         </div>
         <div id="div-form-invoice-create-payment" class="tab-pane">
