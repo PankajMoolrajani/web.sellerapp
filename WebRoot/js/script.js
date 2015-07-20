@@ -1,7 +1,7 @@
 $(document).ready(function(){	
 		
-	//var domainName = "localhost";
-	var domainName = "dev.monoxor.com"
+	var domainName = "localhost";
+	//var domainName = "dev.monoxor.com"
 		
 	/*................... Javascript for Index page ......................*/
 
@@ -11,14 +11,16 @@ $(document).ready(function(){
 	});
 
 /*................... Javascript for login page ......................*/
-	function submitLoginForm(login_username , login_password){
+	function submitLoginForm(login_username , login_password){		 		
+		var $btn = $("#btn-submit-login-form").button('loading');				
 		var access_token_url = 	getAccessTokenUrl(login_username , login_password);		
 		var access_token = getAccessToken(access_token_url, login_username , login_password);		
 		var access_token_check_url = getAccessTokenCheckURL();		
-		var authentication_state = checkAccessToken(access_token_check_url,access_token);		
+		var authentication_state = checkAccessToken(access_token_check_url,access_token);
+		$btn.button('reset');
 		if(authentication_state == 'True'){
 			window.location.assign("dashboard.jsp");
-		}
+		}		
 	}
 	
 	function getAccessTokenUrl(login_username , login_password){
@@ -236,7 +238,7 @@ $(document).ready(function(){
 	saveButtonScript();
 	//editButtonScript();
 	resetButtonScript(domainName);
-	searchBarScript();
+	searchBarScript(domainName);
 	selectPickerScript();
 });
 
@@ -539,13 +541,13 @@ function resetOrderFormDetails()
 function resetInvoiceFormDetails()
 {}
 
-function searchBarScript()
+function searchBarScript(domainName)
 {	
 	$(".input-text-search-box-main").keyup(function(){			
 		var parentId = $(this).parent().parent().attr("id");		
 		switch(parentId) {
 	    case "div-user-search":
-	    	searchUserFormDetails();
+	    	searchUserFormDetails(domainName);
 	        break;
 	    case "div-user-category-search":
 	        //searchUserCatFormDetails();
@@ -564,37 +566,43 @@ function searchBarScript()
 		}
 	});
 }
-function searchUserFormDetails()
+function searchUserFormDetails(domainName)
 {
-//	/*........first it Loads table according to the screen-size.......*/
-//	var userTextChar = $(".input-text-search-box-main").val();
-//	if(($(window).width())>=750) /*......screen width greater than 750px.....*/
-//	{
-//		$.ajax({
-//			type: "GET",
-//			url: "UserTableDataServlet",			
-//			dataType: "json",
-//			data: {"var": "empty", "pageName": "user-create", "screenType": "large"},
-//			success: function(responseText){				
-//				var userTable="";
-//				
-//		    	for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
-//        		{				        		
-//		    		userTable =	userTable+"<tr><td><input type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
-//		    		"</td><td>"+responseText["userTable"][i].id+
-//					"</td><td>"+responseText["userTable"][i].userName+
-//        			"</td><td>"+responseText["userTable"][i].emailId+
-//        			"</td><td>"+responseText["userTable"][i].phoneNo+
-//        			"</td></tr>";
-//				}		    	
-//				$("#tbody-table-user").html(userTable);					
-//			},
-//			error: function(request, error, data){
-//				alert(error);				
-//			}  						
-//		});
-//		
-//		/*........searching time table load according to the search result.......*/				
+	/*........first it Loads table according to the screen-size.......*/	
+	var userTextChar = $(".input-text-search-box-main").val();	
+	if(($(window).width())>=750) /*......screen width greater than 750px.....*/
+	{	
+		if(!(userTextChar==""))  //if a character typed in search-bar
+		{	 	 						
+			$.ajax({ 						
+				type: "GET",
+				url: "http://localhost:8080/rest.sellerapp/rest/user/table_data/search?textChar="+userTextChar+"&screenType=large",			
+				dataType: "html",
+				success: function(responseText){			
+					alert(responseText);
+//					var userTable="";
+//					for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
+//					{				        		
+//						userTable =	userTable+"<tr><td><input type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
+//						"</td><td>"+responseText["userTable"][i].id+
+//						"</td><td>"+responseText["userTable"][i].userName+
+//						"</td><td>"+responseText["userTable"][i].emailId+
+//						"</td><td>"+responseText["userTable"][i].phoneNo+
+//						"</td></tr>";
+//					}		  						
+//					$("#tbody-table-user").html(userTable);	
+//					//$("#tbody-table-user").html(responseText);						
+				},
+				error: function(request, error, data){
+					alert(error);
+					alert(data);
+				}  						
+			});		
+		}
+		
+		
+		
+		/*........searching time table load according to the search result.......*/				
 //		$("#input-text-user-search").keyup(function(){			
 //
 //			var userTextChar1 = $("#input-text-user-search").val();	 				
@@ -651,9 +659,9 @@ function searchUserFormDetails()
 //				});
 //			}	 			
 //		});
-//	}
-//	else	  /*......screen width less than 750px.....*/
-//	{	
+	}
+	else	  /*......screen width less than 750px.....*/
+	{	
 //		$.ajax({
 //			type: "GET",
 //			url: "UserTableDataServlet",			
@@ -701,7 +709,7 @@ function searchUserFormDetails()
 //					});
 //			}	 			
 //		});
-//	}
+	}
 }
 
 
@@ -782,7 +790,7 @@ function getErrorMessage(error_code)
 
 /*............................user-create script OPEN......................... */
 function userCreatePageScript(domainName)
-{			
+{				
 	$( "#input-select-form-user-create-category" ).change(function () {	
 		var text = $("#input-select-form-user-create-category option:selected").text();
 		if(text=="CreateCategory")
@@ -796,31 +804,86 @@ function userCreatePageScript(domainName)
 
 		
 	/*...........Demo Table script OPEN...........*/
-	var userTableDemoData="<tr><td><input type='checkbox' id='td-user-temp-1' value=''></input></td><td>1</td><td>Amit</td><td>amit.sharma@monoxor.com</td><td>9549554645</td></tr>";
-	userTableDemoData = userTableDemoData+"<tr><td id='td-user-temp-1-next' colspan='5'></td></tr>";
-	$("#tbody-table-user").html(userTableDemoData);	
+	if(($(window).width())>=750)
+	{
+		$.ajax({
+			type: "GET",
+			url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/all/large",		
+			async: false,
+			dataType: "json",			
+			success: function(responseText){				
+				var userTable="";
+				
+		    	for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
+	    		{				        		
+		    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
+		    		"</td><td>"+responseText["userTable"][i].id+
+					"</td><td>"+responseText["userTable"][i].userName+
+	    			"</td><td>"+responseText["userTable"][i].emailId+
+	    			"</td><td>"+responseText["userTable"][i].phoneNo+
+	    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+				}		    			    
+				$("#tbody-table-user").html(userTable);					
+				},
+				error: function(request, error, data){
+					alert(error);				
+				}  						
+			});
+	}
+	else
+	{
+		$.ajax({
+			type: "GET",
+			url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/all/small",		
+			async: false,
+			dataType: "json",			
+			success: function(responseText){				
+			var userTable="";
+			
+			for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
+			{				        		
+				userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+		    		
+				"</td><td>"+responseText["userTable"][i].userName+	    			
+				"</td><td>"+responseText["userTable"][i].phoneNo+
+				"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' colspan='5'></td></tr>";
+			}		 		    	
+			$("#tbody-table-user").html(userTable);					
+		},
+		error: function(request, error, data){
+			alert(error);				
+		}  						
+		});
+	}
+//	var userTableDemoData="<tr><td><input type='checkbox' id='td-user-temp-1' value=''></input></td><td>1</td><td>Amit</td><td>amit.sharma@monoxor.com</td><td>9549554645</td></tr>";
+//	userTableDemoData = userTableDemoData+"<tr><td id='td-user-temp-1-next' colspan='5'></td></tr>";
+//	$("#tbody-table-user").html(userTableDemoData);	
 	
 	
-	$("#td-user-temp-1").click(function(){				
-		userTableRowEdit();
-		$("#td-user-temp-1-next").toggle();
+	$(".user-table-row-checkbox").click(function(){		
+		var current_checked_row_id = $(this).parent().attr("id");
+		row_attech_form_id = current_checked_row_id+"-form";
+		userTableRowEdit(row_attech_form_id);		
+		$("#"+current_checked_row_id+"-form").toggle();
 	});
+//	$("#td-user-temp-1").click(function(){				
+//		userTableRowEdit();
+//		$("#td-user-temp-1-next").toggle();
+//	});
 	
-	var userTableRowEdit;
-	userTableRowEdit = function(){
-		$("#td-user-temp-1-next").load('form_user_create.jsp',function(){
+	function userTableRowEdit(form_id){		
+		$("#"+form_id).load('form_user_create.jsp',function(){
 			userCreateFormVal(domainName);
-			$("#td-user-temp-1-next #div-form-user-create-heading").css("display","none");
-			$("#td-user-temp-1-next #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-fname #input-text-form-user-create-fname").val("Amit");			
-			$("#td-user-temp-1-next #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-lname #input-text-form-user-create-lname").val("Sharma");
-			$("#td-user-temp-1-next #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-category #input-select-form-user-create-category").val("demo-category");
-			$("#td-user-temp-1-next #div-create-user-sub-form #div-form-user-create-line-2 #div-form-user-create-phone #input-text-form-user-create-phone").val("9549554645");
-			$("#td-user-temp-1-next #div-create-user-sub-form #div-form-user-create-line-2 #div-form-user-create-email #input-text-form-user-create-email").val("amit@demo.com");
-			$("#td-user-temp-1-next #div-create-user-sub-form #div-form-user-create-line-3 #div-form-user-create-add-1 #input-text-form-user-create-add-1").val("demo address-1");
-			$("#td-user-temp-1-next #div-create-user-sub-form #div-form-user-create-line-3 #div-form-user-create-add-2 #input-text-form-user-create-add-2").val("demo address-2");
-			$("#td-user-temp-1-next #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-city #input-text-form-user-create-city").val("alwar");
-			$("#td-user-temp-1-next #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-state #input-text-form-user-state").val("rajasthan");
-			$("#td-user-temp-1-next #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-zip #input-text-form-user-create-zip").val("301001");
+			$("#"+form_id+" #div-form-user-create-heading").css("display","none");
+			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-fname #input-text-form-user-create-fname").val("Amit");			
+			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-lname #input-text-form-user-create-lname").val("Sharma");
+			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-category #input-select-form-user-create-category").val("demo-category");
+			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-2 #div-form-user-create-phone #input-text-form-user-create-phone").val("9549554645");
+			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-2 #div-form-user-create-email #input-text-form-user-create-email").val("amit@demo.com");
+			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-3 #div-form-user-create-add-1 #input-text-form-user-create-add-1").val("demo address-1");
+			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-3 #div-form-user-create-add-2 #input-text-form-user-create-add-2").val("demo address-2");
+			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-city #input-text-form-user-create-city").val("alwar");
+			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-state #input-text-form-user-state").val("rajasthan");
+			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-zip #input-text-form-user-create-zip").val("301001");
 
 			$('.selectpicker').selectpicker();	
 			
@@ -828,9 +891,9 @@ function userCreatePageScript(domainName)
 				style: 'btn-info',
 				size: 4
 			});
-			$("#td-user-temp-1-next #div-form-user-create-line-5 #div-form-user-create-reset #btn-form-user-create-reset").css("display","none");						
+			$("#"+form_id+" #div-form-user-create-line-5 #div-form-user-create-reset #btn-form-user-create-reset").css("display","none");						
 		});						
-	};
+	}
 	/*.......Demo table row edit script CLOSE......*/
 	
 	/*...apply table headers of user-create page according to the screen-size....*/	
@@ -842,7 +905,7 @@ function userCreatePageScript(domainName)
 	else
 	{
 		var header="<tr><th>Select</th><th>Username</th><th>Phone</th></tr>";							      
-		$("#tbody-table-user").html(header);
+		$("#thead-table-user").html(header);
 	}	
 	
 	/*.......launch the user form.......*/
