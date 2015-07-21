@@ -178,11 +178,11 @@ $(document).ready(function(){
 			});
 			if($(window).width()>="750")
 			{								
-				$("#div-page-content").css("padding-left","190px");
+				$("#div-page-content").css("padding-left","180px");
 			}
 			else
 			{
-				$("#div-page-content").css("padding-left","190px");
+				$("#div-page-content").css("padding-left","180px");
 			}
 		}
     	else if ($("nav.sidebar").hasClass("sidebar-menu-expanded"))
@@ -198,11 +198,11 @@ $(document).ready(function(){
 			});
 			if($(window).width()>="750")
 			{
-				$("#div-page-content").css("padding-left","40px");
+				$("#div-page-content").css("padding-left","30px");
 			}
 			else
 			{
-				$("#div-page-content").css("padding-left","40px");
+				$("#div-page-content").css("padding-left","30px");
 			}			
         }				
 	}
@@ -280,8 +280,8 @@ function saveButtonScript()
 
 /*...............user-create Form Submission.................*/
 
-function submitUserFormDetails(){	
-	var $btn = $("#btn-form-user-create-submit").button('loading');
+function submitUserFormDetails(){		
+	//var $btn = $("#btn-form-user-create-submit").button('loading');
 	var selector = ["#input-text-form-user-create-fname",
 	                "#input-text-form-user-crate-lname",
 	                "#input-text-form-user-create-phone", 
@@ -291,49 +291,56 @@ function submitUserFormDetails(){
 	                "#input-text-form-user-create-city", 
 	                "#input-text-form-user-state", 
 	                "#input-text-form-user-create-zip",
-	                "#input-select-form-user-create-category"];
+	                "#input-select-form-user-create-category option:selected"];
 	var userFormSubmitState="false";
 	for(var i=0 ; i<selector.length ; i=i+1)
-	{		
+	{								
 		if($(selector[i]).parent().hasClass("has-error") || $(selector[i]).val()=="")
-		{
+		{				
 			userFormSubmitState= "false";						  
 			break;
 		}
 		else
-		{				 
+		{				
 			userFormSubmitState="true";			 
 		}
 	}
 	 		
 	if(userFormSubmitState=="true")
 	{					
-//		$.ajax({
-//			type: "POST",
-//			url: "UserFormSubmitServlet",
-//			dataType: "json",
-//			data: {"form_user_fname_text": $(selector[0]).val(),
-//			"form_user_lname_text": $(selector[1]).val() ,
-//			"form_user_phone_text": $(selector[2]).val() ,
-//			"form_user_email_text": $(selector[3]).val(),
-//			"form_user_add1_text": $(selector[4]).val() ,
-//			"form_user_add2_text": $(selector[5]).val() ,
-//			"form_user_city_text": $(selector[6]).val() ,
-//			"form_user_state_text": $(selector[7]).val() ,
-//			"form_user_zip_text": $(selector[8]).val() ,				 							 			
-//			"form_user_category_select": $(selector[9]).val()},				
-//			success: function(responseText){
+		var jsonData = new Object();
+		jsonData.firstName = $(selector[0]).val();
+		jsonData.lastName = $(selector[1]).val();
+		jsonData.userCategory = $(selector[9]).val();
+		jsonData.phoneNumber = $(selector[2]).val();
+		jsonData.emailId = $(selector[3]).val();
+		jsonData.addLineOne = $(selector[4]).val(); 			 
+		jsonData.addLineTwo = $(selector[5]).val();
+		jsonData.city = $(selector[6]).val();
+		jsonData.state = $(selector[7]).val();
+		jsonData.zip = $(selector[8]).val()		
+		
+		var jsonText = JSON.stringify(jsonData);		
+		$.ajax({
+			type: "POST",
+			url: "http://localhost:8080/rest.sellerapp/rest/user/create/x",
+			async: false,	
+			contentType :"application/json; charSet=UTF-8",
+			data: jsonText,			
+			dataType: "html",			
+			success: function(responseText){			
 //				$btn.button('reset');
 //				alert('in success');
 //				$("#div-form-user-create").load('form_user_create.jsp');
 //				$("#div-form-user-create").toggle();				 				
 //				alert(responseText["userStatus"]);
-//					},
-//			error: function(request, error, data){
-//						alert(error);						
-//						$btn.button('reset');
-//				} 
-//		});
+			},
+			error: function(request, error, data){
+				
+				alert(request+" "+error+" "+data+" user form submit request");						
+				$btn.button('reset');
+			} 
+		});
 	}
 	else
 	{
@@ -576,142 +583,110 @@ function searchUserFormDetails(domainName)
 		{	 	 						
 			$.ajax({ 						
 				type: "GET",
-				url: "http://localhost:8080/rest.sellerapp/rest/user/table_data/search?textChar="+userTextChar+"&screenType=large",			
-				dataType: "html",
-				success: function(responseText){			
-					alert(responseText);
-//					var userTable="";
-//					for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
-//					{				        		
-//						userTable =	userTable+"<tr><td><input type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
-//						"</td><td>"+responseText["userTable"][i].id+
-//						"</td><td>"+responseText["userTable"][i].userName+
-//						"</td><td>"+responseText["userTable"][i].emailId+
-//						"</td><td>"+responseText["userTable"][i].phoneNo+
-//						"</td></tr>";
-//					}		  						
-//					$("#tbody-table-user").html(userTable);	
-//					//$("#tbody-table-user").html(responseText);						
+				url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/search?textChar="+userTextChar,			
+				async: false,
+				dataType: "json",
+				success: function(responseText){								
+					var userTable="";
+					for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
+		    		{				        		
+			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
+			    		"</td><td>"+responseText["userTable"][i].id+
+						"</td><td>"+responseText["userTable"][i].userName+
+		    			"</td><td>"+responseText["userTable"][i].emailId+
+		    			"</td><td>"+responseText["userTable"][i].phoneNo+
+		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+					}		  						
+					$("#tbody-table-user").html(userTable);		
+					userCreateSubScript(domainName);
 				},
 				error: function(request, error, data){
 					alert(error);
 					alert(data);
 				}  						
-			});		
+			});			
 		}
-		
-		
-		
-		/*........searching time table load according to the search result.......*/				
-//		$("#input-text-user-search").keyup(function(){			
-//
-//			var userTextChar1 = $("#input-text-user-search").val();	 				
-//			if(!(userTextChar1==""))  //if a character typed in search-bar
-//			{	 	 				 					  					
-//				$.ajax({ 						
-//					type: "GET",
-//					url: "UserTableDataServlet",			
-//					dataType: "json",
-//					data: {"var": "filled","pageName": "user-create", "textChar": userTextChar1, "screenType": "large" },
-//					success: function(responseText){							
-//						var userTable="";
-//						for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
-//		        		{				        		
-//				    		userTable =	userTable+"<tr><td><input type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
-//				    		"</td><td>"+responseText["userTable"][i].id+
-//							"</td><td>"+responseText["userTable"][i].userName+
-//		        			"</td><td>"+responseText["userTable"][i].emailId+
-//		        			"</td><td>"+responseText["userTable"][i].phoneNo+
-//		        			"</td></tr>";
-//						}		  						
-//						$("#tbody-table-user").html(userTable);	
-//						//$("#tbody-table-user").html(responseText);						
-//					},
-//					error: function(request, error, data){
-//						alert(error);
-//						alert(data);
-//					}  						
-//				});		
-//			}
-//			else  // if search bar is empty even after button typed (back-button,space)
-//			{		 					
-//				$.ajax({
-//					type: "GET",
-//					url: "UserTableDataServlet",			
-//					dataType: "json",
-//					data: {"var": "empty", "pageName": "user-create", "screenType": "large"},
-//					success: function(responseText){
-//						var userTable="";
-//						for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
-//		        		{				        		
-//				    		userTable =	userTable+"<tr><td><input type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
-//				    		"</td><td>"+responseText["userTable"][i].id+
-//							"</td><td>"+responseText["userTable"][i].userName+
-//		        			"</td><td>"+responseText["userTable"][i].emailId+
-//		        			"</td><td>"+responseText["userTable"][i].phoneNo+
-//		        			"</td></tr>";
-//						}		    	
-//						$("#tbody-table-user").html(userTable);							
-//					},
-//					error: function(request, error, data){
-//						alert(error);				
-//					}  						
-//				});
-//			}	 			
-//		});
+		else
+		{
+			$.ajax({
+				type: "GET",
+				url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/all",		
+				async: false,
+				dataType: "json",			
+				success: function(responseText){				
+					var userTable="";
+					
+			    	for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
+		    		{				        		
+			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
+			    		"</td><td>"+responseText["userTable"][i].id+
+						"</td><td>"+responseText["userTable"][i].userName+
+		    			"</td><td>"+responseText["userTable"][i].emailId+
+		    			"</td><td>"+responseText["userTable"][i].phoneNo+
+		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+					}		    			    
+					$("#tbody-table-user").html(userTable);					
+					userCreateSubScript(domainName);
+				},
+				error: function(request, error, data){
+					alert(error);				
+				}  						
+			});
+		}
 	}
 	else	  /*......screen width less than 750px.....*/
 	{	
-//		$.ajax({
-//			type: "GET",
-//			url: "UserTableDataServlet",			
-//			dataType: "html",
-//			data: {"var": "empty", "pageName": "user-create", "screenType": "small"},
-//			success: function(responseText){				
-//				$("#tbody-table-user").html(responseText);						
-//				},
-//			error: function(request, error, data){
-//					alert(error);				
-//				}  						
-//			});
-//			
-//		/*........searching time table load according to the search result.......*/				
-//		$("#input-text-user-search").keyup(function(){	 					 				
-//			var userTextChar1 = $("#input-text-user-search-text-box").val();	 				
-//			if(!(userTextChar1==""))  //if a character typed in search-bar
-//			{	 	 				 					  					
-//				$.ajax({ 						
-//					type: "GET",
-//					url: "UserTableDataServlet",			
-//					dataType: "html",
-//					data: {"var": "filled","pageName": "user-create", "textChar": userTextChar1, "screenType": "small"},
-//					success: function(responseText){										
-//						$("#tbody-table-user").html(responseText);						
-//							},
-//					error: function(request, error, data){
-//								alert(error);				
-//							}  						
-//					 });		
-//			}
-//			else  // if search bar is empty even after button typed (back-button,space)
-//			{		 					
-//				$.ajax({
-//					type: "GET",
-//					url: "UserTableDataServlet",			
-//					dataType: "html",
-//					data: {"var": "empty", "pageName": "user-create", "screenType": "small"},
-//					success: function(responseText){				
-//						$("#tbody-table-user").html(responseText);						
-//						},
-//					error: function(request, error, data){
-//							alert(error);				
-//						}  						
-//					});
-//			}	 			
-//		});
+		if(!(userTextChar==""))  //if a character typed in search-bar
+		{	 	 						
+			$.ajax({ 						
+				type: "GET",
+				url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/search?textChar="+userTextChar,			
+				async: false,
+				dataType: "json",
+				success: function(responseText){								
+					var userTable="";
+					for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
+		    		{				        		
+			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+			    		
+						"</td><td>"+responseText["userTable"][i].userName+		    
+						"</td><td>"+responseText["userTable"][i].phoneNo+
+		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+					}		  						
+					$("#tbody-table-user").html(userTable);		
+					userCreateSubScript(domainName);
+				},
+				error: function(request, error, data){
+					alert(error);
+					alert(data);
+				}  						
+			});			
+		}
+		else
+		{
+			$.ajax({
+				type: "GET",
+				url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/all",		
+				async: false,
+				dataType: "json",			
+				success: function(responseText){				
+					var userTable="";					
+			    	for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
+		    		{				        		
+			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+			    		
+						"</td><td>"+responseText["userTable"][i].userName+		    	
+		    			"</td><td>"+responseText["userTable"][i].phoneNo+
+		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+					}		    			    
+					$("#tbody-table-user").html(userTable);					
+					userCreateSubScript(domainName);
+				},
+				error: function(request, error, data){
+					alert(error);				
+				}  						
+			});
+		}
 	}
 }
-
 
 function searchUserCatFormDetails()
 {			 				
@@ -772,8 +747,7 @@ function searchInvoiceFormDetails()
 {}
 
 /* error handling for whole script page*/
-function getErrorMessage(error_code)
-{		
+function getErrorMessage(error_code){		
 	var error_message;
 	$.ajax({
 		type: "GET", 
@@ -790,7 +764,7 @@ function getErrorMessage(error_code)
 
 /*............................user-create script OPEN......................... */
 function userCreatePageScript(domainName)
-{				
+{					
 	$( "#input-select-form-user-create-category" ).change(function () {	
 		var text = $("#input-select-form-user-create-category option:selected").text();
 		if(text=="CreateCategory")
@@ -808,14 +782,13 @@ function userCreatePageScript(domainName)
 	{
 		$.ajax({
 			type: "GET",
-			url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/all/large",		
+			url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/all",		
 			async: false,
 			dataType: "json",			
 			success: function(responseText){				
 				var userTable="";
 				
-		    	for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
-	    		{				        		
+		    	for(var i=0 ; i<responseText["userTable"].length ; i=i+1){				        		
 		    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
 		    		"</td><td>"+responseText["userTable"][i].id+
 					"</td><td>"+responseText["userTable"][i].userName+
@@ -823,10 +796,11 @@ function userCreatePageScript(domainName)
 	    			"</td><td>"+responseText["userTable"][i].phoneNo+
 	    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 				}		    			    
-				$("#tbody-table-user").html(userTable);					
+				$("#tbody-table-user").html(userTable);				
+				userCreateSubScript(domainName);
 				},
 				error: function(request, error, data){
-					alert(error);				
+					alert(error+" in user table data");				
 				}  						
 			});
 	}
@@ -834,41 +808,62 @@ function userCreatePageScript(domainName)
 	{
 		$.ajax({
 			type: "GET",
-			url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/all/small",		
+			url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/all",		
 			async: false,
 			dataType: "json",			
 			success: function(responseText){				
 			var userTable="";
 			
-			for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
-			{				        		
-				userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+		    		
-				"</td><td>"+responseText["userTable"][i].userName+	    			
-				"</td><td>"+responseText["userTable"][i].phoneNo+
-				"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' colspan='5'></td></tr>";
+			for(var i=0 ; i<responseText["userTable"].length ; i=i+1){				        		
+	    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+	    		
+				"</td><td>"+responseText["userTable"][i].userName+    			
+    			"</td><td>"+responseText["userTable"][i].phoneNo+
+    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 			}		 		    	
-			$("#tbody-table-user").html(userTable);					
+			$("#tbody-table-user").html(userTable);		
+			userCreateSubScript(domainName);
 		},
 		error: function(request, error, data){
 			alert(error);				
 		}  						
 		});
+	}	
+		
+	/*.......Demo table row edit script CLOSE......*/
+	
+	/*...apply table headers of user-create page according to the screen-size....*/	
+	if($(window).width()>=750)
+	{		
+		var header="<tr><th>Select</th><th>User Id</th><th>Username</th><th>EmailID</th><th>Phone</th></tr>";			
+		$("#thead-table-user").html(header);
 	}
-//	var userTableDemoData="<tr><td><input type='checkbox' id='td-user-temp-1' value=''></input></td><td>1</td><td>Amit</td><td>amit.sharma@monoxor.com</td><td>9549554645</td></tr>";
-//	userTableDemoData = userTableDemoData+"<tr><td id='td-user-temp-1-next' colspan='5'></td></tr>";
-//	$("#tbody-table-user").html(userTableDemoData);	
+	else
+	{
+		var header="<tr><th>Select</th><th>Username</th><th>Phone</th></tr>";							      
+		$("#thead-table-user").html(header);
+	}	
 	
-	
-	$(".user-table-row-checkbox").click(function(){		
+	/*.......launch the user form.......*/
+	$("#btn-user-create").click(function(){			
+		$("#div-form-user-create").toggle();
+	});
+
+/*......load form each time when clicking on nav user......*/
+	$("#li-tab-user-browse").click(function(){  
+		$("#div-form-user-create").css("display","none");
+		$("#div-form-user-create").load('form_user_create.jsp');
+	}); 
+}
+
+function userCreateSubScript(domainName)
+{		
+	$(".user-table-row-checkbox").click(function(){	
 		var current_checked_row_id = $(this).parent().attr("id");
 		row_attech_form_id = current_checked_row_id+"-form";
 		userTableRowEdit(row_attech_form_id);		
 		$("#"+current_checked_row_id+"-form").toggle();
 	});
-//	$("#td-user-temp-1").click(function(){				
-//		userTableRowEdit();
-//		$("#td-user-temp-1-next").toggle();
-//	});
+
 	
 	function userTableRowEdit(form_id){		
 		$("#"+form_id).load('form_user_create.jsp',function(){
@@ -894,30 +889,6 @@ function userCreatePageScript(domainName)
 			$("#"+form_id+" #div-form-user-create-line-5 #div-form-user-create-reset #btn-form-user-create-reset").css("display","none");						
 		});						
 	}
-	/*.......Demo table row edit script CLOSE......*/
-	
-	/*...apply table headers of user-create page according to the screen-size....*/	
-	if($(window).width()>=750)
-	{		
-		var header="<tr><th>Select</th><th>User Id</th><th>Username</th><th>EmailID</th><th>Phone</th></tr>";			
-		$("#thead-table-user").html(header);
-	}
-	else
-	{
-		var header="<tr><th>Select</th><th>Username</th><th>Phone</th></tr>";							      
-		$("#thead-table-user").html(header);
-	}	
-	
-	/*.......launch the user form.......*/
-	$("#btn-user-create").click(function(){			
-		$("#div-form-user-create").toggle();
-	});
-
-/*......load form each time when clicking on nav user......*/
-	$("#li-tab-user-browse").click(function(){  
-		$("#div-form-user-create").css("display","none");
-		$("#div-form-user-create").load('form_user_create.jsp');
-	}); 
 }
 
 /*......user form validation.........*/

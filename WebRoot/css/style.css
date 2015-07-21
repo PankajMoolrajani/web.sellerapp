@@ -204,6 +204,14 @@ nav.sidebar ul >li > ul > li
 	display:none;	
 }
 
+/*.........for user create page..........*/
+@media(max-width:765px){
+	#div-form-user-create
+	{
+		border:1px dotted gray;padding:5px;display:none; margin-top:2%;border-radius:4px;
+	}
+}
+
 /*........for navbar .............*/
 @media(max-width:765px){
 	#div-alert-box
@@ -251,10 +259,9 @@ nav.sidebar ul >li > ul > li
 @media screen and (max-width: 766px) 
 {
 	#div-page-content{				
-		padding-left:40px;
+		padding-left:30px;
 	}
 }
-/*..........................user-create-page-CLOSE..........................*/
 
 /*........................inventory-management script OPEN.................*/
 	
