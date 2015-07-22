@@ -281,9 +281,9 @@ function saveButtonScript()
 /*...............user-create Form Submission.................*/
 
 function submitUserFormDetails(){		
-	//var $btn = $("#btn-form-user-create-submit").button('loading');
+	var $btn = $(".btn-page-state-save-main").button('loading');
 	var selector = ["#input-text-form-user-create-fname",
-	                "#input-text-form-user-crate-lname",
+	                "#input-text-form-user-create-lname",
 	                "#input-text-form-user-create-phone", 
 	                "#input-text-form-user-create-email", 
 	                "#input-text-form-user-create-add-1", 	  
@@ -320,20 +320,24 @@ function submitUserFormDetails(){
 		jsonData.state = $(selector[7]).val();
 		jsonData.zip = $(selector[8]).val()		
 		
-		var jsonText = JSON.stringify(jsonData);		
+		var jsonText = JSON.stringify(jsonData);	
 		$.ajax({
 			type: "POST",
 			url: "http://localhost:8080/rest.sellerapp/rest/user/create/x",
 			async: false,	
 			contentType :"application/json; charSet=UTF-8",
 			data: jsonText,			
-			dataType: "html",			
-			success: function(responseText){			
-//				$btn.button('reset');
-//				alert('in success');
-//				$("#div-form-user-create").load('form_user_create.jsp');
-//				$("#div-form-user-create").toggle();				 				
-//				alert(responseText["userStatus"]);
+			dataType: "json",			
+			success: function(responseText){				
+				$btn.button('reset');
+				var error_code = responseText["error_code"];
+				 if(error_code==""){
+					 
+				 }
+				 else{
+					 var error_message=getErrorMessage(error_code);
+					 alert(error_message);
+				 }
 			},
 			error: function(request, error, data){
 				
@@ -342,15 +346,13 @@ function submitUserFormDetails(){
 			} 
 		});
 	}
-	else
-	{
+	else{
 		alert("First Fill all the fields Properly");		
 		$btn.button('reset');
 	}	
 }
 
-function submitUserCatFormDetails()
-{
+function submitUserCatFormDetails(){
 	var $btn = $(this).button('loading');
 	var selector = ["#input-text-form-user-category-create-name",
 	                 "#input-text-form-user-category-create-description"];
@@ -531,14 +533,19 @@ function resetButtonScript(domainName)
 function resetUserFormDetails(domainName)
 {	
 	$("#div-create-user-sub-form").load('sub_form_user_create.jsp',function(){
+		userCreatePageScript(domainName);
 		userCreateFormVal(domainName);
-		selectPickerScript();
+		selectPickerScript();		
+		/*.......launch the user form.......*/
+		$("#btn-user-create").click(function(){			
+			$("#div-form-user-create").toggle();
+		});
 	});
 }
 function resetUserCatFormDetails(domainName)
 {
 	$("#div-create-user-category-sub-form").load('sub_form_user_category_create.jsp',function(){
-		userCatCreateFormVal(domainName);
+		userCatCreateFormVal(domainName);		
 	});			
 }
 function resetInventoryFormDetails()
@@ -764,19 +771,34 @@ function getErrorMessage(error_code){
 
 /*............................user-create script OPEN......................... */
 function userCreatePageScript(domainName)
-{					
+{				
+	//fetch user Categories for user create form	
+	$.ajax({
+		type: "GET",
+		url: "http://"+domainName+":8080/rest.sellerapp/rest/user_category/category_list",		
+		async: false,
+		dataType: "json",			
+		success: function(responseText){										    	
+	    	var cateogryList = ""; 
+	    	for(var i=0 ; i<responseText["userCategories"].length ; i=i+1)
+	    	{
+	    		cateogryList = cateogryList+"<option value='"+responseText["userCategories"][i].id+"'>"+responseText["userCategories"][i].name+"</option>";
+	    	}	    	 
+	    	$("#input-select-form-user-create-category").append(cateogryList);
+		},
+		error: function(request, error, data){
+				alert(error+" in user_cat fech list");				
+		}  						
+	});
+	
 	$( "#input-select-form-user-create-category" ).change(function () {	
 		var text = $("#input-select-form-user-create-category option:selected").text();
 		if(text=="CreateCategory")
 		{
 			$("#div-modal-form-user-create-category").modal('show');
 		}
-	});
-				
-	if($(window).width()<=380)
-		$("#div-form-user-category-create-submit").removeClass("col-xs-5");
-
-		
+	});	
+	
 	/*...........Demo Table script OPEN...........*/
 	if(($(window).width())>=750)
 	{
@@ -895,7 +917,7 @@ function userCreateSubScript(domainName)
 function userCreateFormVal(domainName)
 {	
 	/*......check fields are not empty.........*/
-	$("#input-text-form-user-create-fname, #input-text-form-user-crate-lname, #input-text-form-user-create-phone, #input-text-form-user-create-add-1, #input-text-form-user-create-add-2, #input-text-form-user-create-city, #input-text-form-user-state, #input-text-form-user-create-zip").on('input', function() {
+	$("#input-text-form-user-create-fname, #input-text-form-user-create-lname, #input-text-form-user-create-phone, #input-text-form-user-create-add-1, #input-text-form-user-create-add-2, #input-text-form-user-create-city, #input-text-form-user-state, #input-text-form-user-create-zip").on('input', function() {
 		var input=$(this);
 		var is_name=input.val();
 		if(is_name)
@@ -909,7 +931,7 @@ function userCreateFormVal(domainName)
 	});
 
 /*......check fields are empty.........*/	
-	$("#input-text-form-user-create-fname,#input-text-form-user-crate-lname, #input-text-form-user-create-phone, #input-text-form-user-create-email, #input-text-form-user-create-add-1, #input-text-form-user-create-add-2, #input-text-form-user-create-city, #input-text-form-user-state, #input-text-form-user-create-zip").blur(function(){		
+	$("#input-text-form-user-create-fname,#input-text-form-user-create-lname, #input-text-form-user-create-phone, #input-text-form-user-create-email, #input-text-form-user-create-add-1, #input-text-form-user-create-add-2, #input-text-form-user-create-city, #input-text-form-user-state, #input-text-form-user-create-zip").blur(function(){		
 		if(!$(this).val())
 		{
 			$(this).parent().addClass("has-error");
@@ -917,7 +939,7 @@ function userCreateFormVal(domainName)
 	});
 
 	/*........check for html injection......*/
-	$("#input-text-form-user-create-fname, #input-text-form-user-crate-lname, #input-text-form-user-create-phone, #input-text-form-user-create-add-1, #input-text-form-user-create-add-2, #input-text-form-user-create-email, #input-text-form-user-create-city, #input-text-form-user-state, #input-text-form-user-create-zip").on('input', function() {
+	$("#input-text-form-user-create-fname, #input-text-form-user-create-lname, #input-text-form-user-create-phone, #input-text-form-user-create-add-1, #input-text-form-user-create-add-2, #input-text-form-user-create-email, #input-text-form-user-create-city, #input-text-form-user-state, #input-text-form-user-create-zip").on('input', function() {
 		var input = $(this);
 		var re = /(<([^>]+)>)/gi;
 		var has_html_characters = re.test(input.val());
@@ -926,7 +948,7 @@ function userCreateFormVal(domainName)
 	});
 	
 	/*.......first-name,last-name,city,state field validation........*/
-	$("#input-text-form-user-create-fname, #input-text-form-user-crate-lname, #input-text-form-user-create-city, #input-text-form-user-state").on('input', function() {
+	$("#input-text-form-user-create-fname, #input-text-form-user-create-lname, #input-text-form-user-create-city, #input-text-form-user-state").on('input', function() {
 		var input = $(this);
 		var re = /^[a-zA-Z]+(?:(?:\\s+|-)[a-zA-Z]+)*$/;
 		var has_characters = re.test(input.val());
