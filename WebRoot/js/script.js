@@ -235,8 +235,7 @@ $(document).ready(function(){
 	invoicePageScript(domainName);
 	invoiceCreateFormVal(domainName);
 	
-	saveButtonScript();
-	//editButtonScript();
+	saveButtonScript(domainName);	
 	resetButtonScript(domainName);
 	searchBarScript(domainName);
 	selectPickerScript();
@@ -252,13 +251,61 @@ function selectPickerScript()
 	});
 }
 
-function saveButtonScript()
+function editButtonScript(domainName)
+{		
+	$(".btn-page-state-edit-main").click(function(){				
+		var parentId = $(this).parent().parent().attr("id");		
+		switch(parentId) {
+	    case "div-form-user-create-state-buttons":
+	    	editUserFormDetails(domainName);
+	        break;
+	    case "div-form-user-category-create-state-buttons":
+	        editUserCatFormDetails();
+	        break;
+	    case "div-form-inventory-create-state-buttons":
+	        editInventoryFormDetails();
+	        break;
+	    case "div-form-order-create-state-buttons":
+	        editOrderFormDetails();
+	        break;
+	    case "div-form-invoice-create-pay-invoice":
+	    	editInvoiceFormDetails();
+	        break;
+	    default:
+	    	
+		}
+	});
+}
+
+function editUserFormDetails(domainName){
+	var checkedFormElementsId = JSON.parse(localStorage["checkedFormElementsId"]);	
+	$(checkedFormElementsId[0]).prop("disabled",false);
+	$(checkedFormElementsId[1]).prop("disabled",false);
+	$(checkedFormElementsId[2]).prop("disabled",false);
+	$(checkedFormElementsId[3]).prop("disabled",false);
+	$(checkedFormElementsId[4]).prop("disabled",false);
+	$(checkedFormElementsId[5]).prop("disabled",false);
+	$(checkedFormElementsId[6]).prop("disabled",false);
+	$(checkedFormElementsId[7]).prop("disabled",false);
+	$(checkedFormElementsId[8]).prop("disabled",false);
+	$(checkedFormElementsId[9]).prop("disabled",false);		
+}
+function editUserCatFormDetails(domainName){	
+}
+function editInventoryFormDetails(domainName){	
+}
+function editOrderFormDetails(domainName){	
+}
+function editInvoiceFormDetails(domainName){	
+}
+
+function saveButtonScript(domainName)
 {	
 	$(".btn-page-state-save-main").click(function(){			
 		var parentId = $(this).parent().parent().attr("id");					
 		switch(parentId) {
 	    case "div-form-user-create-state-buttons":
-	    	submitUserFormDetails();
+	    	submitUserFormDetails(domainName);
 	        break;
 	    case "div-form-user-category-create-state-buttons":
 	        submitUserCatFormDetails();
@@ -280,8 +327,8 @@ function saveButtonScript()
 
 /*...............user-create Form Submission.................*/
 
-function submitUserFormDetails(){		
-	var $btn = $(".btn-page-state-save-main").button('loading');
+function submitUserFormDetails(domainName){			
+	var $btn = $("#div-form-user-create-state-buttons div .btn-page-state-save-main").button('loading');
 	var selector = ["#input-text-form-user-create-fname",
 	                "#input-text-form-user-create-lname",
 	                "#input-text-form-user-create-phone", 
@@ -323,16 +370,16 @@ function submitUserFormDetails(){
 		var jsonText = JSON.stringify(jsonData);	
 		$.ajax({
 			type: "POST",
-			url: "http://localhost:8080/rest.sellerapp/rest/user/create/x",
+			url: "http://"+domainName+":8080/rest.sellerapp/rest/user/create",
 			async: false,	
 			contentType :"application/json; charSet=UTF-8",
 			data: jsonText,			
 			dataType: "json",			
-			success: function(responseText){				
+			success: function(responseText){
 				$btn.button('reset');
 				var error_code = responseText["error_code"];
 				 if(error_code==""){
-					 
+
 				 }
 				 else{
 					 var error_message=getErrorMessage(error_code);
@@ -878,36 +925,93 @@ function userCreatePageScript(domainName)
 }
 
 function userCreateSubScript(domainName)
-{		
-	$(".user-table-row-checkbox").click(function(){	
-		var current_checked_row_id = $(this).parent().attr("id");
-		row_attech_form_id = current_checked_row_id+"-form";
-		userTableRowEdit(row_attech_form_id);		
-		$("#"+current_checked_row_id+"-form").toggle();
-	});
-
+{
+	var row_attech_form_id;
+	$(".user-table-row-checkbox").click(function(){		
+		if($(this).is(':checked'))
+		{
+			var	current_checkbox_value = $(this).attr("value");	
+			
+			localStorage.setItem("current_checkbox_value", JSON.stringify(current_checkbox_value));		
+			
+			var current_checked_row_id = $(this).parent().attr("id");		
+			row_attech_form_id = current_checked_row_id+"-form";			
+			userTableRowEdit(row_attech_form_id);		
+		}
+		else
+		{				
+			$("#"+row_attech_form_id).toggle();	
+		}
+	});	
 	
-	function userTableRowEdit(form_id){		
-		$("#"+form_id).load('form_user_create.jsp',function(){
+	function userTableRowEdit(form_id){				
+		$("#"+form_id).load('form_user_create.jsp',function(){			
 			userCreateFormVal(domainName);
+			editButtonScript(domainName);
 			$("#"+form_id+" #div-form-user-create-heading").css("display","none");
-			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-fname #input-text-form-user-create-fname").val("Amit");			
-			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-lname #input-text-form-user-create-lname").val("Sharma");
-			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-category #input-select-form-user-create-category").val("demo-category");
-			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-2 #div-form-user-create-phone #input-text-form-user-create-phone").val("9549554645");
-			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-2 #div-form-user-create-email #input-text-form-user-create-email").val("amit@demo.com");
-			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-3 #div-form-user-create-add-1 #input-text-form-user-create-add-1").val("demo address-1");
-			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-3 #div-form-user-create-add-2 #input-text-form-user-create-add-2").val("demo address-2");
-			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-city #input-text-form-user-create-city").val("alwar");
-			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-state #input-text-form-user-state").val("rajasthan");
-			$("#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-zip #input-text-form-user-create-zip").val("301001");
+			var checkedFormElementsId =["#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-fname #input-text-form-user-create-fname",
+			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-lname #input-text-form-user-create-lname",
+			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-category #input-select-form-user-create-category",
+			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-2 #div-form-user-create-phone #input-text-form-user-create-phone",
+			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-2 #div-form-user-create-email #input-text-form-user-create-email",
+			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-3 #div-form-user-create-add-1 #input-text-form-user-create-add-1",
+			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-3 #div-form-user-create-add-2 #input-text-form-user-create-add-2",
+			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-city #input-text-form-user-create-city",
+			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-state #input-text-form-user-state",
+			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-zip #input-text-form-user-create-zip"
+			                            ]; 
+			localStorage["checkedFormElementsId"] = JSON.stringify(checkedFormElementsId);
+
+			var checkedUserId = JSON.parse(localStorage.getItem("current_checkbox_value"));
+			//filling category-list of toggle form 
+			$.ajax({
+				type: "GET",
+				url: "http://"+domainName+":8080/rest.sellerapp/rest/user_category/category_list",		
+				async: false,
+				dataType: "json",			
+				success: function(responseText){										    	
+			    	var cateogryList = ""; 
+			    	for(var i=0 ; i<responseText["userCategories"].length ; i=i+1)
+			    	{
+			    		cateogryList = cateogryList+"<option value='"+responseText["userCategories"][i].id+"'>"+responseText["userCategories"][i].name+"</option>";
+			    	}	    	 
+			    	$(checkedFormElementsId[2]).append(cateogryList);
+				},
+				error: function(request, error, data){
+						alert(error+" in user_cat fech list");				
+				}  						
+			});
+			//filling form toggle form details
+			$.ajax({
+				type: "GET",
+				url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_row_form/id/"+checkedUserId,		
+				async: false,
+				dataType: "json",						
+				success: function(responseText){
+					alert(responseText["rowUserDetails"].userCatId);
+					$(checkedFormElementsId[0]).prop("disabled",true).val(responseText["rowUserDetails"].firstName);
+					$(checkedFormElementsId[1]).prop("disabled",true).val(responseText["rowUserDetails"].lastName);
+					$(checkedFormElementsId[2]).prop("disabled",false).val(responseText["rowUserDetails"].userCatId);
+					$(checkedFormElementsId[3]).prop("disabled",true).val(responseText["rowUserDetails"].phoneNumber);
+					$(checkedFormElementsId[4]).prop("disabled",true).val(responseText["rowUserDetails"].emailId);
+					$(checkedFormElementsId[5]).prop("disabled",true).val(responseText["rowUserDetails"].addLineOne);
+					$(checkedFormElementsId[6]).prop("disabled",true).val(responseText["rowUserDetails"].addLineTwo);
+					$(checkedFormElementsId[7]).prop("disabled",true).val(responseText["rowUserDetails"].city);
+					$(checkedFormElementsId[8]).prop("disabled",true).val(responseText["rowUserDetails"].state);
+					$(checkedFormElementsId[9]).prop("disabled",true).val(responseText["rowUserDetails"].zip);
+				},
+				error: function(request, error, data){
+					alert(error);				
+				}  						
+			});						
 
 			$('.selectpicker').selectpicker();	
 			
 			$('.selectpicker').selectpicker({
 				style: 'btn-info',
 				size: 4
-			});
+			});			
+			$("#"+form_id).toggle();	
 			$("#"+form_id+" #div-form-user-create-line-5 #div-form-user-create-reset #btn-form-user-create-reset").css("display","none");						
 		});						
 	}
