@@ -14,7 +14,7 @@ $(document).ready(function(){
 	function submitLoginForm(login_username , login_password){		 		
 		var $btn = $("#btn-submit-login-form").button('loading');				
 		var access_token_url = 	getAccessTokenUrl(login_username , login_password);		
-		var access_token = getAccessToken(access_token_url, login_username , login_password);		
+		var access_token = getAccessToken(access_token_url,login_username,login_password);		
 		var access_token_check_url = getAccessTokenCheckURL();		
 		var authentication_state = checkAccessToken(access_token_check_url,access_token);
 		$btn.button('reset');
@@ -255,7 +255,7 @@ function editButtonScript(domainName)
 {		
 	$(".btn-page-state-edit-main").click(function(){				
 		var parentId = $(this).parent().parent().attr("id");		
-		switch(parentId) {
+		switch(parentId){
 	    case "div-form-user-create-state-buttons":
 	    	editUserFormDetails(domainName);
 	        break;
@@ -278,17 +278,12 @@ function editButtonScript(domainName)
 }
 
 function editUserFormDetails(domainName){
-	var checkedFormElementsId = JSON.parse(localStorage["checkedFormElementsId"]);	
-	$(checkedFormElementsId[0]).prop("disabled",false);
-	$(checkedFormElementsId[1]).prop("disabled",false);
-	$(checkedFormElementsId[2]).prop("disabled",false);
-	$(checkedFormElementsId[3]).prop("disabled",false);
-	$(checkedFormElementsId[4]).prop("disabled",false);
-	$(checkedFormElementsId[5]).prop("disabled",false);
-	$(checkedFormElementsId[6]).prop("disabled",false);
-	$(checkedFormElementsId[7]).prop("disabled",false);
-	$(checkedFormElementsId[8]).prop("disabled",false);
-	$(checkedFormElementsId[9]).prop("disabled",false);		
+	var checkedFormElementsId = JSON.parse(localStorage["checkedFormElementsId"]);				
+	for(var i=0 ; i<checkedFormElementsId.length ; i=i+1)
+	{
+		$(checkedFormElementsId[i]).prop("disabled",false);		
+	}	
+	$(checkedFormElementsId[2]).selectpicker('refresh');		
 }
 function editUserCatFormDetails(domainName){	
 }
@@ -299,8 +294,7 @@ function editOrderFormDetails(domainName){
 function editInvoiceFormDetails(domainName){	
 }
 
-function saveButtonScript(domainName)
-{	
+function saveButtonScript(domainName){	
 	$(".btn-page-state-save-main").click(function(){			
 		var parentId = $(this).parent().parent().attr("id");					
 		switch(parentId) {
@@ -367,7 +361,7 @@ function submitUserFormDetails(domainName){
 		jsonData.state = $(selector[7]).val();
 		jsonData.zip = $(selector[8]).val()		
 		
-		var jsonText = JSON.stringify(jsonData);	
+		var jsonText = JSON.stringify(jsonData);			
 		$.ajax({
 			type: "POST",
 			url: "http://"+domainName+":8080/rest.sellerapp/rest/user/create",
@@ -375,7 +369,7 @@ function submitUserFormDetails(domainName){
 			contentType :"application/json; charSet=UTF-8",
 			data: jsonText,			
 			dataType: "json",			
-			success: function(responseText){
+			success: function(responseText){			
 				$btn.button('reset');
 				var error_code = responseText["error_code"];
 				 if(error_code==""){
@@ -637,7 +631,7 @@ function searchUserFormDetails(domainName)
 		{	 	 						
 			$.ajax({ 						
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/search?textChar="+userTextChar,			
+				url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/search_char/"+userTextChar,			
 				async: false,
 				dataType: "json",
 				success: function(responseText){								
@@ -694,7 +688,7 @@ function searchUserFormDetails(domainName)
 		{	 	 						
 			$.ajax({ 						
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/search?textChar="+userTextChar,			
+				url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/search_char/"+userTextChar,			
 				async: false,
 				dataType: "json",
 				success: function(responseText){								
@@ -928,18 +922,15 @@ function userCreateSubScript(domainName)
 {
 	var row_attech_form_id;
 	$(".user-table-row-checkbox").click(function(){		
-		if($(this).is(':checked'))
-		{
-			var	current_checkbox_value = $(this).attr("value");	
-			
-			localStorage.setItem("current_checkbox_value", JSON.stringify(current_checkbox_value));		
-			
+		if($(this).is(':checked')){
+			//id of user
+			var	current_checkbox_value = $(this).attr("value");			
+			localStorage.setItem("current_checkbox_value", JSON.stringify(current_checkbox_value));					
 			var current_checked_row_id = $(this).parent().attr("id");		
 			row_attech_form_id = current_checked_row_id+"-form";			
 			userTableRowEdit(row_attech_form_id);		
 		}
-		else
-		{				
+		else{				
 			$("#"+row_attech_form_id).toggle();	
 		}
 	});	
@@ -963,6 +954,7 @@ function userCreateSubScript(domainName)
 			localStorage["checkedFormElementsId"] = JSON.stringify(checkedFormElementsId);
 
 			var checkedUserId = JSON.parse(localStorage.getItem("current_checkbox_value"));
+			
 			//filling category-list of toggle form 
 			$.ajax({
 				type: "GET",
@@ -975,7 +967,7 @@ function userCreateSubScript(domainName)
 			    	{
 			    		cateogryList = cateogryList+"<option value='"+responseText["userCategories"][i].id+"'>"+responseText["userCategories"][i].name+"</option>";
 			    	}	    	 
-			    	$(checkedFormElementsId[2]).append(cateogryList);
+			    	$(checkedFormElementsId[2]).append(cateogryList);			    	
 				},
 				error: function(request, error, data){
 						alert(error+" in user_cat fech list");				
@@ -984,14 +976,16 @@ function userCreateSubScript(domainName)
 			//filling form toggle form details
 			$.ajax({
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_row_form/id/"+checkedUserId,		
+				url: "http://"+domainName+":8080/rest.sellerapp/rest/user/get_form_data/user_id/"+checkedUserId,		
 				async: false,
 				dataType: "json",						
-				success: function(responseText){
-					alert(responseText["rowUserDetails"].userCatId);
+				success: function(responseText){										
 					$(checkedFormElementsId[0]).prop("disabled",true).val(responseText["rowUserDetails"].firstName);
 					$(checkedFormElementsId[1]).prop("disabled",true).val(responseText["rowUserDetails"].lastName);
-					$(checkedFormElementsId[2]).prop("disabled",false).val(responseText["rowUserDetails"].userCatId);
+					
+					//need to make title attribut blank to set a value to select menu
+					$(checkedFormElementsId[2]).attr("title","");					
+					$(checkedFormElementsId[2]).prop("disabled",true).val(responseText["rowUserDetails"].userCatId);
 					$(checkedFormElementsId[3]).prop("disabled",true).val(responseText["rowUserDetails"].phoneNumber);
 					$(checkedFormElementsId[4]).prop("disabled",true).val(responseText["rowUserDetails"].emailId);
 					$(checkedFormElementsId[5]).prop("disabled",true).val(responseText["rowUserDetails"].addLineOne);
@@ -1012,7 +1006,7 @@ function userCreateSubScript(domainName)
 				size: 4
 			});			
 			$("#"+form_id).toggle();	
-			$("#"+form_id+" #div-form-user-create-line-5 #div-form-user-create-reset #btn-form-user-create-reset").css("display","none");						
+			$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-reset-main").css("display","none");						
 		});						
 	}
 }
