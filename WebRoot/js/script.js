@@ -95,13 +95,13 @@ $(document).ready(function(){
 				dataType: "json",
 				contentType: "application/json; charset=utf-8",
 				success: function(responseText){
-				authentication_state = responseText.check_access_token;								
-			},
-			error: function(request,error,data)
-			{
-				alert(request);				
-			}
-		});
+					authentication_state = responseText.check_access_token;								
+				},
+				error: function(request,error,data)
+				{
+					alert(request);				
+				}
+			});
 		return authentication_state;
 	}
 	
@@ -933,6 +933,7 @@ function userCreateSubScript(domainName)
 		else{				
 			$("#"+row_attech_form_id).toggle();	
 		}
+						
 	});	
 	
 	function userTableRowEdit(form_id){				
@@ -1006,9 +1007,41 @@ function userCreateSubScript(domainName)
 				size: 4
 			});			
 			$("#"+form_id).toggle();	
-			$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-reset-main").css("display","none");						
+			$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-reset-main").css("display","none");
+			
+			//user_form update script
+			$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").click(function(){
+				var jsonData = new Object();		
+				jsonData.firstName = $(checkedFormElementsId[0]).val();	
+				jsonData.lastName = $(checkedFormElementsId[1]).val();
+				jsonData.userCatId = $(checkedFormElementsId[2]).val();
+				jsonData.phoneNumber = $(checkedFormElementsId[3]).val();
+				jsonData.emailId = $(checkedFormElementsId[4]).val();
+				jsonData.addLineOne = $(checkedFormElementsId[5]).val();
+				jsonData.addLineTwo = $(checkedFormElementsId[6]).val();
+				jsonData.city = $(checkedFormElementsId[7]).val();
+				jsonData.state = $(checkedFormElementsId[8]).val();
+				jsonData.zip = $(checkedFormElementsId[9]).val();				
+				jsonData.userId = JSON.parse(localStorage.getItem("current_checkbox_value"));								
+				var jsonText = JSON.stringify(jsonData);				
+				$.ajax({
+					type: "POST",
+					url: "http://"+domainName+":8080/rest.sellerapp/rest/user/update/form_data",		
+					async: false,
+					dataType: "html",
+					data: jsonText,
+					contentType: "application/json; charset=utf-8",
+					success: function(responseText){										    	
+						alert(responseText);
+					},
+					error: function(request, error, data){
+							alert(error+" in user_cat fech list");				
+					}  						
+				});
+			});	
 		});						
 	}
+		
 }
 
 /*......user form validation.........*/
