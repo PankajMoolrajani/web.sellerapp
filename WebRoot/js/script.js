@@ -13,13 +13,14 @@ $(document).ready(function(){
 /*................... Javascript for login page ......................*/
 	function submitLoginForm(login_username , login_password){		 		
 		var $btn = $("#btn-submit-login-form").button('loading');				
-		var access_token_url = 	getAccessTokenUrl(login_username , login_password);		
+		var access_token_url = 	getAccessTokenUrl(login_username , login_password);				
 		var access_token = getAccessToken(access_token_url,login_username,login_password);		
-		var access_token_check_url = getAccessTokenCheckURL();		
+		var access_token_check_url = getAccessTokenCheckURL();
 		var authentication_state = checkAccessToken(access_token_check_url,access_token);
+		
 		$btn.button('reset');
 		if(authentication_state == 'True'){
-			window.location.assign("dashboard.jsp");
+			window.location.assign("dashboard.jsp");					
 		}		
 	}
 	
@@ -27,7 +28,7 @@ $(document).ready(function(){
 		var access_token_url;
 		$.ajax({
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/rest/auth/access_token_url",
+				url: "http://"+domainName+":8080/rest.sellerapp/auth/access-token-url",
 				async: false,			
 				dataType: "json",				
 				success: function(responseText){
@@ -72,7 +73,7 @@ $(document).ready(function(){
 		var access_token_check_url;
 		$.ajax({
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/rest/auth/access_token_check_url",
+				url: "http://"+domainName+":8080/rest.sellerapp/auth/access-token-check-url",
 				async: false,			
 				dataType: "json",				
 				success: function(responseText){				
@@ -364,7 +365,7 @@ function submitUserFormDetails(domainName){
 		var jsonText = JSON.stringify(jsonData);			
 		$.ajax({
 			type: "POST",
-			url: "http://"+domainName+":8080/rest.sellerapp/rest/user/create",
+			url: "http://"+domainName+":8080/rest.sellerapp/user/create-user/single",
 			async: false,	
 			contentType :"application/json; charSet=UTF-8",
 			data: jsonText,			
@@ -631,19 +632,19 @@ function searchUserFormDetails(domainName)
 		{	 	 						
 			$.ajax({ 						
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/search_char/"+userTextChar,			
+				url: "http://"+domainName+":8080/rest.sellerapp/user/get-user/search-text/"+userTextChar,			
 				async: false,
 				dataType: "json",
 				success: function(responseText){								
 					var userTable="";
 					for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
 		    		{				        		
-			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
-			    		"</td><td>"+responseText["userTable"][i].id+
+			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].userId+"></input>"+
+			    		"</td><td>"+responseText["userTable"][i].userId+
 						"</td><td>"+responseText["userTable"][i].userName+
 		    			"</td><td>"+responseText["userTable"][i].emailId+
-		    			"</td><td>"+responseText["userTable"][i].phoneNo+
-		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+		    			"</td><td>"+responseText["userTable"][i].phoneNumber+
+		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 					}		  						
 					$("#tbody-table-user").html(userTable);		
 					userCreateSubScript(domainName);
@@ -658,20 +659,19 @@ function searchUserFormDetails(domainName)
 		{
 			$.ajax({
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/all",		
+				url: "http://"+domainName+":8080/rest.sellerapp/user/get-user/all",		
 				async: false,
 				dataType: "json",			
 				success: function(responseText){				
-					var userTable="";
-					
+					var userTable="";					
 			    	for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
 		    		{				        		
-			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
-			    		"</td><td>"+responseText["userTable"][i].id+
+			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].userId+"></input>"+
+			    		"</td><td>"+responseText["userTable"][i].userId+
 						"</td><td>"+responseText["userTable"][i].userName+
 		    			"</td><td>"+responseText["userTable"][i].emailId+
-		    			"</td><td>"+responseText["userTable"][i].phoneNo+
-		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+		    			"</td><td>"+responseText["userTable"][i].phoneNumber+
+		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 					}		    			    
 					$("#tbody-table-user").html(userTable);					
 					userCreateSubScript(domainName);
@@ -688,17 +688,17 @@ function searchUserFormDetails(domainName)
 		{	 	 						
 			$.ajax({ 						
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/search_char/"+userTextChar,			
+				url: "http://"+domainName+":8080/rest.sellerapp/user/get-user/search-text/"+userTextChar,			
 				async: false,
 				dataType: "json",
 				success: function(responseText){								
 					var userTable="";
 					for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
 		    		{				        		
-			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+			    		
+			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].userId+"></input>"+			    		
 						"</td><td>"+responseText["userTable"][i].userName+		    
-						"</td><td>"+responseText["userTable"][i].phoneNo+
-		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+						"</td><td>"+responseText["userTable"][i].phoneNumber+
+		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 					}		  						
 					$("#tbody-table-user").html(userTable);		
 					userCreateSubScript(domainName);
@@ -713,17 +713,17 @@ function searchUserFormDetails(domainName)
 		{
 			$.ajax({
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/all",		
+				url: "http://"+domainName+":8080/rest.sellerapp/user/get-user/all",		
 				async: false,
 				dataType: "json",			
 				success: function(responseText){				
 					var userTable="";					
 			    	for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
 		    		{				        		
-			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+			    		
+			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].userId+"></input>"+			    		
 						"</td><td>"+responseText["userTable"][i].userName+		    	
-		    			"</td><td>"+responseText["userTable"][i].phoneNo+
-		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+		    			"</td><td>"+responseText["userTable"][i].phoneNumber+
+		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 					}		    			    
 					$("#tbody-table-user").html(userTable);					
 					userCreateSubScript(domainName);
@@ -812,11 +812,11 @@ function getErrorMessage(error_code){
 
 /*............................user-create script OPEN......................... */
 function userCreatePageScript(domainName)
-{				
+{					
 	//fetch user Categories for user create form	
 	$.ajax({
 		type: "GET",
-		url: "http://"+domainName+":8080/rest.sellerapp/rest/user_category/category_list",		
+		url: "http://"+domainName+":8080/rest.sellerapp/user-category/get-user-category/all",		
 		async: false,
 		dataType: "json",			
 		success: function(responseText){										    	
@@ -845,19 +845,19 @@ function userCreatePageScript(domainName)
 	{
 		$.ajax({
 			type: "GET",
-			url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/all",		
+			url: "http://"+domainName+":8080/rest.sellerapp/user/get-user/all",		
 			async: false,
 			dataType: "json",			
-			success: function(responseText){				
+			success: function(responseText){						
 				var userTable="";
 				
 		    	for(var i=0 ; i<responseText["userTable"].length ; i=i+1){				        		
-		    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
-		    		"</td><td>"+responseText["userTable"][i].id+
+		    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].userId+"></input>"+
+		    		"</td><td>"+responseText["userTable"][i].userId+
 					"</td><td>"+responseText["userTable"][i].userName+
 	    			"</td><td>"+responseText["userTable"][i].emailId+
-	    			"</td><td>"+responseText["userTable"][i].phoneNo+
-	    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+	    			"</td><td>"+responseText["userTable"][i].phoneNumber+
+	    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 				}		    			    
 				$("#tbody-table-user").html(userTable);				
 				userCreateSubScript(domainName);
@@ -871,17 +871,17 @@ function userCreatePageScript(domainName)
 	{
 		$.ajax({
 			type: "GET",
-			url: "http://"+domainName+":8080/rest.sellerapp/rest/user/table_data/all",		
+			url: "http://"+domainName+":8080/rest.sellerapp/user/get-user/all",		
 			async: false,
 			dataType: "json",			
 			success: function(responseText){				
 			var userTable="";
 			
 			for(var i=0 ; i<responseText["userTable"].length ; i=i+1){				        		
-	    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+	    		
+	    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].userId+"></input>"+	    		
 				"</td><td>"+responseText["userTable"][i].userName+    			
-    			"</td><td>"+responseText["userTable"][i].phoneNo+
-    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+    			"</td><td>"+responseText["userTable"][i].phoneNumber+
+    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 			}		 		    	
 			$("#tbody-table-user").html(userTable);		
 			userCreateSubScript(domainName);
@@ -959,7 +959,7 @@ function userCreateSubScript(domainName)
 			//filling category-list of toggle form 
 			$.ajax({
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/rest/user_category/category_list",		
+				url: "http://"+domainName+":8080/rest.sellerapp/user-category/get-user-category/all",		
 				async: false,
 				dataType: "json",			
 				success: function(responseText){										    	
@@ -977,23 +977,23 @@ function userCreateSubScript(domainName)
 			//filling form toggle form details
 			$.ajax({
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/rest/user/get_form_data/user_id/"+checkedUserId,		
+				url: "http://"+domainName+":8080/rest.sellerapp/user/get-user/user-id/"+checkedUserId,		
 				async: false,
 				dataType: "json",						
 				success: function(responseText){										
-					$(checkedFormElementsId[0]).prop("disabled",true).val(responseText["rowUserDetails"].firstName);
-					$(checkedFormElementsId[1]).prop("disabled",true).val(responseText["rowUserDetails"].lastName);
+					$(checkedFormElementsId[0]).prop("disabled",true).val(responseText["userDetails"].firstName);
+					$(checkedFormElementsId[1]).prop("disabled",true).val(responseText["userDetails"].lastName);
 					
 					//need to make title attribut blank to set a value to select menu
 					$(checkedFormElementsId[2]).attr("title","");					
-					$(checkedFormElementsId[2]).prop("disabled",true).val(responseText["rowUserDetails"].userCatId);
-					$(checkedFormElementsId[3]).prop("disabled",true).val(responseText["rowUserDetails"].phoneNumber);
-					$(checkedFormElementsId[4]).prop("disabled",true).val(responseText["rowUserDetails"].emailId);
-					$(checkedFormElementsId[5]).prop("disabled",true).val(responseText["rowUserDetails"].addLineOne);
-					$(checkedFormElementsId[6]).prop("disabled",true).val(responseText["rowUserDetails"].addLineTwo);
-					$(checkedFormElementsId[7]).prop("disabled",true).val(responseText["rowUserDetails"].city);
-					$(checkedFormElementsId[8]).prop("disabled",true).val(responseText["rowUserDetails"].state);
-					$(checkedFormElementsId[9]).prop("disabled",true).val(responseText["rowUserDetails"].zip);
+					$(checkedFormElementsId[2]).prop("disabled",true).val(responseText["userDetails"].userCatId);
+					$(checkedFormElementsId[3]).prop("disabled",true).val(responseText["userDetails"].phoneNumber);
+					$(checkedFormElementsId[4]).prop("disabled",true).val(responseText["userDetails"].emailId);
+					$(checkedFormElementsId[5]).prop("disabled",true).val(responseText["userDetails"].addLineOne);
+					$(checkedFormElementsId[6]).prop("disabled",true).val(responseText["userDetails"].addLineTwo);
+					$(checkedFormElementsId[7]).prop("disabled",true).val(responseText["userDetails"].city);
+					$(checkedFormElementsId[8]).prop("disabled",true).val(responseText["userDetails"].state);
+					$(checkedFormElementsId[9]).prop("disabled",true).val(responseText["userDetails"].zip);
 				},
 				error: function(request, error, data){
 					alert(error);				
@@ -1026,7 +1026,7 @@ function userCreateSubScript(domainName)
 				var jsonText = JSON.stringify(jsonData);				
 				$.ajax({
 					type: "POST",
-					url: "http://"+domainName+":8080/rest.sellerapp/rest/user/update/form_data",		
+					url: "http://"+domainName+":8080/rest.sellerapp/rest/user/update/form-data",		
 					async: false,
 					dataType: "html",
 					data: jsonText,
