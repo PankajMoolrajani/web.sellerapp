@@ -1670,8 +1670,7 @@ function inventoryFormValid()
 {		
 	/*......check inventory form fields are not empty.........*/
 	$("#input-text-form-inventory-create-base-sku, #input-text-form-inventory-create-name,#input-text-form-inventory-create-weight, #input-txt-form-inventory-create-category,#input-text-form-invenotry-create-stock, #input-text-form-inventory-create-maxprice, #input-text-form-invenotry-create-minprice,#input-text-form-invenotry-create-weight,#input-text-form-invenotry-create-procurement-time, #input-text-form-invenotry-create-stock, #input-text-form-inventory-create-tags, #input-text-form-marketplace-create-marketplace-url, #input-select-form-marketplace-create-marketplace-name, #input-modal-inventory-category-create-name, #input-form-inventory-category-create-tax-percent").on('input', function() {
-		var input=$(this);
-		alert(input);
+		var input=$(this);		
 		var is_name=input.val();			
 		if(is_name)
 		{
