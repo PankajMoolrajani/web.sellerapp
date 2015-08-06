@@ -13,7 +13,7 @@ $(document).ready(function(){
 /*................... Javascript for login page ......................*/
 	function submitLoginForm(login_username , login_password){		 		
 		var $btn = $("#btn-submit-login-form").button('loading');				
-		var access_token_url = 	getAccessTokenUrl(login_username , login_password);				
+		var access_token_url = 	getAccessTokenUrl();				
 		var access_token = getAccessToken(access_token_url,login_username,login_password);		
 		var access_token_check_url = getAccessTokenCheckURL();
 		var authentication_state = checkAccessToken(access_token_check_url,access_token);
@@ -24,7 +24,7 @@ $(document).ready(function(){
 		}		
 	}
 	
-	function getAccessTokenUrl(login_username , login_password){
+	function getAccessTokenUrl(){
 		var access_token_url;
 		$.ajax({
 				type: "GET",
@@ -279,11 +279,15 @@ function editButtonScript(domainName)
 }
 
 function editUserFormDetails(domainName){
-	var checkedFormElementsId = JSON.parse(localStorage["checkedFormElementsId"]);				
+	
+	var checkedFormElementsId = JSON.parse(localStorage["checkedFormElementsId"]);	
 	for(var i=0 ; i<checkedFormElementsId.length ; i=i+1)
 	{
-		$(checkedFormElementsId[i]).prop("disabled",false);		
+		$(checkedFormElementsId[i]).prop("disabled",false);				
 	}	
+	var checkedFormEditSaveBtnId = JSON.parse(localStorage["checkedFormEditSaveBtnId"]);	
+	
+	$(checkedFormEditSaveBtnId[1]).prop('disabled', false);
 	$(checkedFormElementsId[2]).selectpicker('refresh');		
 }
 function editUserCatFormDetails(domainName){	
@@ -351,13 +355,13 @@ function submitUserFormDetails(domainName){
 	if(userFormSubmitState=="true")
 	{					
 		var jsonData = new Object();
-		jsonData.firstName = $(selector[0]).val();
-		jsonData.lastName = $(selector[1]).val();
-		jsonData.userCategory = $(selector[9]).val();
-		jsonData.phoneNumber = $(selector[2]).val();
-		jsonData.emailId = $(selector[3]).val();
-		jsonData.addLineOne = $(selector[4]).val(); 			 
-		jsonData.addLineTwo = $(selector[5]).val();
+		jsonData.name_first = $(selector[0]).val();
+		jsonData.name_last = $(selector[1]).val();
+		jsonData.id_user_category = $(selector[9]).val();
+		jsonData.phone = $(selector[2]).val();
+		jsonData.emailid = $(selector[3]).val();
+		jsonData.address_line_one = $(selector[4]).val(); 			 
+		jsonData.address_line_two = $(selector[5]).val();
 		jsonData.city = $(selector[6]).val();
 		jsonData.state = $(selector[7]).val();
 		jsonData.zip = $(selector[8]).val()		
@@ -365,16 +369,17 @@ function submitUserFormDetails(domainName){
 		var jsonText = JSON.stringify(jsonData);			
 		$.ajax({
 			type: "POST",
-			url: "http://"+domainName+":8080/rest.sellerapp/user/create-user/single",
+			url: "http://"+domainName+":8080/rest.sellerapp/user/create",
 			async: false,	
 			contentType :"application/json; charSet=UTF-8",
 			data: jsonText,			
-			dataType: "json",			
-			success: function(responseText){			
+			dataType: "html",			
+			success: function(responseText){	
+				alert(responseText);
 				$btn.button('reset');
 				var error_code = responseText["error_code"];
 				 if(error_code==""){
-
+					 
 				 }
 				 else{
 					 var error_message=getErrorMessage(error_code);
@@ -632,19 +637,19 @@ function searchUserFormDetails(domainName)
 		{	 	 						
 			$.ajax({ 						
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/user/get-user/search-text/"+userTextChar,			
+				url: "http://"+domainName+":8080/rest.sellerapp/user/get/search/"+userTextChar,			
 				async: false,
 				dataType: "json",
 				success: function(responseText){								
 					var userTable="";
 					for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
 		    		{				        		
-			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].userId+"></input>"+
-			    		"</td><td>"+responseText["userTable"][i].userId+
-						"</td><td>"+responseText["userTable"][i].userName+
-		    			"</td><td>"+responseText["userTable"][i].emailId+
-		    			"</td><td>"+responseText["userTable"][i].phoneNumber+
-		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
+			    		"</td><td>"+responseText["userTable"][i].id+
+						"</td><td>"+responseText["userTable"][i].name_user+
+		    			"</td><td>"+responseText["userTable"][i].emailid+
+		    			"</td><td>"+responseText["userTable"][i].phone+
+		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 					}		  						
 					$("#tbody-table-user").html(userTable);		
 					userCreateSubScript(domainName);
@@ -659,19 +664,19 @@ function searchUserFormDetails(domainName)
 		{
 			$.ajax({
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/user/get-user/all",		
+				url: "http://"+domainName+":8080/rest.sellerapp/user/get/all",		
 				async: false,
 				dataType: "json",			
 				success: function(responseText){				
 					var userTable="";					
 			    	for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
 		    		{				        		
-			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].userId+"></input>"+
-			    		"</td><td>"+responseText["userTable"][i].userId+
-						"</td><td>"+responseText["userTable"][i].userName+
-		    			"</td><td>"+responseText["userTable"][i].emailId+
-		    			"</td><td>"+responseText["userTable"][i].phoneNumber+
-		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
+			    		"</td><td>"+responseText["userTable"][i].id+
+						"</td><td>"+responseText["userTable"][i].name_user+
+		    			"</td><td>"+responseText["userTable"][i].emailid+
+		    			"</td><td>"+responseText["userTable"][i].phone+
+		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 					}		    			    
 					$("#tbody-table-user").html(userTable);					
 					userCreateSubScript(domainName);
@@ -688,17 +693,17 @@ function searchUserFormDetails(domainName)
 		{	 	 						
 			$.ajax({ 						
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/user/get-user/search-text/"+userTextChar,			
+				url: "http://"+domainName+":8080/rest.sellerapp/user/get/search/"+userTextChar,			
 				async: false,
 				dataType: "json",
 				success: function(responseText){								
 					var userTable="";
 					for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
 		    		{				        		
-			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].userId+"></input>"+			    		
-						"</td><td>"+responseText["userTable"][i].userName+		    
-						"</td><td>"+responseText["userTable"][i].phoneNumber+
-		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+			    		
+						"</td><td>"+responseText["userTable"][i].name_user+		    
+						"</td><td>"+responseText["userTable"][i].phone+
+		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 					}		  						
 					$("#tbody-table-user").html(userTable);		
 					userCreateSubScript(domainName);
@@ -713,17 +718,17 @@ function searchUserFormDetails(domainName)
 		{
 			$.ajax({
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/user/get-user/all",		
+				url: "http://"+domainName+":8080/rest.sellerapp/user/get/all",		
 				async: false,
 				dataType: "json",			
 				success: function(responseText){				
 					var userTable="";					
 			    	for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
 		    		{				        		
-			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].userId+"></input>"+			    		
-						"</td><td>"+responseText["userTable"][i].userName+		    	
-		    			"</td><td>"+responseText["userTable"][i].phoneNumber+
-		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+			    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+			    		
+						"</td><td>"+responseText["userTable"][i].name_user+		    	
+		    			"</td><td>"+responseText["userTable"][i].phone+
+		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 					}		    			    
 					$("#tbody-table-user").html(userTable);					
 					userCreateSubScript(domainName);
@@ -813,6 +818,8 @@ function getErrorMessage(error_code){
 /*............................user-create script OPEN......................... */
 function userCreatePageScript(domainName)
 {					
+	localStorage.setItem("current_checkbox_value", JSON.stringify(""));					
+
 	//fetch user Categories for user create form	
 	$.ajax({
 		type: "GET",
@@ -845,19 +852,18 @@ function userCreatePageScript(domainName)
 	{
 		$.ajax({
 			type: "GET",
-			url: "http://"+domainName+":8080/rest.sellerapp/user/get-user/all",		
+			url: "http://"+domainName+":8080/rest.sellerapp/user/get/all",		
 			async: false,
 			dataType: "json",			
 			success: function(responseText){						
-				var userTable="";
-				
+				var userTable="";				
 		    	for(var i=0 ; i<responseText["userTable"].length ; i=i+1){				        		
-		    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].userId+"></input>"+
-		    		"</td><td>"+responseText["userTable"][i].userId+
-					"</td><td>"+responseText["userTable"][i].userName+
-	    			"</td><td>"+responseText["userTable"][i].emailId+
-	    			"</td><td>"+responseText["userTable"][i].phoneNumber+
-	    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+		    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+
+		    		"</td><td>"+responseText["userTable"][i].id+
+					"</td><td>"+responseText["userTable"][i].name_user+
+	    			"</td><td>"+responseText["userTable"][i].emailid+
+	    			"</td><td>"+responseText["userTable"][i].phone+
+	    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 				}		    			    
 				$("#tbody-table-user").html(userTable);				
 				userCreateSubScript(domainName);
@@ -878,10 +884,10 @@ function userCreatePageScript(domainName)
 			var userTable="";
 			
 			for(var i=0 ; i<responseText["userTable"].length ; i=i+1){				        		
-	    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].userId+"></input>"+	    		
-				"</td><td>"+responseText["userTable"][i].userName+    			
-    			"</td><td>"+responseText["userTable"][i].phoneNumber+
-    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].userId+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
+	    		userTable =	userTable+"<tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"'><input class='user-table-row-checkbox' type='checkbox' value="+responseText["userTable"][i].id+"></input>"+	    		
+				"</td><td>"+responseText["userTable"][i].name_user+    			
+    			"</td><td>"+responseText["userTable"][i].phone+
+    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 			}		 		    	
 			$("#tbody-table-user").html(userTable);		
 			userCreateSubScript(domainName);
@@ -919,21 +925,23 @@ function userCreatePageScript(domainName)
 }
 
 function userCreateSubScript(domainName)
-{
+{	
 	var row_attech_form_id;
 	$(".user-table-row-checkbox").click(function(){		
 		if($(this).is(':checked')){
 			//id of user
+			var test_temp = JSON.parse(localStorage.getItem("current_checkbox_value"));
+			alert(test_temp);
 			var	current_checkbox_value = $(this).attr("value");			
 			localStorage.setItem("current_checkbox_value", JSON.stringify(current_checkbox_value));					
 			var current_checked_row_id = $(this).parent().attr("id");		
 			row_attech_form_id = current_checked_row_id+"-form";			
 			userTableRowEdit(row_attech_form_id);		
 		}
-		else{				
+		else{			
+			localStorage.setItem("current_checkbox_value", JSON.stringify(current_checkbox_value));					
 			$("#"+row_attech_form_id).toggle();	
-		}
-						
+		}						
 	});	
 	
 	function userTableRowEdit(form_id){				
@@ -941,7 +949,8 @@ function userCreateSubScript(domainName)
 			userCreateFormVal(domainName);
 			editButtonScript(domainName);
 			$("#"+form_id+" #div-form-user-create-heading").css("display","none");
-			var checkedFormElementsId =["#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-fname #input-text-form-user-create-fname",
+			var checkedFormElementsId =[
+			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-fname #input-text-form-user-create-fname",
 			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-lname #input-text-form-user-create-lname",
 			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-category #input-select-form-user-create-category",
 			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-2 #div-form-user-create-phone #input-text-form-user-create-phone",
@@ -952,8 +961,13 @@ function userCreateSubScript(domainName)
 			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-state #input-text-form-user-state",
 			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-zip #input-text-form-user-create-zip"
 			                            ]; 
+			
 			localStorage["checkedFormElementsId"] = JSON.stringify(checkedFormElementsId);
-
+			
+			var checkedFormEditSaveBtnId = ["#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main",
+			                                "#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main"];
+			localStorage["checkedFormEditSaveBtnId"] = JSON.stringify(checkedFormEditSaveBtnId);
+			
 			var checkedUserId = JSON.parse(localStorage.getItem("current_checkbox_value"));
 			
 			//filling category-list of toggle form 
@@ -977,20 +991,20 @@ function userCreateSubScript(domainName)
 			//filling form toggle form details
 			$.ajax({
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/user/get-user/user-id/"+checkedUserId,		
+				url: "http://"+domainName+":8080/rest.sellerapp/user/get/id/"+checkedUserId,		
 				async: false,
 				dataType: "json",						
-				success: function(responseText){										
-					$(checkedFormElementsId[0]).prop("disabled",true).val(responseText["userDetails"].firstName);
-					$(checkedFormElementsId[1]).prop("disabled",true).val(responseText["userDetails"].lastName);
+				success: function(responseText){					
+					$(checkedFormElementsId[0]).prop("disabled",true).val(responseText["userDetails"].name_first);
+					$(checkedFormElementsId[1]).prop("disabled",true).val(responseText["userDetails"].name_last);
 					
 					//need to make title attribut blank to set a value to select menu
-					$(checkedFormElementsId[2]).attr("title","");					
-					$(checkedFormElementsId[2]).prop("disabled",true).val(responseText["userDetails"].userCatId);
-					$(checkedFormElementsId[3]).prop("disabled",true).val(responseText["userDetails"].phoneNumber);
-					$(checkedFormElementsId[4]).prop("disabled",true).val(responseText["userDetails"].emailId);
-					$(checkedFormElementsId[5]).prop("disabled",true).val(responseText["userDetails"].addLineOne);
-					$(checkedFormElementsId[6]).prop("disabled",true).val(responseText["userDetails"].addLineTwo);
+					$(checkedFormElementsId[2]).attr("title","");										
+					$(checkedFormElementsId[2]).prop("disabled",true).val(responseText["userCategoryDetails"].id);
+					$(checkedFormElementsId[3]).prop("disabled",true).val(responseText["userDetails"].phone);
+					$(checkedFormElementsId[4]).prop("disabled",true).val(responseText["userDetails"].emailid);
+					$(checkedFormElementsId[5]).prop("disabled",true).val(responseText["userDetails"].address_line_one);
+					$(checkedFormElementsId[6]).prop("disabled",true).val(responseText["userDetails"].address_line_two);
 					$(checkedFormElementsId[7]).prop("disabled",true).val(responseText["userDetails"].city);
 					$(checkedFormElementsId[8]).prop("disabled",true).val(responseText["userDetails"].state);
 					$(checkedFormElementsId[9]).prop("disabled",true).val(responseText["userDetails"].zip);
@@ -1008,25 +1022,27 @@ function userCreateSubScript(domainName)
 			});			
 			$("#"+form_id).toggle();	
 			$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-reset-main").css("display","none");
+			$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").prop('disabled', true);
 			
 			//user_form update script
-			$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").click(function(){
+			$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").click(function(){				
+				var $btn = $("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").button('loading');
 				var jsonData = new Object();		
-				jsonData.firstName = $(checkedFormElementsId[0]).val();	
-				jsonData.lastName = $(checkedFormElementsId[1]).val();
-				jsonData.userCatId = $(checkedFormElementsId[2]).val();
-				jsonData.phoneNumber = $(checkedFormElementsId[3]).val();
-				jsonData.emailId = $(checkedFormElementsId[4]).val();
-				jsonData.addLineOne = $(checkedFormElementsId[5]).val();
-				jsonData.addLineTwo = $(checkedFormElementsId[6]).val();
+				jsonData.first_name = $(checkedFormElementsId[0]).val();	
+				jsonData.last_name = $(checkedFormElementsId[1]).val();
+				jsonData.user_cat_id = $(checkedFormElementsId[2]).val();
+				jsonData.phone_number = $(checkedFormElementsId[3]).val();
+				jsonData.email_id = $(checkedFormElementsId[4]).val();
+				jsonData.add_line_one = $(checkedFormElementsId[5]).val();
+				jsonData.add_line_two = $(checkedFormElementsId[6]).val();
 				jsonData.city = $(checkedFormElementsId[7]).val();
 				jsonData.state = $(checkedFormElementsId[8]).val();
 				jsonData.zip = $(checkedFormElementsId[9]).val();				
-				jsonData.userId = JSON.parse(localStorage.getItem("current_checkbox_value"));								
+				jsonData.user_id = JSON.parse(localStorage.getItem("current_checkbox_value"));								
 				var jsonText = JSON.stringify(jsonData);				
 				$.ajax({
 					type: "POST",
-					url: "http://"+domainName+":8080/rest.sellerapp/rest/user/update/form-data",		
+					url: "http://"+domainName+":8080/rest.sellerapp/user/update/form-data",		
 					async: false,
 					dataType: "html",
 					data: jsonText,
@@ -1035,7 +1051,7 @@ function userCreateSubScript(domainName)
 						alert(responseText);
 					},
 					error: function(request, error, data){
-							alert(error+" in user_cat fech list");				
+							alert(error+" in user_cat fech list" +error+" and "+data);				
 					}  						
 				});
 			});	
