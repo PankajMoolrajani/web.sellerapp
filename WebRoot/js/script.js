@@ -877,7 +877,7 @@ function userCreatePageScript(domainName)
 	{
 		$.ajax({
 			type: "GET",
-			url: "http://"+domainName+":8080/rest.sellerapp/user/get-user/all",		
+			url: "http://"+domainName+":8080/rest.sellerapp/user/get/all",		
 			async: false,
 			dataType: "json",			
 			success: function(responseText){				
@@ -929,9 +929,7 @@ function userCreateSubScript(domainName)
 	var row_attech_form_id;
 	$(".user-table-row-checkbox").click(function(){		
 		if($(this).is(':checked')){
-			//id of user
-			var test_temp = JSON.parse(localStorage.getItem("current_checkbox_value"));
-			alert(test_temp);
+			//id of user					
 			var	current_checkbox_value = $(this).attr("value");			
 			localStorage.setItem("current_checkbox_value", JSON.stringify(current_checkbox_value));					
 			var current_checked_row_id = $(this).parent().attr("id");		
@@ -1028,7 +1026,7 @@ function userCreateSubScript(domainName)
 			$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").click(function(){				
 				var $btn = $("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").button('loading');
 				var jsonData = new Object();		
-				jsonData.first_name = $(checkedFormElementsId[0]).val();	
+				jsonData.first_name = $(checkedFormElementsId[0]).val();					
 				jsonData.last_name = $(checkedFormElementsId[1]).val();
 				jsonData.user_cat_id = $(checkedFormElementsId[2]).val();
 				jsonData.phone_number = $(checkedFormElementsId[3]).val();
@@ -1039,7 +1037,8 @@ function userCreateSubScript(domainName)
 				jsonData.state = $(checkedFormElementsId[8]).val();
 				jsonData.zip = $(checkedFormElementsId[9]).val();				
 				jsonData.user_id = JSON.parse(localStorage.getItem("current_checkbox_value"));								
-				var jsonText = JSON.stringify(jsonData);				
+				var jsonText = JSON.stringify(jsonData);
+				alert(jsonText);
 				$.ajax({
 					type: "POST",
 					url: "http://"+domainName+":8080/rest.sellerapp/user/update/form-data",		
