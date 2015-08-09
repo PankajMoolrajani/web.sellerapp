@@ -1022,41 +1022,70 @@ function userCreateSubScript(domainName)
 			$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-reset-main").css("display","none");
 			$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").prop('disabled', true);
 			
-			//user_form update script
+			var json_user_data = new Object();
+			json_user_data.name_first = $(checkedFormElementsId[0]).val();					
+			json_user_data.name_last = $(checkedFormElementsId[1]).val();
+			json_user_data.id_user_category = $(checkedFormElementsId[2]).val();
+			json_user_data.phone = $(checkedFormElementsId[3]).val();
+			json_user_data.emailid = $(checkedFormElementsId[4]).val();
+			json_user_data.address_line_one = $(checkedFormElementsId[5]).val();
+			json_user_data.address_line_two = $(checkedFormElementsId[6]).val();
+			json_user_data.city = $(checkedFormElementsId[7]).val();
+			json_user_data.state = $(checkedFormElementsId[8]).val();
+			json_user_data.zip = $(checkedFormElementsId[9]).val();				
+			json_user_data.id = JSON.parse(localStorage.getItem("current_checkbox_value"));
+			
+			var json_user_text = JSON.stringify(json_user_data);			
+			
+		//user_form update script
 			$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").click(function(){				
-				var $btn = $("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").button('loading');
-				var jsonData = new Object();		
-				jsonData.first_name = $(checkedFormElementsId[0]).val();					
-				jsonData.last_name = $(checkedFormElementsId[1]).val();
-				jsonData.user_cat_id = $(checkedFormElementsId[2]).val();
-				jsonData.phone_number = $(checkedFormElementsId[3]).val();
-				jsonData.email_id = $(checkedFormElementsId[4]).val();
-				jsonData.add_line_one = $(checkedFormElementsId[5]).val();
-				jsonData.add_line_two = $(checkedFormElementsId[6]).val();
-				jsonData.city = $(checkedFormElementsId[7]).val();
-				jsonData.state = $(checkedFormElementsId[8]).val();
-				jsonData.zip = $(checkedFormElementsId[9]).val();				
-				jsonData.user_id = JSON.parse(localStorage.getItem("current_checkbox_value"));								
-				var jsonText = JSON.stringify(jsonData);
-				alert(jsonText);
+				var $btn = $("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").button('loading');																
+				
+				var json_user_updated_data = new Object();
+				json_user_updated_data.name_first = $(checkedFormElementsId[0]).val();					
+				json_user_updated_data.name_last = $(checkedFormElementsId[1]).val();
+				json_user_updated_data.id_user_category = $(checkedFormElementsId[2]).val();
+				json_user_updated_data.phone = $(checkedFormElementsId[3]).val();
+				json_user_updated_data.emailid = $(checkedFormElementsId[4]).val();
+				json_user_updated_data.address_line_one = $(checkedFormElementsId[5]).val();
+				json_user_updated_data.address_line_two = $(checkedFormElementsId[6]).val();
+				json_user_updated_data.city = $(checkedFormElementsId[7]).val();
+				json_user_updated_data.state = $(checkedFormElementsId[8]).val();
+				json_user_updated_data.zip = $(checkedFormElementsId[9]).val();				
+				json_user_updated_data.id_user = JSON.parse(localStorage.getItem("current_checkbox_value"));
+				
+				var json_user_updated_text = JSON.stringify(json_user_updated_data);				
+				
+				var user_final_data = new Object();				
+				for(var key in json_user_data){					
+					if(json_user_data[key] != json_user_updated_data[key]){
+						user_final_data[key] = json_user_updated_data[key];
+					}
+				}
+				user_final_data["id"] = JSON.parse(localStorage.getItem("current_checkbox_value"));
+				var user_final_text = JSON.stringify(user_final_data);									
 				$.ajax({
 					type: "POST",
-					url: "http://"+domainName+":8080/rest.sellerapp/user/update/form-data",		
-					async: false,
-					dataType: "html",
-					data: jsonText,
-					contentType: "application/json; charset=utf-8",
-					success: function(responseText){										    	
-						alert(responseText);
+					url: "http://"+domainName+":8080/rest.sellerapp/user/update",
+					async: false,	
+					contentType :"application/json; charSet=UTF-8",
+					data: user_final_text,			
+					dataType: "json",			
+					success: function(responseText){	
+						alert('done');
+						userTableRowEdit(form_id);
+						$("#"+form_id).toggle();
+						$btn.button('reset');						
 					},
-					error: function(request, error, data){
-							alert(error+" in user_cat fech list" +error+" and "+data);				
-					}  						
+					error: function(request, error, data){						
+						alert(request+" "+error+" "+data+" in user update");						
+						$btn.button('reset');
+					} 
 				});
-			});	
-		});						
+
+			});				
+		});								
 	}
-		
 }
 
 /*......user form validation.........*/
