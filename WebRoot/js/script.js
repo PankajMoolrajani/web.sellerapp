@@ -634,12 +634,18 @@ function searchUserFormDetails(domainName)
 	if(($(window).width())>=750) /*......screen width greater than 750px.....*/
 	{	
 		if(!(userTextChar==""))  //if a character typed in search-bar
-		{	 	 						
+		{	 	
+			var jsonData = new Object();		
+			jsonData.name_user = userTextChar;					
+			var jsonText = JSON.stringify(jsonData);
+						
 			$.ajax({ 						
-				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/user/get/search/"+userTextChar,			
+				type: "POST",
+				url: "http://"+domainName+":8080/rest.sellerapp/user/get/search",	
 				async: false,
-				dataType: "json",
+				contentType :"application/json; charSet=UTF-8",
+				data: jsonText,			
+				dataType: "json",			
 				success: function(responseText){								
 					var userTable="";
 					for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
@@ -692,11 +698,13 @@ function searchUserFormDetails(domainName)
 		if(!(userTextChar==""))  //if a character typed in search-bar
 		{	 	 						
 			$.ajax({ 						
-				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/user/get/search/"+userTextChar,			
+				type: "POST",
+				url: "http://"+domainName+":8080/rest.sellerapp/user/get/search/"+userTextChar,
 				async: false,
-				dataType: "json",
-				success: function(responseText){								
+				contentType :"application/json; charSet=UTF-8",
+				data: user_final_text,			
+				dataType: "json",			
+				success: function(responseText){							
 					var userTable="";
 					for(var i=0 ; i<responseText["userTable"].length ; i=i+1)
 		    		{				        		
@@ -925,21 +933,32 @@ function userCreatePageScript(domainName)
 }
 
 function userCreateSubScript(domainName)
-{	
+{		
 	var row_attech_form_id;
 	$(".user-table-row-checkbox").click(function(){		
 		if($(this).is(':checked')){
-			//id of user					
+			$("body").fadeTo("fast", 0.4);
+			$("#spinner").show();		
+			
+			//id of user						
 			var	current_checkbox_value = $(this).attr("value");			
+
+			//check if another checkbox already checked
+			var checked_user_id = JSON.parse(localStorage.getItem("current_checkbox_value"));			
+			if(checked_user_id != "")
+			{												
+				$("#td-user-form-create-table-"+checked_user_id+" .user-table-row-checkbox").prop('checked',false);
+				$("#td-user-form-create-table-"+checked_user_id+"-form").toggle();
+			}
+			var current_checked_row_id = $(this).parent().attr("id");				
 			localStorage.setItem("current_checkbox_value", JSON.stringify(current_checkbox_value));					
-			var current_checked_row_id = $(this).parent().attr("id");		
 			row_attech_form_id = current_checked_row_id+"-form";			
-			userTableRowEdit(row_attech_form_id);		
+			userTableRowEdit(row_attech_form_id);					
 		}
-		else{			
-			localStorage.setItem("current_checkbox_value", JSON.stringify(current_checkbox_value));					
+		else{						
+			localStorage.setItem("current_checkbox_value", JSON.stringify(""));				
 			$("#"+row_attech_form_id).toggle();	
-		}						
+		}								
 	});	
 	
 	function userTableRowEdit(form_id){				
@@ -966,7 +985,7 @@ function userCreateSubScript(domainName)
 			                                "#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main"];
 			localStorage["checkedFormEditSaveBtnId"] = JSON.stringify(checkedFormEditSaveBtnId);
 			
-			var checkedUserId = JSON.parse(localStorage.getItem("current_checkbox_value"));
+			var checked_user_id = JSON.parse(localStorage.getItem("current_checkbox_value"));
 			
 			//filling category-list of toggle form 
 			$.ajax({
@@ -986,11 +1005,17 @@ function userCreateSubScript(domainName)
 						alert(error+" in user_cat fech list");				
 				}  						
 			});
-			//filling form toggle form details
+			
+		//filling toggle form details
+			var json_user_object = new Object();
+			json_user_object.id = checked_user_id;						
+			var json_user_text = JSON.stringify(json_user_object);			
 			$.ajax({
-				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/user/get/id/"+checkedUserId,		
+				type: "POST",
+				url: "http://"+domainName+":8080/rest.sellerapp/user/get/id",		
 				async: false,
+				contentType: "application/json; charset=utf-8",
+				data:json_user_text,
 				dataType: "json",						
 				success: function(responseText){					
 					$(checkedFormElementsId[0]).prop("disabled",true).val(responseText["userDetails"].name_first);
@@ -1018,6 +1043,9 @@ function userCreateSubScript(domainName)
 				style: 'btn-info',
 				size: 4
 			});			
+			$("body").fadeTo("fast", 1);
+			$("#spinner").hide();
+			
 			$("#"+form_id).toggle();	
 			$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-reset-main").css("display","none");
 			$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").prop('disabled', true);
@@ -1084,7 +1112,7 @@ function userCreateSubScript(domainName)
 				});
 
 			});				
-		});								
+		});										
 	}
 }
 

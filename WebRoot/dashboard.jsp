@@ -191,7 +191,9 @@
 			</div> 
 		</div>
 	</div>
-
+	<div id="spinner" class="spinner" style="display:none;">
+		<img id="img-spinner" src="pictures/spinner.gif" alt="Loading"/>
+	</div>
 </body>
 
 </html>
