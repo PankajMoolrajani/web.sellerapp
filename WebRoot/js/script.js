@@ -1,6 +1,6 @@
 $(document).ready(function(){	
 		
-	var domainName = "localhost";
+	var domain_name = "localhost";
 	//var domainName = "dev.monoxor.com"
 		
 	/*................... Javascript for Index page ......................*/
@@ -28,7 +28,7 @@ $(document).ready(function(){
 		var access_token_url;
 		$.ajax({
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/auth/access-token-url",
+				url: "http://"+domain_name+":8080/rest.sellerapp/auth/access-token-url",
 				async: false,			
 				dataType: "json",				
 				success: function(responseText){
@@ -73,7 +73,7 @@ $(document).ready(function(){
 		var access_token_check_url;
 		$.ajax({
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/auth/access-token-check-url",
+				url: "http://"+domain_name+":8080/rest.sellerapp/auth/access-token-check-url",
 				async: false,			
 				dataType: "json",				
 				success: function(responseText){				
@@ -222,23 +222,23 @@ $(document).ready(function(){
 		});
 	}	
 	
-	userCreatePageScript(domainName); //calling of user-management page script
-	userCreateFormVal(domainName); //calling of user-mgmt validation page script
+	userCreatePageScript(domain_name); //calling of user-management page script
+	userCreateFormVal(domain_name); //calling of user-mgmt validation page script
 	
-	userCatCreatePageScript(domainName); //calling of user-category page script
-	userCatCreateFormVal(domainName); //calling of user-mgmt validation page script
+	userCatCreatePageScript(domain_name); //calling of user-category page script
+	userCatCreateFormVal(domain_name); //calling of user-mgmt validation page script
 	
-	inventoryPageScript(domainName);
+	inventoryPageScript(domain_name);
 	
-	orderPageScript(domainName); 
+	orderPageScript(domain_name); 
 	
 	
-	invoicePageScript(domainName);
-	invoiceCreateFormVal(domainName);
+	invoicePageScript(domain_name);
+	invoiceCreateFormVal(domain_name);
 	
-	saveButtonScript(domainName);	
-	resetButtonScript(domainName);
-	searchBarScript(domainName);
+	saveButtonScript(domain_name);	
+	resetButtonScript(domain_name);
+	searchBarScript(domain_name);
 	selectPickerScript();
 });
 
@@ -252,16 +252,16 @@ function selectPickerScript()
 	});
 }
 
-function editButtonScript(domainName)
+function editButtonScript(domain_name)
 {		
 	$(".btn-page-state-edit-main").click(function(){				
 		var parentId = $(this).parent().parent().attr("id");		
 		switch(parentId){
 	    case "div-form-user-create-state-buttons":
-	    	editUserFormDetails(domainName);
+	    	editUserFormDetails(domain_name);
 	        break;
 	    case "div-form-user-category-create-state-buttons":
-	        editUserCatFormDetails();
+	        editUserCatFormDetails(domain_name);
 	        break;
 	    case "div-form-inventory-create-state-buttons":
 	        editInventoryFormDetails();
@@ -278,33 +278,43 @@ function editButtonScript(domainName)
 	});
 }
 
-function editUserFormDetails(domainName){
+function editUserFormDetails(domain_name){
 	
-	var checkedFormElementsId = JSON.parse(localStorage["checkedFormElementsId"]);	
-	for(var i=0 ; i<checkedFormElementsId.length ; i=i+1)
+	var checked_form_elements_id = JSON.parse(localStorage["checked_form_elements_id"]);	
+	for(var i=0 ; i<checked_form_elements_id.length ; i=i+1)
 	{
-		$(checkedFormElementsId[i]).prop("disabled",false);				
+		$(checked_form_elements_id[i]).prop("disabled",false);				
 	}	
-	var checkedFormEditSaveBtnId = JSON.parse(localStorage["checkedFormEditSaveBtnId"]);	
+	var checkedFormEditSaveBtnId = JSON.parse(localStorage["checked_form_edit_save_btn_id"]);	
 	
 	$(checkedFormEditSaveBtnId[1]).prop('disabled', false);
-	$(checkedFormElementsId[2]).selectpicker('refresh');		
-}
-function editUserCatFormDetails(domainName){	
-}
-function editInventoryFormDetails(domainName){	
-}
-function editOrderFormDetails(domainName){	
-}
-function editInvoiceFormDetails(domainName){	
+	$(checked_form_elements_id[2]).selectpicker('refresh');		
 }
 
-function saveButtonScript(domainName){	
+function editUserCatFormDetails(domain_name){	
+	var checked_form_elements_id = JSON.parse(localStorage["checked_form_elements_id_user_category"]);	
+	for(var i=0 ; i<checked_form_elements_id.length ; i=i+1)
+	{
+		$(checked_form_elements_id[i]).prop("disabled",false);				
+	}	
+	var checkedFormEditSaveBtnId = JSON.parse(localStorage["checked_form_edit_save_btn_id_user_category"]);	
+	
+	$(checkedFormEditSaveBtnId[1]).prop('disabled', false);
+	$(checked_form_elements_id[2]).selectpicker('refresh');	
+}
+function editInventoryFormDetails(domain_name){	
+}
+function editOrderFormDetails(domain_name){	
+}
+function editInvoiceFormDetails(domain_name){	
+}
+
+function saveButtonScript(domain_name){	
 	$(".btn-page-state-save-main").click(function(){			
 		var parentId = $(this).parent().parent().attr("id");					
 		switch(parentId) {
 	    case "div-form-user-create-state-buttons":
-	    	submitUserFormDetails(domainName);
+	    	submitUserFormDetails(domain_name);
 	        break;
 	    case "div-form-user-category-create-state-buttons":
 	        submitUserCatFormDetails();
@@ -326,7 +336,7 @@ function saveButtonScript(domainName){
 
 /*...............user-create Form Submission.................*/
 
-function submitUserFormDetails(domainName){			
+function submitUserFormDetails(domain_name){			
 	var $btn = $("#div-form-user-create-state-buttons div .btn-page-state-save-main").button('loading');
 	var selector = ["#input-text-form-user-create-fname",
 	                "#input-text-form-user-create-lname",
@@ -364,12 +374,12 @@ function submitUserFormDetails(domainName){
 		jsonData.address_line_two = $(selector[5]).val();
 		jsonData.city = $(selector[6]).val();
 		jsonData.state = $(selector[7]).val();
-		jsonData.zip = $(selector[8]).val()		
+		jsonData.zip = $(selector[8]).val();		
 		
 		var jsonText = JSON.stringify(jsonData);			
 		$.ajax({
 			type: "POST",
-			url: "http://"+domainName+":8080/rest.sellerapp/user/create",
+			url: "http://"+domain_name+":8080/rest.sellerapp/user/create",
 			async: false,	
 			contentType :"application/json; charSet=UTF-8",
 			data: jsonText,			
@@ -403,22 +413,22 @@ function submitUserCatFormDetails(){
 	var $btn = $(this).button('loading');
 	var selector = ["#input-text-form-user-category-create-name",
 	                 "#input-text-form-user-category-create-description"];
-	var userFormSubmitState="false";
+	var user_form_submit_state="false";
 	for(var i=0 ; i<selector.length ; i=i+1)
 	{		
 		if($(selector[i]).parent().hasClass("has-error") || $(selector[i]).val()=="")
 		{				
-			userFormSubmitState = "false";
+			user_form_submit_state = "false";
 			alert("First Fill all the fields Properly");		
 			$btn.button('reset');
 			break;
 		}
 		else
 		{
-			userFormSubmitState="true";			 
+			user_form_submit_state="true";			 
 		}
 	}
-	if(userFormSubmitState=="true")
+	if(user_form_submit_state=="true")
 	{
 		alert('value inserted');	
 //		$.ajax({
@@ -503,19 +513,19 @@ function submitInventoryFormDetails()
 		var data_jsonPost = ']}';		
 		for(var i=1 ; i<=marketplaceCount ; i=i+1)
 		{					
-			var pMarketplace_name = $("#span-form-inventory-mplaceName"+i).text();
-			var pMarketplace_id = $("#span-form-inventory-mplaceName"+i).attr("data-form-mplace"+i);			
-			var pMarketplace_url = $("#span-form-inventory-mplaceUrl"+i).text();			
-			var sellPrice = $("#input-form-inventory-sellPrice"+i).val();
+			var product_marketplace_name = $("#span-form-inventory-mplaceName"+i).text();
+			var product_marketplace_id = $("#span-form-inventory-mplaceName"+i).attr("data-form-mplace"+i);			
+			var product_marketplace_url = $("#span-form-inventory-mplaceUrl"+i).text();			
+			var sell_price = $("#input-form-inventory-sellPrice"+i).val();
 			var stock = $("#input-text-form-invenotry-create-stock"+i).val();
 			var status = $("#input-form-inventory-status"+i).val();				
 			if(i<marketplaceCount)
 			{
-				data_jsonMid = data_jsonMid+'{"pMarketplace_id":"'+pMarketplace_id+'","pMarketplace_name":"'+pMarketplace_name+'","pMarketplace_url":"'+pMarketplace_url+'","sellPrice": "'+sellPrice+'","stockPrice": "'+stock+'","status": "'+status+'"},';
+				data_jsonMid = data_jsonMid+'{"product_marketplace_id":"'+product_marketplace_id+'","product_marketplace_name":"'+product_marketplace_name+'","product_marketplace_url":"'+product_marketplace_url+'","sellPrice": "'+sell_price+'","stockPrice": "'+stock+'","status": "'+status+'"},';
 			}			
 			else // for last line without ','
 			{
-				data_jsonMid = data_jsonMid+'{"pMarketplace_id":"'+pMarketplace_id+'","pMarketplace_name":"'+pMarketplace_name+'","pMarketplace_url":"'+pMarketplace_url+'","sellPrice": "'+sellPrice+'","stockPrice": "'+stock+'","status": "'+status+'"}';
+				data_jsonMid = data_jsonMid+'{"product_marketplace_id":"'+product_marketplace_id+'","product_marketplace_name":"'+product_marketplace_name+'","product_marketplace_url":"'+product_marketplace_url+'","sellPrice": "'+sell_price+'","stockPrice": "'+stock+'","status": "'+status+'"}';
 			}				
 		}		 
 		var marketplaceEntry_json_txt = data_jsonPre+data_jsonMid+data_jsonPost;		
@@ -552,36 +562,36 @@ function submitInventoryFormDetails()
 	}
 }
 
-function resetButtonScript(domainName)
+function resetButtonScript(domain_name)
 {
 	$(".btn-page-state-reset-main").click(function(){					
 		var parentId = $(this).parent().parent().attr("id");		
 		switch(parentId) {
 	    case "div-form-user-create-state-buttons":
-	    	resetUserFormDetails(domainName);
+	    	resetUserFormDetails(domain_name);
 	        break;
 	    case "div-form-user-category-create-state-buttons":
-	        resetUserCatFormDetails(domainName);
+	        resetUserCatFormDetails(domain_name);
 	        break;
 	    case "div-form-inventory-create-state-buttons":
-	        resetInventoryFormDetails(domainName);
+	        resetInventoryFormDetails(domain_name);
 	        break;
 	    case "div-form-order-create-state-buttons":
-	        resetOrderFormDetails(domainName);
+	        resetOrderFormDetails(domain_name);
 	        break;
 	    case "div-form-invoice-create-pay-invoice":
-	        resetInvoiceFormDetails(domainName);
+	        resetInvoiceFormDetails(domain_name);
 	        break;
 	    default:
 	    	
 		}
 	});
 }
-function resetUserFormDetails(domainName)
+function resetUserFormDetails(domain_name)
 {	
 	$("#div-create-user-sub-form").load('sub_form_user_create.jsp',function(){
-		userCreatePageScript(domainName);
-		userCreateFormVal(domainName);
+		userCreatePageScript(domain_name);
+		userCreateFormVal(domain_name);
 		selectPickerScript();		
 		/*.......launch the user form.......*/
 		$("#btn-user-create").click(function(){			
@@ -589,10 +599,16 @@ function resetUserFormDetails(domainName)
 		});
 	});
 }
-function resetUserCatFormDetails(domainName)
+function resetUserCatFormDetails(domain_name)
 {
 	$("#div-create-user-category-sub-form").load('sub_form_user_category_create.jsp',function(){
-		userCatCreateFormVal(domainName);		
+	
+		userCatCreatePageScript(domain_name);
+		userCatCreateFormVal(domain_name);			
+		/*.......launch the user form.......*/
+		$("#btn-user-category-create").click(function(){			
+			$("#div-form-user-category-create").toggle();
+		});
 	});			
 }
 function resetInventoryFormDetails()
@@ -602,16 +618,17 @@ function resetOrderFormDetails()
 function resetInvoiceFormDetails()
 {}
 
-function searchBarScript(domainName)
+function searchBarScript(domain_name)
 {	
-	$(".input-text-search-box-main").keyup(function(){			
-		var parentId = $(this).parent().parent().attr("id");		
-		switch(parentId) {
+	$(".input-text-search-box-main").keyup(function(){		
+		var search_text_value = $(this).val();				
+		var parent_id = $(this).parent().parent().attr("id");		
+		switch(parent_id) {
 	    case "div-user-search":
-	    	searchUserFormDetails(domainName);
+	    	searchUserFormDetails(domain_name, search_text_value);
 	        break;
 	    case "div-user-category-search":
-	        //searchUserCatFormDetails();
+	    	searchUserCategoryFormDetails(domain_name, search_text_value);
 	        break;
 	    case "div-inventory-search":
 	    	//searchInventoryFormDetails();
@@ -627,21 +644,19 @@ function searchBarScript(domainName)
 		}
 	});
 }
-function searchUserFormDetails(domainName)
-{
-	/*........first it Loads table according to the screen-size.......*/	
-	var userTextChar = $(".input-text-search-box-main").val();	
+function searchUserFormDetails(domain_name, user_search_text)
+{	
+	/*........first it Loads table according to the screen-size.......*/		
 	if(($(window).width())>=750) /*......screen width greater than 750px.....*/
 	{	
-		if(!(userTextChar==""))  //if a character typed in search-bar
+		if(!(user_search_text==""))  //if a character typed in search-bar
 		{	 	
-			var jsonData = new Object();		
-			jsonData.name_user = userTextChar;					
-			var jsonText = JSON.stringify(jsonData);
-						
+			var jsonData = new Object();					
+			jsonData.name_user = user_search_text;			
+			var jsonText = JSON.stringify(jsonData);			
 			$.ajax({ 						
 				type: "POST",
-				url: "http://"+domainName+":8080/rest.sellerapp/user/get/search",	
+				url: "http://"+domain_name+":8080/rest.sellerapp/user/get/search",	
 				async: false,
 				contentType :"application/json; charSet=UTF-8",
 				data: jsonText,			
@@ -658,7 +673,7 @@ function searchUserFormDetails(domainName)
 		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 					}		  						
 					$("#tbody-table-user").html(userTable);		
-					userCreateSubScript(domainName);
+					userCreateSubScript(domain_name);
 				},
 				error: function(request, error, data){
 					alert(error);
@@ -670,7 +685,7 @@ function searchUserFormDetails(domainName)
 		{
 			$.ajax({
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/user/get/all",		
+				url: "http://"+domain_name+":8080/rest.sellerapp/user/get/all",		
 				async: false,
 				dataType: "json",			
 				success: function(responseText){				
@@ -685,7 +700,7 @@ function searchUserFormDetails(domainName)
 		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 					}		    			    
 					$("#tbody-table-user").html(userTable);					
-					userCreateSubScript(domainName);
+					userCreateSubScript(domain_name);
 				},
 				error: function(request, error, data){
 					alert(error);				
@@ -695,11 +710,11 @@ function searchUserFormDetails(domainName)
 	}
 	else	  /*......screen width less than 750px.....*/
 	{	
-		if(!(userTextChar==""))  //if a character typed in search-bar
+		if(!(user_search_text==""))  //if a character typed in search-bar
 		{	 	 						
 			$.ajax({ 						
 				type: "POST",
-				url: "http://"+domainName+":8080/rest.sellerapp/user/get/search/"+userTextChar,
+				url: "http://"+domain_name+":8080/rest.sellerapp/user/get/search/"+user_search_text,
 				async: false,
 				contentType :"application/json; charSet=UTF-8",
 				data: user_final_text,			
@@ -714,7 +729,7 @@ function searchUserFormDetails(domainName)
 		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 					}		  						
 					$("#tbody-table-user").html(userTable);		
-					userCreateSubScript(domainName);
+					userCreateSubScript(domain_name);
 				},
 				error: function(request, error, data){
 					alert(error);
@@ -726,7 +741,7 @@ function searchUserFormDetails(domainName)
 		{
 			$.ajax({
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/user/get/all",		
+				url: "http://"+domain_name+":8080/rest.sellerapp/user/get/all",		
 				async: false,
 				dataType: "json",			
 				success: function(responseText){				
@@ -739,7 +754,7 @@ function searchUserFormDetails(domainName)
 		    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 					}		    			    
 					$("#tbody-table-user").html(userTable);					
-					userCreateSubScript(domainName);
+					userCreateSubScript(domain_name);
 				},
 				error: function(request, error, data){
 					alert(error);				
@@ -749,56 +764,59 @@ function searchUserFormDetails(domainName)
 	}
 }
 
-function searchUserCatFormDetails()
-{			 				
-	var userTextChar1 = $(".input-text-search-box-main").val();			
-//	if(!(userTextChar1==""))
-//	{
-//		$.ajax({ 						
-//			type: "GET",
-//			url: "UserTableDataServlet",			
-//			dataType: "json",							
-//			data: {"var": "filled","pageName": "user-category", "textChar": userTextChar1},
-//			success: function(responseText){	
-//				
-//				var userCatTable="";				
-//				for(var i=0 ; i<responseText["usercatTable"].length ; i=i+1)
-//				{				        		
-//					userCatTable =	userCatTable+"<tr><td><input type='checkbox' value="+responseText["usercatTable"][i].id+"></input>"+
-//					"</td><td>"+responseText["usercatTable"][i].id+
-//					"</td><td>"+responseText["usercatTable"][i].name+
-//					"</td></tr>";
-//				}		        		    	
-//				$("#tbody-usercat-table-data").html(userCatTable);						
-//			},
-//			error: function(request, error, data){
-//				alert(error);				
-//			}  						
-//		});
-//	}
-//	else
-//	{
-//		$.ajax({
-//			type: "GET",
-//			url: "UserTableDataServlet",			
-//			dataType: "json",
-//			data: {"var": "empty", "pageName": "user-category"},
-//			success: function(responseText){				
-//				var userCatTable="";				
-//				for(var i=0 ; i<responseText["usercatTable"].length ; i=i+1)
-//				{				        		
-//					userCatTable =	userCatTable+"<tr><td><input type='checkbox' value="+responseText["usercatTable"][i].id+"></input>"+
-//					"</td><td>"+responseText["usercatTable"][i].id+
-//					"</td><td>"+responseText["usercatTable"][i].name+
-//					"</td></tr>";
-//				}		        		    	
-//				$("#tbody-usercat-table-data").html(userCatTable);						
-//			},
-//			error: function(request, error, data){
-//				alert(error);				
-//			}  						
-//		});
-//	}	
+function searchUserCategoryFormDetails(domain_name, user_category_search_text)
+{				
+	if(!(user_category_search_text==""))
+	{		
+		var json_search_object = new Object();		
+		json_search_object.name = user_category_search_text;					
+		var json_search_text = JSON.stringify(json_search_object);			
+		$.ajax({ 									
+			type: "POST",
+			url: "http://"+domain_name+":8080/rest.sellerapp/user/category/get/search",	
+			async: false,
+			contentType :"application/json; charSet=UTF-8",
+			data: json_search_text,			
+			dataType: "json",			
+			success: function(responseText){						
+				var user_category_rows="";							
+				for(var i=0 ; i<responseText["user_category_search_row"].length ; i=i+1){				        		
+					user_category_rows = user_category_rows+"<tr><td id='td-user-category-form-create-table-"+responseText["user_category_search_row"][i].id+"'><input class='user-category-table-row-checkbox' type='checkbox' value="+responseText["user_category_search_row"][i].id+"></input>"+
+		    		"</td><td>"+responseText["user_category_search_row"][i].id+
+					"</td><td>"+responseText["user_category_search_row"][i].name+    			
+	    			"</td></tr><tr><td id='td-user-category-form-create-table-"+responseText["user_category_search_row"][i].id+"-form' class='user-category-table-row-attech-form' colspan='5'></td></tr>";		    		
+				}		    						
+				$("#tbody-table-user-category").html(user_category_rows);						
+			},
+			error: function(request, error, data){
+				alert(data);				
+			}  						
+		});
+	}
+
+	else
+	{
+		$.ajax({
+			type: "GET",
+			url: "http://"+domain_name+":8080/rest.sellerapp/user/category/get/all",		
+			async: false,
+			dataType: "json",			
+			success: function(responseText){				
+				var user_category_table="";				
+		    	for(var i=0 ; i<responseText["user_category_table"].length ; i=i+1){				        		
+		    		user_category_table =	user_category_table+"<tr><td id='td-user-category-form-create-table-"+responseText["user_category_table"][i].id+"'><input class='user-category-table-row-checkbox' type='checkbox' value="+responseText["user_category_table"][i].id+"></input>"+
+		    		"</td><td>"+responseText["user_category_table"][i].id+
+					"</td><td>"+responseText["user_category_table"][i].name+    			
+	    			"</td></tr><tr><td id='td-user-category-form-create-table-"+responseText["user_category_table"][i].id+"-form' class='user-category-table-row-attech-form' colspan='5'></td></tr>";		    		
+				}		    			    
+				$("#tbody-table-user-category").html(user_category_table);				
+				userCreateSubScript(domain_name);
+			},
+			error: function(request, error, data){
+				alert(error+" in user table data");				
+			}  						
+		});
+	}	
 }
 function searchInventoryFormDetails()
 {}
@@ -824,43 +842,43 @@ function getErrorMessage(error_code){
 }
 
 /*............................user-create script OPEN......................... */
-function userCreatePageScript(domainName)
+function userCreatePageScript(domain_name)
 {					
 	localStorage.setItem("current_checkbox_value", JSON.stringify(""));					
 
 	//fetch user Categories for user create form	
 	$.ajax({
 		type: "GET",
-		url: "http://"+domainName+":8080/rest.sellerapp/user-category/get-user-category/all",		
+		url: "http://"+domain_name+":8080/rest.sellerapp/user/category/get/all",		
 		async: false,
 		dataType: "json",			
 		success: function(responseText){										    	
-	    	var cateogryList = ""; 
-	    	for(var i=0 ; i<responseText["userCategories"].length ; i=i+1)
+	    	var category_list = ""; 
+	    	for(var i=0 ; i<responseText["user_category_table"].length ; i=i+1)
 	    	{
-	    		cateogryList = cateogryList+"<option value='"+responseText["userCategories"][i].id+"'>"+responseText["userCategories"][i].name+"</option>";
+	    		category_list = category_list+"<option value='"+responseText["user_category_table"][i].id+"'>"+responseText["user_category_table"][i].name+"</option>";
 	    	}	    	 
-	    	$("#input-select-form-user-create-category").append(cateogryList);
+	    	$("#input-select-form-user-create-category").append(category_list);
 		},
 		error: function(request, error, data){
 				alert(error+" in user_cat fech list");				
 		}  						
 	});
 	
-	$( "#input-select-form-user-create-category" ).change(function () {	
-		var text = $("#input-select-form-user-create-category option:selected").text();
-		if(text=="CreateCategory")
-		{
-			$("#div-modal-form-user-create-category").modal('show');
-		}
-	});	
+//	$( "#input-select-form-user-create-category" ).change(function () {	
+//		var text = $("#input-select-form-user-create-category option:selected").text();
+//		if(text=="CreateCategory")
+//		{
+//			$("#div-modal-form-user-create-category").modal('show');
+//		}
+//	});	
 	
 	/*...........Demo Table script OPEN...........*/
 	if(($(window).width())>=750)
 	{
 		$.ajax({
 			type: "GET",
-			url: "http://"+domainName+":8080/rest.sellerapp/user/get/all",		
+			url: "http://"+domain_name+":8080/rest.sellerapp/user/get/all",		
 			async: false,
 			dataType: "json",			
 			success: function(responseText){						
@@ -874,10 +892,10 @@ function userCreatePageScript(domainName)
 	    			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 				}		    			    
 				$("#tbody-table-user").html(userTable);				
-				userCreateSubScript(domainName);
+				userCreateSubScript(domain_name);
 				},
 				error: function(request, error, data){
-					alert(error+" in user table data");				
+					alert(error+" in user table data "+data);				
 				}  						
 			});
 	}
@@ -885,7 +903,7 @@ function userCreatePageScript(domainName)
 	{
 		$.ajax({
 			type: "GET",
-			url: "http://"+domainName+":8080/rest.sellerapp/user/get/all",		
+			url: "http://"+domain_name+":8080/rest.sellerapp/user/get/all",		
 			async: false,
 			dataType: "json",			
 			success: function(responseText){				
@@ -898,7 +916,7 @@ function userCreatePageScript(domainName)
     			"</td></tr><tr><td id='td-user-form-create-table-"+responseText["userTable"][i].id+"-form' class='user-table-row-attech-form' colspan='5'></td></tr>";		    		
 			}		 		    	
 			$("#tbody-table-user").html(userTable);		
-			userCreateSubScript(domainName);
+			userCreateSubScript(domain_name);
 		},
 		error: function(request, error, data){
 			alert(error);				
@@ -925,14 +943,14 @@ function userCreatePageScript(domainName)
 		$("#div-form-user-create").toggle();
 	});
 
-/*......load form each time when clicking on nav user......*/
-	$("#li-tab-user-browse").click(function(){  
-		$("#div-form-user-create").css("display","none");
-		$("#div-form-user-create").load('form_user_create.jsp');
-	}); 
+///*......load form each time when clicking on nav user......*/
+//	$("#li-tab-user-browse").click(function(){  
+//		$("#div-form-user-create").css("display","none");
+//		$("#div-form-user-create").load('form_user_create.jsp');
+//	}); 
 }
 
-function userCreateSubScript(domainName)
+function userCreateSubScript(domain_name)
 {		
 	var row_attech_form_id;
 	$(".user-table-row-checkbox").click(function(){		
@@ -963,10 +981,10 @@ function userCreateSubScript(domainName)
 	
 	function userTableRowEdit(form_id){				
 		$("#"+form_id).load('form_user_create.jsp',function(){			
-			userCreateFormVal(domainName);
-			editButtonScript(domainName);
+			userCreateFormVal(domain_name);
+			editButtonScript(domain_name);
 			$("#"+form_id+" #div-form-user-create-heading").css("display","none");
-			var checkedFormElementsId =[
+			var checked_form_elements_id =[
 			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-fname #input-text-form-user-create-fname",
 			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-lname #input-text-form-user-create-lname",
 			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-1 #div-form-user-create-category #input-select-form-user-create-category",
@@ -979,27 +997,27 @@ function userCreateSubScript(domainName)
 			                            "#"+form_id+" #div-create-user-sub-form #div-form-user-create-line-4 #div-form-user-create-zip #input-text-form-user-create-zip"
 			                            ]; 
 			
-			localStorage["checkedFormElementsId"] = JSON.stringify(checkedFormElementsId);
+			localStorage["checked_form_elements_id"] = JSON.stringify(checked_form_elements_id);
 			
-			var checkedFormEditSaveBtnId = ["#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main",
+			var checked_form_edit_save_btn_id = ["#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-edit-main",
 			                                "#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main"];
-			localStorage["checkedFormEditSaveBtnId"] = JSON.stringify(checkedFormEditSaveBtnId);
+			localStorage["checked_form_edit_save_btn_id"] = JSON.stringify(checked_form_edit_save_btn_id);
 			
 			var checked_user_id = JSON.parse(localStorage.getItem("current_checkbox_value"));
 			
 			//filling category-list of toggle form 
 			$.ajax({
 				type: "GET",
-				url: "http://"+domainName+":8080/rest.sellerapp/user-category/get-user-category/all",		
+				url: "http://"+domain_name+":8080/rest.sellerapp/user-category/user/category/all",		
 				async: false,
 				dataType: "json",			
 				success: function(responseText){										    	
-			    	var cateogryList = ""; 
-			    	for(var i=0 ; i<responseText["userCategories"].length ; i=i+1)
+			    	var category_list = ""; 
+			    	for(var i=0 ; i<responseText["user_category_table"].length ; i=i+1)
 			    	{
-			    		cateogryList = cateogryList+"<option value='"+responseText["userCategories"][i].id+"'>"+responseText["userCategories"][i].name+"</option>";
+			    		category_list = category_list+"<option value='"+responseText["user_category_table"][i].id+"'>"+responseText["user_category_table"][i].name+"</option>";
 			    	}	    	 
-			    	$(checkedFormElementsId[2]).append(cateogryList);			    	
+			    	$(checked_form_elements_id[2]).append(category_list);			    	
 				},
 				error: function(request, error, data){
 						alert(error+" in user_cat fech list");				
@@ -1012,25 +1030,25 @@ function userCreateSubScript(domainName)
 			var json_user_text = JSON.stringify(json_user_object);			
 			$.ajax({
 				type: "POST",
-				url: "http://"+domainName+":8080/rest.sellerapp/user/get/id",		
+				url: "http://"+domain_name+":8080/rest.sellerapp/user/get/id",		
 				async: false,
 				contentType: "application/json; charset=utf-8",
 				data:json_user_text,
 				dataType: "json",						
 				success: function(responseText){					
-					$(checkedFormElementsId[0]).prop("disabled",true).val(responseText["userDetails"].name_first);
-					$(checkedFormElementsId[1]).prop("disabled",true).val(responseText["userDetails"].name_last);
+					$(checked_form_elements_id[0]).prop("disabled",true).val(responseText["userDetails"].name_first);
+					$(checked_form_elements_id[1]).prop("disabled",true).val(responseText["userDetails"].name_last);
 					
 					//need to make title attribut blank to set a value to select menu
-					$(checkedFormElementsId[2]).attr("title","");										
-					$(checkedFormElementsId[2]).prop("disabled",true).val(responseText["userCategoryDetails"].id);
-					$(checkedFormElementsId[3]).prop("disabled",true).val(responseText["userDetails"].phone);
-					$(checkedFormElementsId[4]).prop("disabled",true).val(responseText["userDetails"].emailid);
-					$(checkedFormElementsId[5]).prop("disabled",true).val(responseText["userDetails"].address_line_one);
-					$(checkedFormElementsId[6]).prop("disabled",true).val(responseText["userDetails"].address_line_two);
-					$(checkedFormElementsId[7]).prop("disabled",true).val(responseText["userDetails"].city);
-					$(checkedFormElementsId[8]).prop("disabled",true).val(responseText["userDetails"].state);
-					$(checkedFormElementsId[9]).prop("disabled",true).val(responseText["userDetails"].zip);
+					$(checked_form_elements_id[2]).attr("title","");										
+					$(checked_form_elements_id[2]).prop("disabled",true).val(responseText["userCategoryDetails"].id);
+					$(checked_form_elements_id[3]).prop("disabled",true).val(responseText["userDetails"].phone);
+					$(checked_form_elements_id[4]).prop("disabled",true).val(responseText["userDetails"].emailid);
+					$(checked_form_elements_id[5]).prop("disabled",true).val(responseText["userDetails"].address_line_one);
+					$(checked_form_elements_id[6]).prop("disabled",true).val(responseText["userDetails"].address_line_two);
+					$(checked_form_elements_id[7]).prop("disabled",true).val(responseText["userDetails"].city);
+					$(checked_form_elements_id[8]).prop("disabled",true).val(responseText["userDetails"].state);
+					$(checked_form_elements_id[9]).prop("disabled",true).val(responseText["userDetails"].zip);
 				},
 				error: function(request, error, data){
 					alert(error);				
@@ -1051,16 +1069,16 @@ function userCreateSubScript(domainName)
 			$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").prop('disabled', true);
 			
 			var json_user_data = new Object();
-			json_user_data.name_first = $(checkedFormElementsId[0]).val();					
-			json_user_data.name_last = $(checkedFormElementsId[1]).val();
-			json_user_data.id_user_category = $(checkedFormElementsId[2]).val();
-			json_user_data.phone = $(checkedFormElementsId[3]).val();
-			json_user_data.emailid = $(checkedFormElementsId[4]).val();
-			json_user_data.address_line_one = $(checkedFormElementsId[5]).val();
-			json_user_data.address_line_two = $(checkedFormElementsId[6]).val();
-			json_user_data.city = $(checkedFormElementsId[7]).val();
-			json_user_data.state = $(checkedFormElementsId[8]).val();
-			json_user_data.zip = $(checkedFormElementsId[9]).val();				
+			json_user_data.name_first = $(checked_form_elements_id[0]).val();					
+			json_user_data.name_last = $(checked_form_elements_id[1]).val();
+			json_user_data.id_user_category = $(checked_form_elements_id[2]).val();
+			json_user_data.phone = $(checked_form_elements_id[3]).val();
+			json_user_data.emailid = $(checked_form_elements_id[4]).val();
+			json_user_data.address_line_one = $(checked_form_elements_id[5]).val();
+			json_user_data.address_line_two = $(checked_form_elements_id[6]).val();
+			json_user_data.city = $(checked_form_elements_id[7]).val();
+			json_user_data.state = $(checked_form_elements_id[8]).val();
+			json_user_data.zip = $(checked_form_elements_id[9]).val();				
 			json_user_data.id = JSON.parse(localStorage.getItem("current_checkbox_value"));
 			
 			var json_user_text = JSON.stringify(json_user_data);			
@@ -1070,16 +1088,16 @@ function userCreateSubScript(domainName)
 				var $btn = $("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").button('loading');																
 				
 				var json_user_updated_data = new Object();
-				json_user_updated_data.name_first = $(checkedFormElementsId[0]).val();					
-				json_user_updated_data.name_last = $(checkedFormElementsId[1]).val();
-				json_user_updated_data.id_user_category = $(checkedFormElementsId[2]).val();
-				json_user_updated_data.phone = $(checkedFormElementsId[3]).val();
-				json_user_updated_data.emailid = $(checkedFormElementsId[4]).val();
-				json_user_updated_data.address_line_one = $(checkedFormElementsId[5]).val();
-				json_user_updated_data.address_line_two = $(checkedFormElementsId[6]).val();
-				json_user_updated_data.city = $(checkedFormElementsId[7]).val();
-				json_user_updated_data.state = $(checkedFormElementsId[8]).val();
-				json_user_updated_data.zip = $(checkedFormElementsId[9]).val();				
+				json_user_updated_data.name_first = $(checked_form_elements_id[0]).val();					
+				json_user_updated_data.name_last = $(checked_form_elements_id[1]).val();
+				json_user_updated_data.id_user_category = $(checked_form_elements_id[2]).val();
+				json_user_updated_data.phone = $(checked_form_elements_id[3]).val();
+				json_user_updated_data.emailid = $(checked_form_elements_id[4]).val();
+				json_user_updated_data.address_line_one = $(checked_form_elements_id[5]).val();
+				json_user_updated_data.address_line_two = $(checked_form_elements_id[6]).val();
+				json_user_updated_data.city = $(checked_form_elements_id[7]).val();
+				json_user_updated_data.state = $(checked_form_elements_id[8]).val();
+				json_user_updated_data.zip = $(checked_form_elements_id[9]).val();				
 				json_user_updated_data.id_user = JSON.parse(localStorage.getItem("current_checkbox_value"));
 				
 				var json_user_updated_text = JSON.stringify(json_user_updated_data);				
@@ -1094,7 +1112,7 @@ function userCreateSubScript(domainName)
 				var user_final_text = JSON.stringify(user_final_data);									
 				$.ajax({
 					type: "POST",
-					url: "http://"+domainName+":8080/rest.sellerapp/user/update",
+					url: "http://"+domain_name+":8080/rest.sellerapp/user/update",
 					async: false,	
 					contentType :"application/json; charSet=UTF-8",
 					data: user_final_text,			
@@ -1117,7 +1135,7 @@ function userCreateSubScript(domainName)
 }
 
 /*......user form validation.........*/
-function userCreateFormVal(domainName)
+function userCreateFormVal(domain_name)
 {	
 	/*......check fields are not empty.........*/
 	$("#input-text-form-user-create-fname, #input-text-form-user-create-lname, #input-text-form-user-create-phone, #input-text-form-user-create-add-1, #input-text-form-user-create-add-2, #input-text-form-user-create-city, #input-text-form-user-state, #input-text-form-user-create-zip").on('input', function() {
@@ -1201,12 +1219,30 @@ function userCreateFormVal(domainName)
 
 /*............................user category-create OPEN......................... */
 
-function userCatCreatePageScript(domainName)
+function userCatCreatePageScript(domain_name)
 {		
-	if($(window).width()<=380)
-	{				
-		$("#div-form-user-category-create-submit").removeClass("col-xs-5");
-	}
+	localStorage.setItem("current_checkbox_value_user_category", JSON.stringify(""));
+	/*............fetch user category table.............*/
+	$.ajax({
+		type: "GET",
+		url: "http://"+domain_name+":8080/rest.sellerapp/user/category/get/all",		
+		async: false,
+		dataType: "json",			
+		success: function(responseText){				
+			var user_category_table="";				
+	    	for(var i=0 ; i<responseText["user_category_table"].length ; i=i+1){				        		
+	    		user_category_table = user_category_table+"<tr><td id='td-user-category-form-create-table-"+responseText["user_category_table"][i].id+"'><input class='user-category-table-row-checkbox' type='checkbox' value="+responseText["user_category_table"][i].id+"></input>"+
+	    		"</td><td>"+responseText["user_category_table"][i].id+
+				"</td><td>"+responseText["user_category_table"][i].name+    			
+    			"</td></tr><tr><td id='td-user-category-form-create-table-"+responseText["user_category_table"][i].id+"-form' class='user-category-table-row-attech-form' colspan='5'></td></tr>";		    		
+			}		    			    
+			$("#tbody-table-user-category").html(user_category_table);				
+			userCatCreateSubScript(domain_name);
+		},
+		error: function(request, error, data){
+			alert(error+" in user table data");				
+		}  						
+	});
 	
 	/*...apply table headers of user-cat according to the screen-size....*/
 	if($(window).width()>=750)
@@ -1220,79 +1256,151 @@ function userCatCreatePageScript(domainName)
 		$("#thead-table-user-category").html(header);
 	}	
 	
-	/*...........Demo Table script OPEN...........*/
-	var userCatTableDemoData="<tr><td><input type='checkbox' id='td-user-cat-temp-1' value=''></input></td><td>1</td><td>customer</td></tr>";
-	userCatTableDemoData = userCatTableDemoData+"<tr><td id='td-user-cat-temp-1-next' colspan='5'></td></tr>";
-	$("#tbody-table-user-category").html(userCatTableDemoData);	
-	
-	
 	$("#td-user-cat-temp-1").click(function(){			
 		userCatTableRowEdit();
 		$("#td-user-cat-temp-1-next").toggle();
 	});
 	
-	var userCatTableRowEdit;
-	userCatTableRowEdit = function(){		
-		$("#td-user-cat-temp-1-next").load('form_user_category_create.jsp',function(){
-			userCatCreateFormVal(domainName);
-			$("#td-user-cat-temp-1-next #div-form-user-category-create-heading").css("display","none");
-			$("#td-user-cat-temp-1-next #div-create-user-category-sub-form #div-form-user-category-create-name #input-text-form-user-category-create-name").val("Demo Customer");			
-			$("#td-user-cat-temp-1-next #div-create-user-category-sub-form #div-form-user-category-create-description #input-text-form-user-category-create-description").val("Demo Description");
-
-			$("#td-user-cat-temp-1-next #div-form-user-category-create-footer #div-form-user-category-create-reset #btn-form-user-category-create-reset").css("display","none");
-		});						
-	};
-
-	var resetUserCatFun = function(){
-		$("#td-user-cat-temp-1-next").load('form_user_category_create.jsp',function(){
-			$("#td-user-cat-temp-1-next #div-form-user-category-create-heading").css("display","none");
-				userCatCreateFormVal(domainName);
-			$("#td-user-cat-temp-1-next #div-form-user-category-create-footer #div-form-user-category-create-reset #btn-form-user-category-create-reset").click(function(){
-				resetUserCatFun();
-			});
-		});
-	};
-	/*.......Demo table row edit script CLOSE......*/
-	
-	
- 	var userTextChar = $("#input-text-user-category-search").val();  	
-//		$.ajax({
-//			type: "GET",
-//			url: "UserTableDataServlet",			
-//			dataType: "json",
-//			data: {"var": "empty", "pageName": "user-category", "screenType": "large"},
-//			success: function(responseText){			
-//				var userCatTable="";				
-//		    	for(var i=0 ; i<responseText["usercatTable"].length ; i=i+1)
-//        		{				        		
-//		    		userCatTable =	userCatTable+"<tr><td><input type='checkbox' value="+responseText["usercatTable"][i].id+"></input>"+
-//					"</td><td>"+responseText["usercatTable"][i].id+
-//        			"</td><td>"+responseText["usercatTable"][i].name+
-//        			"</td></tr>";
-//				}		        		    	
-//				$("#tbody-usercat-table-data").html(userCatTable);						
-//			},
-//			error: function(request, error, data){
-//				alert(error);				
-//			}  						
-//		});
-	
-	
-	
 	/*.......launch the user-category form.......*/
 	$("#btn-user-category-create").click(function(){		
 		$("#div-form-user-category-create").toggle();
 	});
+}
 
-	/*......load form each time when clicking on nav user......*/
-	$("#li-tab-user-category").click(function(){  
-		$("#div-form-user-category-create").css("display","none");
-		$("#div-form-user-category-create").load('form_user_category_create.jsp');
-	});
+function userCatCreateSubScript(domain_name)
+{				
+	var row_attech_form_id;
+	$(".user-category-table-row-checkbox").click(function(){		
+		if($(this).is(':checked')){
+			$("body").fadeTo("fast", 0.4);
+			$("#spinner").show();		
+			
+			//id of user						
+			var	current_checkbox_value = $(this).attr("value");			
+
+			//check if another checkbox already checked
+			var checked_user_id = JSON.parse(localStorage.getItem("current_checkbox_value_user_category"));			
+			if(checked_user_id != "")
+			{												
+				$("#td-user-category-form-create-table-"+checked_user_id+" .user-category-table-row-checkbox").prop('checked',false);
+				$("#td-user-category-form-create-table-"+checked_user_id+"-form").toggle();
+			}
+			var current_checked_row_id = $(this).parent().attr("id");				
+			localStorage.setItem("current_checkbox_value_user_category", JSON.stringify(current_checkbox_value));					
+			row_attech_form_id = current_checked_row_id+"-form";			
+			userCatTableRowEdit(row_attech_form_id);					
+		}
+		else{						
+			localStorage.setItem("current_checkbox_value_user_category", JSON.stringify(""));				
+			$("#"+row_attech_form_id).toggle();	
+		}								
+	});	
+	
+	function userCatTableRowEdit(form_id){						
+		$("#"+form_id).load('form_user_category_create.jsp',function(){			
+			userCatCreateFormVal(domain_name);
+			editButtonScript(domain_name);
+			$("#"+form_id+" #div-form-user-category-create-heading").css("display","none");
+			var checked_form_elements_id =[
+			                            "#"+form_id+" #div-create-user-category-sub-form #div-form-user-category-create-name #input-text-form-user-category-create-name",
+			                            "#"+form_id+" #div-create-user-category-sub-form #div-form-user-category-create-description #input-text-form-user-category-create-description"			                            
+			                            ]; 
+			
+			localStorage["checked_form_elements_id_user_category"] = JSON.stringify(checked_form_elements_id);
+			
+			var checked_form_edit_save_btn_id = ["#"+form_id+" #div-form-user-category-create-state-buttons div .btn-page-state-edit-main",
+			                                "#"+form_id+" #div-form-user-category-create-state-buttons div .btn-page-state-save-main"];
+			localStorage["checked_form_edit_save_btn_id_user_category"] = JSON.stringify(checked_form_edit_save_btn_id);
+			
+			var checked_user_id = JSON.parse(localStorage.getItem("current_checkbox_value_user_category"));
+						
+			
+		//filling toggle form details
+			var json_user_object = new Object();
+			json_user_object.id = checked_user_id;						
+			var json_user_text = JSON.stringify(json_user_object);			
+			$.ajax({
+				type: "POST",
+				url: "http://"+domain_name+":8080/rest.sellerapp/user/category/get/id",		
+				async: false,
+				contentType: "application/json; charset=utf-8",
+				data:json_user_text,
+				dataType: "json",						
+				success: function(responseText){					
+					$(checked_form_elements_id[0]).prop("disabled",true).val(responseText["user_category_form_detail"].name);
+					$(checked_form_elements_id[1]).prop("disabled",true).val(responseText["user_category_form_detail"].description);									
+				},
+				error: function(request, error, data){
+					alert(error);				
+				}  						
+			});						
+
+			$('.selectpicker').selectpicker();	
+			
+			$('.selectpicker').selectpicker({
+				style: 'btn-info',
+				size: 4
+			});			
+			$("body").fadeTo("fast", 1);
+			$("#spinner").hide();
+			
+			$("#"+form_id).toggle();	
+			$("#"+form_id+" #div-form-user-category-create-state-buttons div .btn-page-state-reset-main").css("display","none");
+			$("#"+form_id+" #div-form-user-category-create-state-buttons div .btn-page-state-save-main").prop('disabled', true);
+			
+			var json_user_category_data = new Object();
+			json_user_category_data.name = $(checked_form_elements_id[0]).val();					
+			json_user_category_data.description = $(checked_form_elements_id[1]).val();				
+			json_user_category_data.id = JSON.parse(localStorage.getItem("current_checkbox_value_user_category"));
+			
+			var json_user_text = JSON.stringify(json_user_category_data);			
+			
+		//user_form update script
+			$("#"+form_id+" #div-form-user-category-create-state-buttons div .btn-page-state-save-main").click(function(){				
+				var $btn = $("#"+form_id+" #div-form-user-category-create-state-buttons div .btn-page-state-save-main").button('loading');																
+				
+				var json_user_category_updated_data = new Object();
+				json_user_category_updated_data.name = $(checked_form_elements_id[0]).val();					
+				json_user_category_updated_data.description = $(checked_form_elements_id[1]).val();				
+				json_user_category_updated_data.id = JSON.parse(localStorage.getItem("current_checkbox_value_user_category"));
+				
+				var json_user_category_updated_text = JSON.stringify(json_user_category_updated_data);				
+				
+				var user_category_final_data = new Object();				
+				for(var key in json_user_category_data){					
+					if(json_user_category_data[key] != json_user_category_updated_data[key]){
+						user_category_final_data[key] = json_user_category_updated_data[key];
+					}
+				}
+				user_category_final_data["id"] = JSON.parse(localStorage.getItem("current_checkbox_value_user_category"));
+				var user_category_final_text = JSON.stringify(user_category_final_data);		
+				
+				$.ajax({
+					type: "POST",
+					url: "http://"+domain_name+":8080/rest.sellerapp/user/category/update",
+					async: false,	
+					contentType :"application/json; charSet=UTF-8",
+					data: user_category_final_text,			
+					dataType: "json",			
+					success: function(responseText){	
+						alert('done');
+						userCatTableRowEdit(form_id);
+						$("#"+form_id).toggle();
+						$btn.button('reset');						
+					},
+					error: function(request, error, data){						
+						alert(request+" "+error+" "+data+" in user update");						
+						$btn.button('reset');
+					} 
+				});
+
+			});				
+		});										
+	}
 }
 
 /*.......user category form validation and submission........*/
-function userCatCreateFormVal(domainName)
+function userCatCreateFormVal(domain_name)
 {	
 	$("#input-text-form-user-category-create-name, #input-text-form-user-category-create-description-text").on('input', function() {
 		var input = $(this);
@@ -1314,7 +1422,7 @@ function userCatCreateFormVal(domainName)
 /*............................usercat-create2 CLOSE......................... */	 
 
 /*............................user-create script OPEN......................... */	
-function inventoryPageScript(domainName)
+function inventoryPageScript(domain_name)
 {	
 	$("#tbody-table-inventory").html("<tr><td><input id='td-inventory-temp-1' type='checkbox' value=''></input></td><td>10010458</td><td>A Black And Silver Case Watch</td><td>10</td><td>745</td><td>Jaipur</td></tr>" +
 									"<tr><td id='td-inventory-temp-1-next' colspan='6'></td></tr>");
@@ -1460,14 +1568,14 @@ function inventoryPageScript(domainName)
 	
 	//inventory category fetching according to typed text 
 	$("#input-select-form-inventory-create-category").keyup(function(){					
-		var userTextChar1 = $("#input-select-form-inventory-create-category").val();	 				
-		if(!(userTextChar1==""))  //if a character typed in search-bar
+		var user_category_search_text = $("#input-select-form-inventory-create-category").val();	 				
+		if(!(user_category_search_text==""))  //if a character typed in search-bar
 		{	 	 				 					  					
 //			$.ajax({ 						
 //				type: "GET",
 //				url: "InventoryAjaxFetch",			
 //				dataType: "json",
-//				data: {"fetch":"categories","var": "filled", "textChar": userTextChar1},
+//				data: {"fetch":"categories","var": "filled", "textChar": user_category_search_text},
 //				success: function(responseText){							
 //					var productCategoryList="<a data-toggle='modal' data-target='.productcategory-create-modal' class='list-group-item cursorPointer'>Create Category</a>";
 //					//alert(responseText);
@@ -1493,7 +1601,7 @@ function inventoryPageScript(domainName)
 //				type: "GET",
 //				url: "InventoryAjaxFetch",			
 //				dataType: "json",
-//				data: {"fetch":"categories","var": "empty","textChar": userTextChar1},
+//				data: {"fetch":"categories","var": "empty","textChar": user_category_search_text},
 //				success: function(responseText){							
 //					var productCategoryList="<a data-toggle='modal' data-target='.productcategory-create-modal'class='list-group-item cursorPointer'>Create Category</a>";
 //					//alert(responseText);
@@ -1776,7 +1884,7 @@ function inventoryFormValid()
 }
 
 /*..........................Invoice Script OPEN...........................*/
-function invoicePageScript(domainName)
+function invoicePageScript(domain_name)
 {
 	var invoiceLineCount = 0;
 	var invoiceLineArray =[];
@@ -1962,7 +2070,7 @@ function invoicePageScript(domainName)
 	
 }
 
-function invoiceCreateFormVal(domainName)
+function invoiceCreateFormVal(domain_name)
 {
 	/*......check fields are not empty.........*/
 	$("#input-text-form-user-create-order-id, #input-text-form-user-create-marketplace, #input-text-form-user-create-marketplace-order-id, #input-text-form-user-create-customer-name, #input-text-form-user-create-order-total, #input-text-form-user-create-amount-recieved, #input-text-form-user-create-commission, #input-text-form-user-create-record-date").on('input', function() {
@@ -2054,7 +2162,7 @@ $("#btn-form-user-create-submit").click(function(){
 });
 }
 
-function orderPageScript(domainName)
+function orderPageScript(domain_name)
 {	
 	var orderLineCount = 0;
 	var orderLineArray = [];
@@ -2136,7 +2244,7 @@ function orderPageScript(domainName)
 	
 	$("#btn-form-order-create-reset").click(function(){
 		$("#div-create-order-sub-form").load('sub_form_order_create.jsp',function(){
-			orderPageScript(domainName);
+			orderPageScript(domain_name);
 		});
 		
 	});
@@ -2193,7 +2301,7 @@ function orderPageScript(domainName)
 	var resetOrderFun = function(){
 		$("#td-user-temp-1-next").load('form_order_create.jsp',function(){
 			$("#td-orders-temp-1-next #div-form-order-create-heading").css("display","none");
-			orderFormValid(domainName);
+			orderFormValid(domain_name);
 //			$("#td-orders-temp-1-next #div-form-user-create-line-5 #div-form-user-create-reset #btn-form-user-create-reset").click(function(){
 //				resetOrderFun();
 //			});
@@ -2201,7 +2309,7 @@ function orderPageScript(domainName)
 	};
 	/*.......Demo table row edit script CLOSE......*/
 }
-function orderFormValid(domainName)
+function orderFormValid(domain_name)
 {
 	
 }
