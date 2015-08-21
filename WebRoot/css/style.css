@@ -287,16 +287,14 @@ nav.sidebar ul >li > ul > li
 #div-img-form-inventory-create-image-main
 {
 	height:30%;
-	width:100%;
-	background-color:#5bc0de;
+	width:100%;	
 }	
 .div-img-form-inventory-create-image-thumbnail
 {
 	width:32.5%;
 	height:12%;
 	margin-left:.5%;
-	margin-top:1%;
-	background-color:#afe6dc;
+	margin-top:1%;	
 }
 #div-modal-sub-form-inventory-category-create
 {

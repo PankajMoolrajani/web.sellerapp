@@ -1,19 +1,26 @@
 <div class="row"> 
 	<div id="div-img-form-inventory-create-image" class="col-md-2 col-sm-2">
 		<div class="row">
-			<div id="div-img-form-inventory-create-image-main" class="col-md-12 col-sm-12">
-				<p>Main-Image</p>
+			<form action="UploadImageServlet" id="form-inventory-create-image-main" method="post" class="to-none" enctype="multipart/form-data">
+				<input type="file" size="60" id="input-file-form-inventory-create-image-main" name="myfile" multiple>
+				<button type="submit" id="btn-form-inventory-create-image-submit" class="btn btn-default">Upload File</button>
+			</form>			
+			<button id="btn-form-inventory-create-image-submit-show" class="btn btn-default to-none">upload</button>
+			<span id="span-img-form-inevntory-create-upload-message" class="to-none"></span>			
+			
+			<div id="div-img-form-inventory-create-image-main" class="col-md-12 col-sm-12">					
+				<img src="pictures/blank_upload.jpg" height="100%" width="100%">				
 			</div>				
 		</div>	
 		<div class="row">
 			<div id="div-img-form-inventory-create-image-thumbnail-1" class="col-md-4 col-sm-4 col-xs-4 div-img-form-inventory-create-image-thumbnail">
-				<p>Thumb-nail-1</p>					
+							
 			</div>
 			<div id="div-img-form-inventory-create-image-thumbnail-2" class="col-md-4 col-sm-4 col-xs-4 div-img-form-inventory-create-image-thumbnail">
-				<p>Thumb-nail-2</p>
+				
 			</div>
 			<div id="div-img-form-inventory-create-image-thumbnail-3" class="col-md-4 col-sm-4 col-xs-4 div-img-form-inventory-create-image-thumbnail">
-				<p>Thumb-nail-3</p>
+				
 			</div>					
 		</div>
 	</div>

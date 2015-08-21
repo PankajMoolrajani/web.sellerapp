@@ -1,18 +1,7 @@
 <div id="div-modal-inventory-category-create-parent-category" class="row">
 	<div class="col-sm-12 col-md-12">
     	<label class="control-label" for="inputInventorySku">Parent category</label>
-		<select id="input-select-inventory-category-create-parent-category" class=" selectpicker form-control val-empty" >					
-		<%
-			//Connection con = DbConnection.getConnection();
-			//PreparedStatement ps = con.prepareStatement("select id,name from inventory_category");
-			//ResultSet rs = ps.executeQuery();						
-			//while(rs.next())
-			//{																						
-		%>
-				<option value="<%="(rs.getInt(1))"%>"><%="(rs.getString(2))"%></option>
-		<%
-			//}
-		%>	        						        
+		<select id="input-select-inventory-category-create-parent-category" class="form-control selectpicker">								
 		</select>
     </div>
 </div>

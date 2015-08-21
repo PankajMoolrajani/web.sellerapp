@@ -30,7 +30,7 @@
 		<label class="control-label" for="inputInventorySku">Row</label>
 		<input type="text" id="input-text-form-inventory-create-row" class="form-control val-empty"/>		
 	</div>
-	<div id="div-orm-inventory-create-case" class="col-sm-3 col-md-3 col-xs-6">
+	<div id="div-form-inventory-create-case" class="col-sm-3 col-md-3 col-xs-6">
 		<label class="control-label" for="inputInventorySku">Case</label>
 		<input type="text" id="input-text-form-inventory-create-case" class="form-control val-empty"/>		
 	</div>	
