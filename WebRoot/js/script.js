@@ -1564,7 +1564,7 @@ function inventoryPageScript(domain_name){
 		var inventory_parent_id = $("#input-select-inventory-category-create-parent-category").attr("id");
 		
 		var tax_object = new object();
-		tax_object.
+		
 		var inventory_object = new Object();		
 		inventory_object.name = inventory_name;	
 		inventory_object.percent = inventory_tax_percent;	
