@@ -132,7 +132,7 @@
 					</li>
 					<li>
 						<div class="div-sidemenu-menuitem">
-							<a class='expandable tooltip-dash' href="#" data-toggle="tab" data-placement="right" title="order upload">
+							<a class='expandable tooltip-dash' href="#div-order-bulk-upload-page" data-toggle="tab" data-placement="right" title="order upload">
 								<span class='span-sidemenu-menuitem-text'>Bulk Upload</span>
 								<span class='glyphicon glyphicon-upload collapsed-element span-sidemenu-menuitem-icon'></span>
 							</a>
@@ -184,6 +184,9 @@
 				</div>	
 				<div id="div-order-management-page" class="tab-pane">
 					<jsp:include page="order_management.jsp"></jsp:include>
+				</div>
+				<div id="div-order-bulk-upload-page" class="tab-pane">
+					<jsp:include page="order_upload.jsp"></jsp:include>
 				</div>
 				<div id="div-invoice-management-page" class="tab-pane">
 					<jsp:include page="invoice_management.jsp"></jsp:include>

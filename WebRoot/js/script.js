@@ -2425,6 +2425,94 @@ function orderPageScript(domain_name)
 		});
 	};
 	/*.......Demo table row edit script CLOSE......*/
+	function orderFileUpload(){
+		//ajax file upload
+		var options = {
+		        beforeSend : function() {		                
+		                // clear everything		                
+		                $("#message").empty();		                
+		        },
+		        uploadProgress : function(event, position, total, percentComplete) {		                		                
+		
+		                // change message text to red after 50%
+		                if (percentComplete > 50) {
+		                $("#message").html("<font color='red'>File Upload is in progress</font>");
+		                }
+		        },
+		        success : function() {		                		                
+		        },
+		        complete : function(response) {
+		        $("#message").html("<font color='blue'>Order file has been uploaded!</font>");
+		        	showPacketTable();
+		        },
+		        error : function() {
+		        $("#message").html("<font color='red'> ERROR: unable to upload files</font>");
+		        }
+		};
+		$("#form-bulk-order-upload").ajaxForm(options);
+		$("#btn-form-order-upload-file").click(function(){
+			var upload_file_type = $('#select-upload-file-type-order option:selected').text();
+			var orderFile = $("#input-file-bulk-order-upload").val();		
+			var $btn = $("#btn-form-order-upload-file").button('loading');
+			if(upload_file_type == "Amazon")
+			{
+				$.ajax({
+					type: "POST",
+					url: "http://"+domain_name+":8080/rest.sellerapp/uniware/upload",			
+					dataType: "json",
+					data: {"fileName" : orderFile},
+					cache : false,
+					contentType : false,
+					processData : false,
+					success: function(responseText){
+						$btn.button('reset'); 
+							 var error_code = responseText["error_code"];
+							 
+							 if(error_code=="")
+							 {
+								alert('success');
+							 }
+							 else
+							 {
+								 var error_message=getErrorMessage(error_code);
+								 alert(error_message);
+							 }
+					},
+					error: function(request, error, data){				
+						alert(error);				
+					}  						
+				});
+			}
+			else
+			{
+				$.ajax({
+					type: "GET",
+					url: "http://"+domain_name+":8080/rest.sellerapp/uniware/upload",			
+					dataType: "json",
+					data: {"fileName" : orderFile},
+					cache : false,
+					contentType : false,
+					processData : false,
+					success: function(responseText){											
+							 var error_code = responseText["error_code"];
+							 
+							 if(error_code=="")
+							 {
+								 $btn.button('reset'); 
+							 }
+							 else
+							 {
+								 var error_message=getErrorMessage(error_code);
+								 alert(error_message);
+							 }
+					},
+					error: function(request, error, data){				
+						alert(error);				
+					}  						
+				});				
+			}
+		});
+	}
 }
 function orderFormValid(domain_name)
 {
