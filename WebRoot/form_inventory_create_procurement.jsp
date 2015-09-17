@@ -3,7 +3,7 @@
 		<div id="div-form-inventory-create-procurement-type" class="row"> 
 			<div class="col-md-10 col-sm-10">
 				<label class="control-label" >Procurement Type</label>
-				<select id="input-select-form-invenotry-create-brand" class="form-control selectpicker show-tick val-empty" title="Select Type">
+				<select id="input-select-form-invenotry-create-procurement-type" class="form-control selectpicker show-tick val-empty" title="Select Type">
 					<option>Demo Type</option>				
 				</select>				
 			</div>
@@ -11,7 +11,7 @@
 		<div id="div-form-inventory-create-procurement-supplier" class="row">
 			<div class="col-md-10 col-sm-10">
 				<label class="control-label" >Supplier</label>
-				<select id="input-select-form-invenotry-create-brand" class="form-control selectpicker show-tick val-empty" title="Select Type">
+				<select id="input-select-form-invenotry-create-procurement-supplier" class="form-control selectpicker show-tick val-empty" title="Select Type">
 					<option>Demo Supplier</option>				
 				</select>							
 			</div>

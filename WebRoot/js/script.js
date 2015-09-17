@@ -222,19 +222,19 @@ $(document).ready(function(){
 		});
 	}	
 	
-	userCreatePageScript(domain_name); //calling of user-management page script
-	userCreateFormVal(domain_name); //calling of user-mgmt validation page script
+	//userCreatePageScript(domain_name); //calling of user-management page script
+	//userCreateFormVal(domain_name); //calling of user-mgmt validation page script
 	
-	userCatCreatePageScript(domain_name); //calling of user-category page script
-	userCatCreateFormVal(domain_name); //calling of user-mgmt validation page script
+	//userCatCreatePageScript(domain_name); //calling of user-category page script
+	//userCatCreateFormVal(domain_name); //calling of user-mgmt validation page script
 	
 	inventoryPageScript(domain_name);
 	
-	orderPageScript(domain_name); 
+	//orderPageScript(domain_name); 
 	
 	
-	invoicePageScript(domain_name);
-	invoiceCreateFormVal(domain_name);
+	//invoicePageScript(domain_name);
+	//invoiceCreateFormVal(domain_name);
 	
 	saveButtonScript(domain_name);	
 	resetButtonScript(domain_name);
@@ -264,7 +264,7 @@ function editButtonScript(domain_name)
 	        editUserCatFormDetails(domain_name);
 	        break;
 	    case "div-form-inventory-create-state-buttons":
-	        editInventoryFormDetails();
+	        editInventoryFormDetails(domain_name);
 	        break;
 	    case "div-form-order-create-state-buttons":
 	        editOrderFormDetails();
@@ -317,10 +317,10 @@ function saveButtonScript(domain_name){
 	    	submitUserFormDetails(domain_name);
 	        break;
 	    case "div-form-user-category-create-state-buttons":
-	        submitUserCatFormDetails();
+	        submitUserCatFormDetails(domain_name);
 	        break;
 	    case "div-form-inventory-create-state-buttons":
-	        submitInventoryFormDetails();
+	        submitInventoryFormDetails(domain_name);
 	        break;
 	    case "div-form-order-create-state-buttons":
 	        submitOrderFormDetails();
@@ -450,19 +450,59 @@ function submitUserCatFormDetails(){
 	 }
 }
 
-function submitInventoryFormDetails()
-{						
-	var $btn = $("#input-btn-submit-form-inventory-create").button('loading');
+function submitInventoryFormDetails(domain_name){
+	
+	var $btn = $("#div-form-inventory-create-state-buttons div .btn-page-state-save-main").button('loading');
+	uploadInventoryImages();
+	
+	function uploadInventoryImages(){		
+		var files = $('input[name="name_inventory_create_images"]').get(0).files;			
+		var formData = new FormData();				
+		for (var i = 0; i < files.length; i++)
+		{			
+			formData.append('file', files[i]);
+		}
+		$.ajax({
+			type: "POST",
+			url: "http://abc:8080/rest.sellerapp/inventory/upload_images",								
+			data: formData,
+			cache : false,
+			contentType: false,
+	        processData: false,
+			success: function(responseText){							
+				alert(responseText);
+			},
+			error: function(request, error, data){				
+				alert(JSON.stringify(request) +" "+error+" "+data);					
+			}  						
+		});	
+	}
+	
+	$btn.button('reset');
 	
 	var selector = ["#input-text-form-inventory-create-base-sku",
 	                "#input-text-form-inventory-create-name",
+	                "#input-select-form-invenotry-create-brand",
 	                "#input-text-form-inventory-create-weight",
 	                "#input-text-form-inventory-create-maxprice", 
 	                "#input-text-form-invenotry-create-minprice", 
 	                "#input-text-form-invenotry-create-stock", 	  
 	                "#input-select-form-inventory-create-category", 
-	                "#input-select-form-inventory-create-category", 
-	                "#input-text-form-inventory-create-tags"];
+	                "#input-text-form-inventory-create-stock-in-hand",
+	                "#input-text-form-inventory-create-stock-outgoing",
+	                "#input-text-form-inventory-create-stock-incoming",
+	                "#input-text-form-inventory-create-warehouse",
+	                "#input-text-form-inventory-create-aisle",
+	                "#input-text-form-inventory-create-rack",
+	                "#input-text-form-inventory-create-row",
+	                "#input-text-form-inventory-create-case",
+	                "#input-select-form-invenotry-create-procurement-type",
+	                "#input-select-form-invenotry-create-procurement-supplier",
+	                "#input-text-form-inventory-create-procurement-time",
+	                "#input-text-form-inventory-create-min-price",
+	                "#input-text-form-inventory-create-max-price",
+	                "#input-text-form-inventory-create-cost-price",
+	                "#input-text-form-inventory-create-tax"];
 		
 	//passing selector and marketplaceCount to the function
 	$.fn.inventoryEntryFormValid(selector,marketplaceCount);		
@@ -473,13 +513,11 @@ function submitInventoryFormDetails()
 		var inventoryFullSubmitState="false";
 		for(var i=0 ; i<selector.length ; i=i+1)
 		{		
-			if($(selector[i]).parent().hasClass("has-error") || $(selector[i]).val()=="")
-			{				
+			if($(selector[i]).parent().hasClass("has-error") || $(selector[i]).val()==""){				
 				inventoryFullSubmitState= "false";						  
 				break;
 			}
-			else
-			{				 				
+			else{				 				
 				inventoryFullSubmitState="true";			 
 			}
 		}
@@ -1478,23 +1516,35 @@ function inventoryPageScript(domain_name){
 	});
 	// upload complete
 	
-	//inventory-category-search
-	$("#input-select-modal-form-inventory-category-create").keyup(function(){				
-		var search_inventory_txt = $(this).val();
-		$.ajax({
-			type: "POST",
-			url: "http://"+domain_name+":8080/rest.sellerapp/inventory/category/get/search",
-			async: false,	
-			contentType :"application/json; charSet=UTF-8",					
-			dataType: "json",			
-			success: function(responseText){
-				alert(responseText);
-			},
-			error: function(request, error, data){						
-				alert(request+" "+error+" "+data+" in user update");										
-			} 
+	$("#input-btn-form-inventory-create-category").click(function(){
+		//inventory-category-search 
+		$("#input-select-modal-form-inventory-category-create").keyup(function(){				
+			var identifier = $(this).val();			
+			if(identifier){
+				$.ajax({
+					type: "GET",
+					url: "http://"+domain_name+":8080/rest.sellerapp/inventory/category/get/search/"+identifier,		
+					async: false,	
+					contentType :"text/json",					
+					dataType: "json",			
+					success: function(response){
+						response_length = response.data.length;
+						var html = "";
+						for(var i = 0 ; i<response_length ; i++){
+							html = html + "<div class='row'>" +
+											"<div class='col-md-4 col-md-offset-2'><p>"+response.data[i].name+"</p></div><div class='col-md-4'><button id='"+response.data[i].id+"' class='btn-inventory-cateogry-select btn btn-default btn-xs'>Select</button></div>" +
+										  "</div> ";
+						}
+						$("#div-modal-form-inventory-create-category-search-content").html(html);
+					},
+					error: function(request, error, data){						
+						alert(request+" "+error+" "+data+" in user update");										
+					} 
+				});
+			}			
 		});
 	});
+	
 	
 	$("#td-inventory-temp-1").click(function(){						
 		inventoryTableRowEdit();
@@ -2424,48 +2474,59 @@ function orderPageScript(domain_name)
 //			});
 		});
 	};
+	
+	orderFileUpload();
 	/*.......Demo table row edit script CLOSE......*/
 	function orderFileUpload(){
 		//ajax file upload
 		var options = {
 		        beforeSend : function() {		                
 		                // clear everything		                
-		                $("#message").empty();		                
+		                $("#span-bulk-order-file-status").empty();		                
 		        },
 		        uploadProgress : function(event, position, total, percentComplete) {		                		                
 		
 		                // change message text to red after 50%
 		                if (percentComplete > 50) {
-		                $("#message").html("<font color='red'>File Upload is in progress</font>");
+		                $("#span-bulk-order-file-status").html("<font color='red'>File Upload is in progress</font>");
 		                }
 		        },
 		        success : function() {		                		                
 		        },
 		        complete : function(response) {
-		        $("#message").html("<font color='blue'>Order file has been uploaded!</font>");
+		        $("#span-bulk-order-file-status").html("<font color='blue'>Order file has been uploaded!</font>");
 		        	showPacketTable();
 		        },
 		        error : function() {
-		        $("#message").html("<font color='red'> ERROR: unable to upload files</font>");
+		        $("#span-bulk-order-file-status").html("<font color='red'> ERROR: unable to upload files</font>");
 		        }
 		};
 		$("#form-bulk-order-upload").ajaxForm(options);
-		$("#btn-form-order-upload-file").click(function(){
+		
+		$("#btn-form-order-upload-file").click(function(){			
+			var file = $('input[name="order-upload-file"]').get(0).files[0];
+
+		    var formData = new FormData();		    
+		    formData.append('file', file);		    		
+			alert(JSON.stringify(formData));
+			
 			var upload_file_type = $('#select-upload-file-type-order option:selected').text();
-			var orderFile = $("#input-file-bulk-order-upload").val();		
-			var $btn = $("#btn-form-order-upload-file").button('loading');
+//			var orderFile = $("#input-file-bulk-order-upload").val();		
+//			var $btn = $("#btn-form-order-upload-file").button('loading');			
+			alert(JSON.stringify(formData));
 			if(upload_file_type == "Amazon")
 			{
 				$.ajax({
 					type: "POST",
-					url: "http://"+domain_name+":8080/rest.sellerapp/uniware/upload",			
-					dataType: "json",
-					data: {"fileName" : orderFile},
+					url: "http://"+domain_name+":8080/rest.sellerapp/uniware/upload",								
+					data: formData,
 					cache : false,
-					contentType : false,
-					processData : false,
+	                contentType : 'multipart/form-data',
+	                dataType : 'json',
+	                processData : false,
 					success: function(responseText){
-						$btn.button('reset'); 
+						alert('success');
+						//$btn.button('reset'); 
 							 var error_code = responseText["error_code"];
 							 
 							 if(error_code=="")
@@ -2479,21 +2540,21 @@ function orderPageScript(domain_name)
 							 }
 					},
 					error: function(request, error, data){				
-						alert(error);				
+						alert(JSON.stringify(request) +" "+error+" "+data);				
 					}  						
 				});
 			}
 			else
 			{
 				$.ajax({
-					type: "GET",
-					url: "http://"+domain_name+":8080/rest.sellerapp/uniware/upload",			
-					dataType: "json",
-					data: {"fileName" : orderFile},
+					type: "POST",
+					url: "http://"+domain_name+":8080/rest.sellerapp/uniware/upload",								
+					data: formData,
 					cache : false,
-					contentType : false,
-					processData : false,
-					success: function(responseText){											
+					contentType: false,
+			        processData: false,
+					success: function(responseText){		
+					alert('success');
 							 var error_code = responseText["error_code"];
 							 
 							 if(error_code=="")
@@ -2507,7 +2568,7 @@ function orderPageScript(domain_name)
 							 }
 					},
 					error: function(request, error, data){				
-						alert(error);				
+						alert(JSON.stringify(request) +" "+error+" "+data);					
 					}  						
 				});				
 			}

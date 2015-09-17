@@ -18,7 +18,8 @@
 	     		</div>
 			</div>
 			<div class="row">
-				<div id="div-modal-form-inventory-create-category-search-content" class="col-md-10 col-md-offset-1">									
+				<div id="div-modal-form-inventory-create-category-search-content" class="col-md-10 col-md-offset-1">
+														
 				</div>
 			</div>
 			<div class="row">

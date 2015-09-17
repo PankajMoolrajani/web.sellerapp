@@ -2,7 +2,7 @@
 	<div id="div-img-form-inventory-create-image" class="col-md-2 col-sm-2">
 		<div class="row">
 			<form action="UploadImageServlet" id="form-inventory-create-image-main" method="post" class="to-none" enctype="multipart/form-data">
-				<input type="file" size="60" id="input-file-form-inventory-create-image-main" name="myfile" multiple>
+				<input type="file" size="60" id="input-file-form-inventory-create-image-main" name="name_inventory_create_images" multiple>
 				<button type="submit" id="btn-form-inventory-create-image-submit" class="btn btn-default">Upload File</button>
 			</form>			
 			<button id="btn-form-inventory-create-image-submit-show" class="btn btn-default to-none">upload</button>
@@ -36,7 +36,7 @@
 		  		<input type="text" id="input-text-form-inventory-create-name" class="form-control val-empty"/>		
 			</div>
 			<div id="div-form-inventory-brand" class="form-group col-md-4 col-sm-4">
-				<label class="control-label" for="inputInventorySku">Brand</label>
+				<label class="control-label" for="inputInventoryBrand">Brand</label>
 				<select id="input-select-form-invenotry-create-brand" class="form-control selectpicker show-tick val-empty" >
 					<option>Demo Brand-1</option>
 				</select>							
