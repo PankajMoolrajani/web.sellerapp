@@ -1519,8 +1519,8 @@ function inventoryPageScript(domain_name){
 	$("#input-btn-form-inventory-create-category").click(function(){
 		//inventory-category-search 
 		$("#input-select-modal-form-inventory-category-create").keyup(function(){				
-			var identifier = $(this).val();			
-			if(identifier){
+			var identifier = $(this).val();	
+			if(!(identifier == "")){
 				$.ajax({
 					type: "GET",
 					url: "http://"+domain_name+":8080/rest.sellerapp/inventory/category/get/search/"+identifier,		
@@ -1528,20 +1528,32 @@ function inventoryPageScript(domain_name){
 					contentType :"text/json",					
 					dataType: "json",			
 					success: function(response){
-						response_length = response.data.length;
-						var html = "";
-						for(var i = 0 ; i<response_length ; i++){
-							html = html + "<div class='row'>" +
-											"<div class='col-md-4 col-md-offset-2'><p>"+response.data[i].name+"</p></div><div class='col-md-4'><button id='"+response.data[i].id+"' class='btn-inventory-cateogry-select btn btn-default btn-xs'>Select</button></div>" +
-										  "</div> ";
-						}
-						$("#div-modal-form-inventory-create-category-search-content").html(html);
-					},
-					error: function(request, error, data){						
-						alert(request+" "+error+" "+data+" in user update");										
-					} 
-				});
-			}			
+					response_length = response.data.length;
+					var html = "";
+					for(var i = 0 ; i<response_length ; i++){
+						html = html + "<div class='row'>" +
+						"<div class='col-md-4 col-md-offset-2'><p>"+response.data[i].name+"</p></div><div class='col-md-4'><button id='"+response.data[i].name+"' class='btn-inventory-cateogry-select btn btn-default btn-xs'>Select</button></div>" +
+						"</div> ";
+					}
+					
+					$("#div-modal-form-inventory-create-category-search-content").html("<br/>"+html);
+					$(".btn-inventory-cateogry-select").click(function(){
+						var root_category_name = $(this).attr("id");
+						$("#input-select-modal-form-inventory-category-create").val(root_category_name);
+					});
+					$("#btn-modal-form-inventory-category-create-close").click(function(){
+						var selected_category = $("#input-select-modal-form-inventory-category-create").val();
+						$("#input-text-form-inventory-choose-category").val(selected_category);
+					});
+				},
+				error: function(request, error, data){						
+					alert(request+" "+error+" "+data+" in user update");										
+				} 
+				});		
+			}
+			else{
+				$("#div-modal-form-inventory-create-category-search-content").html("");
+			}
 		});
 	});
 	

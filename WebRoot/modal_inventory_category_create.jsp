@@ -38,8 +38,7 @@
 		</div>		
 		<br/>
 		<div id="div-modal-form-inventory-category-create-footer" class="modal-footer">
-			<button id="btn-modal-form-inventory-category-create-close" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		    <button id="btn-modal-form-inventory-category-create-submit" type="button" class="btn btn-primary">Save changes</button>
+			<button id="btn-modal-form-inventory-category-create-close" type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>		    
 		</div>
 	</div>
 </div>

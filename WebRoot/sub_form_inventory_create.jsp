@@ -47,11 +47,20 @@
 				<label class="control-label" for="inputInventorySku">SKU Number</label>
 			  	<input type="text" id="input-text-form-inventory-create-base-sku" class="form-control val-empty"/>				
 			</div>
-			<div id="div-form-inventory-create-category" class="form-group col-md-4 col-sm-4">
+			<!-- <div id="div-form-inventory-create-category" class="form-group col-md-4 col-sm-4">
 				<label class="control-label" for="inputInventorySku">Inventory Category</label>
 			  	<button type="button" id="input-btn-form-inventory-create-category" class="form-control btn btn-default" data-toggle="modal" data-target="#div-modal-form-inventory-create-category">
                 	Select Inventory Category
                 </button>	  		
+			</div>  -->
+			<div id="div-form-inventory-create-category" class="form-group col-md-4 col-sm-4">
+				<label class="control-label" for="inputInventorySku">Inventory Category</label>
+				<div class="input-group">					
+					<input type="text" id="input-text-form-inventory-choose-category" class="form-control" disabled>
+			      	<span class="input-group-btn">
+			        	<button id="input-btn-form-inventory-create-category" class="btn btn-default" type="button" data-toggle="modal" data-target="#div-modal-form-inventory-create-category">Select</button>
+			      	</span>
+				</div>				
 			</div>
 			<div id="div-form-inventory-create-weight" class="form-group col-md-4 col-sm-4">
 				<label class="control-label" for="inputInventorySku">Weight</label>
