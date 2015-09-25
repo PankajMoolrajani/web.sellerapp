@@ -97,6 +97,14 @@
 				<ul class="bs-docs-sidenav" style="display:none">
 					<li>
 						<div class="div-sidemenu-menuitem">
+							<a class='expandable tooltip-dash' id="a-sidemenu-item-inventory-browse" href="#div-inventory-browse-page" data-toggle="tab" data-placement="right" title="inventory browse">
+								<span class='span-sidemenu-menuitem-text'>Browse</span>
+								<span class='glyphicon glyphicon-pencil collapsed-element span-sidemenu-menuitem-icon'></span>
+							</a>
+						</div>				
+					</li>				
+					<li>
+						<div class="div-sidemenu-menuitem">
 							<a class='expandable tooltip-dash' id="a-sidemenu-item-inventory" href="#div-inventory-management-page" data-toggle="tab" data-placement="right" title="inventory management">
 								<span class='span-sidemenu-menuitem-text'>Management</span>
 								<span class='glyphicon glyphicon-pencil collapsed-element span-sidemenu-menuitem-icon'></span>
@@ -179,6 +187,9 @@
 				<div id="div-user-categories-page" class="tab-pane">
 					<jsp:include page="user_category.jsp"/>
 				</div>
+				<div id="div-inventory-browse-page" class="tab-pane">
+					<jsp:include page="inventory_browse.jsp"/>
+				</div>	
 				<div id="div-inventory-management-page" class="tab-pane">
 					<jsp:include page="inventory_management.jsp"/>
 				</div>	

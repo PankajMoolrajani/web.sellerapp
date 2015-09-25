@@ -38,7 +38,7 @@
 		</div>		
 		<br/>
 		<div id="div-modal-form-inventory-category-create-footer" class="modal-footer">
-			<button id="btn-modal-form-inventory-category-create-close" type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>		    
+			<button id="btn-modal-form-inventory-category-create-close" type="button" class="btn btn-primary">Ok</button>		    
 		</div>
 	</div>
 </div>

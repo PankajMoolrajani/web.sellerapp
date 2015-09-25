@@ -1,5 +1,4 @@
-$(document).ready(function(){	
-		
+$(document).ready(function(){		
 	var domain_name = "localhost";
 	//var domainName = "dev.monoxor.com"
 		
@@ -226,8 +225,7 @@ $(document).ready(function(){
 	//userCreateFormVal(domain_name); //calling of user-mgmt validation page script
 	
 	//userCatCreatePageScript(domain_name); //calling of user-category page script
-	//userCatCreateFormVal(domain_name); //calling of user-mgmt validation page script
-	
+	//userCatCreateFormVal(domain_name); //calling of user-mgmt validation page script	
 	inventoryPageScript(domain_name);
 	
 	//orderPageScript(domain_name); 
@@ -1461,108 +1459,234 @@ function userCatCreateFormVal(domain_name)
 /*............................usercat-create2 CLOSE......................... */	 
 
 /*............................user-create script OPEN......................... */	
-function inventoryPageScript(domain_name){	
-	var uploaded_image_names;
-	var uploaded_pic_folder_name;
+function inventoryPageScript(domain_name){			
+	/*............inventory browse work open...............*/
+	getInventoryBrowseDetails();
+	createIventoryImageUpload();
+	createInventoryCategoryModal();
 	
-	$("#tbody-table-inventory").html("<tr><td><input id='td-inventory-temp-1' type='checkbox' value=''></input></td><td>10010458</td><td>A Black And Silver Case Watch</td><td>10</td><td>745</td><td>Jaipur</td></tr>" +
-									"<tr><td id='td-inventory-temp-1-next' colspan='6'></td></tr>");
-	
-	/*.......launch the inventory form.......*/
-	$("#btn-inventory-create").click(function(){			
-		$("#div-form-inventory-create").toggle();			 	
-		$( "#div-form-inventory-create-save" ).removeClass("col-md-offset-4 col-sm-offset-4").addClass( "col-md-offset-5 col-sm-offset-5" );
-		$("#input-btn-edit-form-inventory-create").css("display","none");		
-	});
-	
-	//ajax file upload
-	var options = {
-			beforeSend : function() {		                
-				// clear everything		                
-	            $("#span-img-form-inevntory-create-upload-message").empty();		                
-	        },
-	        uploadProgress : function(event, position, total, percentComplete) {		                		                	
-	        	// change message text to red after 50%
-	            if (percentComplete > 50) {
-	            	$("#span-img-form-inevntory-create-upload-message").html("<font color='red'>Uploading in progress</font>");
-	            }
-	        },
-	        success : function() {
-	        	$("#div-img-form-inventory-create-image-main").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[0].name+"' height='100%' width='100%' />")
-	        	$("#div-img-form-inventory-create-image-thumbnail-1").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[1].name+"' height='100%' width='100%' />");
-	        	$("#div-img-form-inventory-create-image-thumbnail-2").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[2].name+"' height='100%' width='100%' />");
-	        	$("#div-img-form-inventory-create-image-thumbnail-3").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[2].name+"' height='100%' width='100%' />");
-	        },	        
-	        complete : function(response) {	        	
-	        	$("#span-img-form-inevntory-create-upload-message").html("<font color='blue'>uploaded Sccessfully!</font>");0	        		        
-	        },	        
-	        error : function() {
-	        	$("#span-img-form-inevntory-create-upload-message").html("<font color='red'> ERROR: unable to upload</font>");
-	        }
-	};
-	$("#form-inventory-create-image-main").ajaxForm(options);
-	
-	$("#div-img-form-inventory-create-image-main").click(function(){
-		$("#btn-form-inventory-create-image-submit-show").addClass("to-display");
-		$("#span-img-form-inevntory-create-upload-message").addClass("to-display");
-		$("#input-file-form-inventory-create-image-main").click();
-	});	
-	
-	$("#btn-form-inventory-create-image-submit-show").click(function(){				
-		uploaded_image_names = $("#input-file-form-inventory-create-image-main")[0].files;
-	    var n = uploaded_image_names[0].name.indexOf("-");	    
-	    uploaded_pic_folder_name = uploaded_image_names[0].name.substring(0,n);	    
-		$("#btn-form-inventory-create-image-submit").click();
-	});
-	// upload complete
-	
-	$("#input-btn-form-inventory-create-category").click(function(){
-		//inventory-category-search 
-		$("#input-select-modal-form-inventory-category-create").keyup(function(){				
-			var identifier = $(this).val();	
-			if(!(identifier == "")){
-				$.ajax({
-					type: "GET",
-					url: "http://"+domain_name+":8080/rest.sellerapp/inventory/category/get/search/"+identifier,		
-					async: false,	
-					contentType :"text/json",					
-					dataType: "json",			
-					success: function(response){
-					response_length = response.data.length;
-					var html = "";
-					for(var i = 0 ; i<response_length ; i++){
-						html = html + "<div class='row'>" +
-						"<div class='col-md-4 col-md-offset-2'><p>"+response.data[i].name+"</p></div><div class='col-md-4'><button id='"+response.data[i].name+"' class='btn-inventory-cateogry-select btn btn-default btn-xs'>Select</button></div>" +
-						"</div> ";
+	function getInventoryBrowseDetails(){		
+		$.ajax({
+			type: "GET",
+			url: "http://"+domain_name+":8080/rest.sellerapp/inventory/get/all",
+			async: false,	
+			contentType :"application/json; charSet=UTF-8",					
+			dataType: "json",			
+			success: function(response){				
+			var inventory = response["data"];				
+			var size = inventory.length;					
+			var lines = size/5;
+			var remain = size - (lines*5);			
+			if(remain != 0 ){
+				lines = lines+1;
+			}
+			var html = "";				
+			for(var i=0,k=0 ; i<lines ; i=i+1){
+				html = html + "<div class='row'>";				
+				for(var j=1 ; j<5 ; j=j+1, k=k+1){					
+					if(k<size){						
+						html = html + "<div class='portfolio-item col-md-3'><div class='row'><div class='col-md-10 col-md-offset-1'><a data-toggle='modal' class='cursorPointer inventory-browse-items' data-target='#div-modal-form-inventory-browse-update'><img class='img-responsive' src='http://placehold.it/400x300' alt=''></a></div></div><br/>" +								
+							"<div class='row'>" +
+								"<div class='col-md-11 col-md-offset-1'><p>Title : "+inventory[k].name+"</p></div>" +
+							"</div>" +
+							"<div class='row'>" +
+								"<div class='col-md-11 col-md-offset-1'><p>MRP : "+inventory[k].price_mrp+"</p></div>" +
+							"</div>" +
+							"<div class='row'>" +
+								"<div class='col-md-11 col-md-offset-1'><p>Selling Price : "+inventory[k].price_sell+"</p></div>" +
+							"</div>" +
+							"<div class='row'>" +
+								"<div class='col-md-11 col-md-offset-1'><p>Stock-in-hand : "+inventory[k].available+"</p></div>" +
+							"</div>" +			
+						"</div>";
 					}
+				}								
+				html = html + "</div>";							
+				$("#div-inventory-browse-images").html(html);
+				
+				$(".inventory-browse-items").click(function(){
+					$("#div-modal-form-inventory-browse-update-body").load('sub_form_inventory_create.jsp',function(){
+						createInventoryCategoryModal();
+					});
+				});
+			}						
+		},
+		error: function(request, error, data){						
+			alert(request+" "+error+" "+data+" in getInventoryBrowseDetails");										
+		} 
+		});				
+	}
+			
+	function createIventoryImageUpload(){		
+		/*............inventory browse work close...............*/
+		
+		var uploaded_image_names;
+		var uploaded_pic_folder_name;		
+	
+		/*.......launch the inventory form.......*/
+		$("#btn-inventory-create").click(function(){			
+			$("#div-form-inventory-create").toggle();			 	
+			$( "#div-form-inventory-create-save" ).removeClass("col-md-offset-4 col-sm-offset-4").addClass( "col-md-offset-5 col-sm-offset-5" );
+			$("#input-btn-edit-form-inventory-create").css("display","none");		
+		});
+		//ajax file upload
+		var options = {
+				beforeSend : function() {		                
+					// clear everything		                
+		            $("#span-img-form-inevntory-create-upload-message").empty();		                
+		        },
+		        uploadProgress : function(event, position, total, percentComplete) {		                		                	
+		        	// change message text to red after 50%
+		            if (percentComplete > 50) {
+		            	$("#span-img-form-inevntory-create-upload-message").html("<font color='red'>Uploading in progress</font>");
+		            }
+		        },
+		        success : function() {
+		        	$("#div-img-form-inventory-create-image-main").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[0].name+"' height='100%' width='100%' />")
+		        	$("#div-img-form-inventory-create-image-thumbnail-1").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[1].name+"' height='100%' width='100%' />");
+		        	$("#div-img-form-inventory-create-image-thumbnail-2").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[2].name+"' height='100%' width='100%' />");
+		        	$("#div-img-form-inventory-create-image-thumbnail-3").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[2].name+"' height='100%' width='100%' />");
+		        },	        
+		        complete : function(response) {	        	
+		        	$("#span-img-form-inevntory-create-upload-message").html("<font color='blue'>uploaded Sccessfully!</font>");0	        		        
+		        },	        
+		        error : function() {
+		        	$("#span-img-form-inevntory-create-upload-message").html("<font color='red'> ERROR: unable to upload</font>");
+		        }
+		};
+		$("#form-inventory-create-image-main").ajaxForm(options);
+		$("#div-img-form-inventory-create-image-main").click(function(){
+			$("#btn-form-inventory-create-image-submit-show").addClass("to-display");
+			$("#span-img-form-inevntory-create-upload-message").addClass("to-display");
+			$("#input-file-form-inventory-create-image-main").click();
+		});	
+		
+		$("#btn-form-inventory-create-image-submit-show").click(function(){				
+			uploaded_image_names = $("#input-file-form-inventory-create-image-main")[0].files;
+		    var n = uploaded_image_names[0].name.indexOf("-");	    
+		    uploaded_pic_folder_name = uploaded_image_names[0].name.substring(0,n);	    
+			$("#btn-form-inventory-create-image-submit").click();
+		});
+		// upload complete
+	}
+	
+
+	function createInventoryCategoryModal(){
+	//select and create inventory_category using modal	
+		
+		$("#input-btn-form-inventory-create-category").click(function(){				
+			//$("#div-modal-form-inventory-create-category").modal('show');
+			$("#btn-modal-form-inventory-category-create-close").click(function(){				
+				$("#div-modal-form-inventory-create-category").modal('hide');	
+			});
+			
+			//inventory-category-search 
+			$("#input-select-modal-form-inventory-category-create").keyup(function(){				
+				var identifier = $(this).val();	
+				if(!(identifier == "")){
+					$.ajax({
+						type: "GET",
+						url: "http://"+domain_name+":8080/rest.sellerapp/inventory/category/get/search/"+identifier,		
+						async: false,	
+						contentType :"text/json",					
+						dataType: "json",			
+						success: function(response){
+						response_length = response.data.length;
+						var html = "";
+						for(var i = 0 ; i<response_length ; i++){
+							html = html + "<div class='row'>" +
+							"<div class='col-md-4 col-md-offset-2'><p>"+response.data[i].name+"</p></div><div class='col-md-4'><button id='"+response.data[i].name+"' class='btn-inventory-cateogry-select btn btn-default btn-xs'>Select</button></div>" +
+							"</div> ";
+						}
+						
+						$("#div-modal-form-inventory-create-category-search-content").html("<br/>"+html);
+						$(".btn-inventory-cateogry-select").click(function(){
+							var root_category_name = $(this).attr("id");
+							$("#input-select-modal-form-inventory-category-create").val(root_category_name);
+						});
+						$("#btn-modal-form-inventory-category-create-close").click(function(){						
+							var selected_category = $("#input-select-modal-form-inventory-category-create").val();
+							$("#input-text-form-inventory-choose-category").val(selected_category);										
+						});
+						
+					},
+					error: function(request, error, data){						
+						alert(request+" "+error+" "+data+" in user update");										
+					} 
+					});		
+				}
+				else{
+					$("#div-modal-form-inventory-create-category-search-content").html("");
+				}
+			});
+		});	
+		
+		//fill parent inventory category in create inventory form	
+		
+		$.ajax({
+			type: "POST",
+			url: "http://"+domain_name+":8080/rest.sellerapp/inventory/category/get/all",
+			async: false,	
+			contentType :"application/json; charSet=UTF-8",					
+			dataType: "json",			
+			success: function(responseText){					
+				for(var i=0 ; i<responseText["data"].length ; i=i+1){
+					var inventory_category = inventory_category+"<option value='"+responseText["data"][i].id+"'>"+responseText["data"][i].name+"</option>";						
+				}		
+				$("#input-select-inventory-category-create-parent-category").attr("title","");				
+				
+				$("#input-select-inventory-category-create-parent-category").append(inventory_category);
+				selectPickerScript();
+			},
+			error: function(request, error, data){						
+				alert(request+" "+error+" "+data+" in user update");										
+			} 
+		});					
+		$("#input-btn-inventory-category-create-submit").click(function(){
+			var inventory_name = $("#input-modal-inventory-category-create-name").val();
+			var inventory_tax_percent = $("#input-form-inventory-category-create-tax-percent").val();
+			var inventory_parent_id = $("#input-select-inventory-category-create-parent-category").attr("id");
+			
+			var tax_object = new object();
+			
+			var inventory_object = new Object();		
+			inventory_object.name = inventory_name;	
+			inventory_object.percent = inventory_tax_percent;	
+			inventory_object.id_parent_category = inventory_parent_id;
+			var inventory_txt = JSON.stringify(inventory_object);				
+	
+			$.ajax({
+				type: "POST",
+				url: "http://"+domain_name+":8080/rest.sellerapp/inventory/category/create",
+				async: false,	
+				data: inventory_txt,
+				contentType :"application/json; charSet=UTF-8",					
+				dataType: "json",			
+				success: function(responseText){					
+					for(var i=0 ; i<responseText["data"].length ; i=i+1){
+						var inventory_category = inventory_category+"<option value='"+responseText["data"][i].id+"'>"+responseText["data"][i].name+"</option>";						
+					}		
+					$("#input-select-inventory-category-create-parent-category").attr("title","");				
 					
-					$("#div-modal-form-inventory-create-category-search-content").html("<br/>"+html);
-					$(".btn-inventory-cateogry-select").click(function(){
-						var root_category_name = $(this).attr("id");
-						$("#input-select-modal-form-inventory-category-create").val(root_category_name);
-					});
-					$("#btn-modal-form-inventory-category-create-close").click(function(){
-						var selected_category = $("#input-select-modal-form-inventory-category-create").val();
-						$("#input-text-form-inventory-choose-category").val(selected_category);
-					});
+					$("#input-select-inventory-category-create-parent-category").append(inventory_category);
+					selectPickerScript();
 				},
 				error: function(request, error, data){						
 					alert(request+" "+error+" "+data+" in user update");										
 				} 
-				});		
-			}
-			else{
-				$("#div-modal-form-inventory-create-category-search-content").html("");
-			}
-		});
-	});
-	
+			});		
+			
+		});	
+	}
 	
 	$("#td-inventory-temp-1").click(function(){						
 		inventoryTableRowEdit();
 		$("#td-inventory-temp-1-next").toggle();
 	});
-		
+	
+	$("#tbody-table-inventory").html("<tr><td><input id='td-inventory-temp-1' type='checkbox' value=''></input></td><td>10010458</td><td>A Black And Silver Case Watch</td><td>10</td><td>745</td><td>Jaipur</td></tr>" +
+	"<tr><td id='td-inventory-temp-1-next' colspan='6'></td></tr>");
+
 		var inventoryTableRowEdit;
 		inventoryTableRowEdit = function(){			
 			$("#td-inventory-temp-1-next").load('form_inventory_create.jsp',function(){
@@ -1599,62 +1723,7 @@ function inventoryPageScript(domain_name){
 		$("#input-btn-edit-form-inventory-create").css({"margin-top": "10px", "margin-left": "40%"});
 	}	
 	
-	//fill parent inventory category in create inventory form	
 	
-		$.ajax({
-			type: "POST",
-			url: "http://"+domain_name+":8080/rest.sellerapp/inventory/category/get/all",
-			async: false,	
-			contentType :"application/json; charSet=UTF-8",					
-			dataType: "json",			
-			success: function(responseText){					
-				for(var i=0 ; i<responseText["data"].length ; i=i+1){
-					var inventory_category = inventory_category+"<option value='"+responseText["data"][i].id+"'>"+responseText["data"][i].name+"</option>";						
-				}		
-				$("#input-select-inventory-category-create-parent-category").attr("title","");				
-				
-				$("#input-select-inventory-category-create-parent-category").append(inventory_category);
-				selectPickerScript();
-			},
-			error: function(request, error, data){						
-				alert(request+" "+error+" "+data+" in user update");										
-			} 
-		});					
-	$("#input-btn-inventory-category-create-submit").click(function(){
-		var inventory_name = $("#input-modal-inventory-category-create-name").val();
-		var inventory_tax_percent = $("#input-form-inventory-category-create-tax-percent").val();
-		var inventory_parent_id = $("#input-select-inventory-category-create-parent-category").attr("id");
-		
-		var tax_object = new object();
-		
-		var inventory_object = new Object();		
-		inventory_object.name = inventory_name;	
-		inventory_object.percent = inventory_tax_percent;	
-		inventory_object.id_parent_category = inventory_parent_id;
-		var inventory_txt = JSON.stringify(inventory_object);				
-
-		$.ajax({
-			type: "POST",
-			url: "http://"+domain_name+":8080/rest.sellerapp/inventory/category/create",
-			async: false,	
-			data: inventory_txt,
-			contentType :"application/json; charSet=UTF-8",					
-			dataType: "json",			
-			success: function(responseText){					
-				for(var i=0 ; i<responseText["data"].length ; i=i+1){
-					var inventory_category = inventory_category+"<option value='"+responseText["data"][i].id+"'>"+responseText["data"][i].name+"</option>";						
-				}		
-				$("#input-select-inventory-category-create-parent-category").attr("title","");				
-				
-				$("#input-select-inventory-category-create-parent-category").append(inventory_category);
-				selectPickerScript();
-			},
-			error: function(request, error, data){						
-				alert(request+" "+error+" "+data+" in user update");										
-			} 
-		});		
-		
-	});	
 	$("#btn-modal-form-inventory-category-create-toggle").click(function(){		
 		$("#div-modal-sub-form-inventory-category-create").toggle();
 	});

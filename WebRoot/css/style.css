@@ -270,6 +270,16 @@ nav.sidebar ul >li > ul > li
 
 /*........................inventory-management script OPEN.................*/
 	
+.portfolio-item {
+    margin-bottom: 20px;   
+    border-style: solid;	
+    border-width: 1px;
+    border-color: #D2D2D2;
+    
+}
+.img-responsive{
+	height:200px;		
+}	
 #div-form-inventory-create
 {
 	border:1px dotted gray; padding:10px;margin-top:2%;display:none;border-radius:4px;
