@@ -991,6 +991,7 @@ function userCreateSubScript(domain_name)
 {		
 	var row_attech_form_id;
 	$(".user-table-row-checkbox").click(function(){		
+		alert($(this).is(':checked'));
 		if($(this).is(':checked')){
 			$("body").fadeTo("fast", 0.4);
 			$("#spinner").show();		
@@ -1459,7 +1460,9 @@ function userCatCreateFormVal(domain_name)
 /*............................usercat-create2 CLOSE......................... */	 
 
 /*............................user-create script OPEN......................... */	
-function inventoryPageScript(domain_name){			
+function inventoryPageScript(domain_name){
+	//used for inventory_table toggle form
+	localStorage.setItem("current_checkbox_value_inventory", JSON.stringify(""));
 	/*............inventory browse work open...............*/
 	getInventoryBrowseDetails();
 	createIventoryImageUpload();
@@ -1684,8 +1687,257 @@ function inventoryPageScript(domain_name){
 		$("#td-inventory-temp-1-next").toggle();
 	});
 	
-	$("#tbody-table-inventory").html("<tr><td><input id='td-inventory-temp-1' type='checkbox' value=''></input></td><td>10010458</td><td>A Black And Silver Case Watch</td><td>10</td><td>745</td><td>Jaipur</td></tr>" +
-	"<tr><td id='td-inventory-temp-1-next' colspan='6'></td></tr>");
+/*.............inventory table script open ...........*/
+	
+	if(($(window).width())>=750)
+	{
+		$.ajax({
+			type: "GET",
+			url: "http://"+domain_name+":8080/rest.sellerapp/inventory/get/all",		
+			async: false,
+			dataType: "json",			
+			success: function(response){
+				var inventory = response["data"];
+				var inventoryTable="";				
+		    	for(var i=0 ; i<inventory.length ; i=i+1){				        		
+		    		inventoryTable = inventoryTable+"<tr><td id='td-inventory-form-create-table-"+inventory[i].id+"'><input class='inventory-table-row-checkbox' type='checkbox' value="+inventory[i].id+"></input>"+
+		    		"</td><td>"+inventory[i].sku+    			
+	    			"</td><td>"+inventory[i].name+
+	    			"</td><td>"+inventory[i].available+
+	    			"</td><td>"+inventory[i].price_sell+
+	    			"</td><td>"+inventory[i].price_sell+
+	    			"</td></tr><tr><td id='td-inventory-form-create-table-"+inventory[i].id+"-form' class='inventory-table-row-attech-form' colspan='5'></td></tr>";		    		
+				}		    			    
+				$("#tbody-table-inventory").html(inventoryTable);				
+				inventoryPageSubScript(domain_name);
+				},
+				error: function(request, error, data){
+					alert(error+" in user table data "+data);				
+				}  						
+			});
+	}
+	else
+	{
+		$.ajax({
+			type: "GET",
+			url: "http://"+domain_name+":8080/rest.sellerapp/inventory/get/all",		
+			async: false,
+			dataType: "json",			
+			success: function(response){
+			var inventory = response["data"];
+			var inventoryTable="";
+			
+			for(var i=0 ; i<inventory.length ; i=i+1){	
+//				$("#tbody-table-inventory").html("<tr><td><input id='td-inventory-temp-1' type='checkbox' value=''></input></td><td>10010458</td><td>A Black And Silver Case Watch</td><td>10</td><td>745</td><td>Jaipur</td></tr>" +
+//				"<tr><td id='td-inventory-temp-1-next' colspan='6'></td></tr>");
+	    		inventoryTable = inventoryTable+"<tr><td id='td-inventory-form-create-table-"+inventory[i].id+"'><input class='inventory-table-row-checkbox' type='checkbox' value="+inventory[i].id+"></input>"+	    		
+				"</td><td>"+inventory[i].sku+    			
+    			"</td><td>"+inventory[i].name+
+    			"</td><td>"+inventory[i].available+
+    			"</td><td>"+inventory[i].price_sell+
+    			"</td><td>"+inventory[i].price_sell+
+    			"</td></tr><tr><td id='td-user-form-create-table-"+inventory[i].id+"-form' class='inventory-table-row-attech-form' colspan='5'></td></tr>";		    		
+			}		 		    	
+			$("#tbody-table-inventory").html(inventoryTable);		
+			inventoryPageSubScript(domain_name);
+		},
+		error: function(request, error, data){
+			alert(error);				
+		}  						
+		});
+	}	
+	
+/*.............inventory table script close ...........*/
+	function inventoryPageSubScript(domain_name){		
+		var row_attech_form_id;
+		$(".inventory-table-row-checkbox").click(function(){	
+			if($(this).is(':checked')){
+				//$("body").fadeTo("fast", 0.4);
+				//$("#spinner").show();		
+				
+				//id of inventory						
+				var	current_checkbox_value = $(this).attr("value");							
+				//check if another checkbox already checked
+				var checked_inventory_id = JSON.parse(localStorage.getItem("current_checkbox_value_inventory"));
+				
+				if(checked_inventory_id != "")
+				{												
+					$("#td-inventory-form-create-table-"+checked_inventory_id+" .inventory-table-row-checkbox").prop('checked',false);
+					$("#td-inventory-form-create-table-"+checked_inventory_id+"-form").toggle();
+				}
+				var current_checked_row_id = $(this).parent().attr("id");				
+				localStorage.setItem("current_checkbox_value_inventory", JSON.stringify(current_checkbox_value));					
+				row_attech_form_id = current_checked_row_id+"-form";
+					
+				inventoryTableRowEdit(row_attech_form_id);					
+			}
+			else{						
+				localStorage.setItem("current_checkbox_value_inventory", JSON.stringify(""));		
+				$("#"+row_attech_form_id).empty();
+				$("#"+row_attech_form_id).toggle();	
+			}								
+		});	
+		
+		function inventoryTableRowEdit(form_id){			
+			$("#"+form_id).load('form_inventory_create.jsp',function(){		
+
+				//inventoryCreateFormVal(domain_name);
+				//editButtonScript(domain_name);
+				
+				//change tab href and associated div id's 
+				$("#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab ul li #a-tab-form-inventory-create-stock").attr("href","#div-form-inventory-create-stock-edit");				
+				$("#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock").attr("id","div-form-inventory-create-stock-edit");
+				
+				$("#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab ul li #a-tab-form-inventory-create-procurement").attr("href","#div-form-inventory-create-procurement-edit");				
+				$("#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-procurement").attr("id","div-form-inventory-create-procurement-edit");
+
+				$("#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab ul li #a-tab-form-inventory-create-sales").attr("href","#div-tab-form-inventory-create-sales-edit");				
+				$("#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-sales").attr("id","div-tab-form-inventory-create-sales-edit");
+
+				$("#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab ul li #a-tab-form-inventory-create-variants").attr("href","#div-tab-form-inventory-create-variants-edit");				
+				$("#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-variants").attr("id","div-tab-form-inventory-create-variants-edit");
+
+				$("#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab ul li #a-tab-form-inventory-create-accounting").attr("href","#div-tab-form-inventory-create-accounting-edit");				
+				$("#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting").attr("id","div-tab-form-inventory-create-accounting-edit");
+				
+				$("#"+form_id+" #div-form-inventory-create-heading").css("display","none");
+				var checked_form_elements_id =[
+				                            "#"+form_id+" #div-sub-form-inventory-create div div #div-form-inventory-create-line-1 #div-form-inventory-create-name #input-text-form-inventory-create-name",
+				                            "#"+form_id+" #div-sub-form-inventory-create div div #div-form-inventory-create-line-1 #div-form-inventory-brand #input-select-form-invenotry-create-brand",
+				                            "#"+form_id+" #div-sub-form-inventory-create div div #div-form-inventory-create-line-2 #div-form-inventory-create-base-sku #input-text-form-inventory-create-base-sku",
+				                            "#"+form_id+" #div-sub-form-inventory-create div div #div-form-inventory-create-line-2 #div-form-inventory-create-category #input-text-form-inventory-choose-category",
+				                            "#"+form_id+" #div-sub-form-inventory-create div div #div-form-inventory-create-line-2 #div-form-inventory-create-weight #input-text-form-inventory-create-weight",
+				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock-edit div #div-form-inventory-create-stock-in-hand #input-text-form-inventory-create-stock-in-hand",
+				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock-edit div #div-form-inventory-create-stock-outgoing #input-text-form-inventory-create-stock-outgoing",
+				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock-edit div #div-form-inventory-create-stock-incoming #input-text-form-inventory-create-stock-incoming",
+				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock-edit div #div-form-inventory-create-warehouse #input-text-form-inventory-create-warehouse",
+				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock-edit div #div-form-inventory-create-aisle #input-text-form-inventory-create-aisle",
+				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock-edit div #div-form-inventory-create-rack #input-text-form-inventory-create-rack",
+				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock-edit div #div-form-inventory-create-row #input-text-form-inventory-create-row",
+				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock-edit div #div-form-inventory-create-case #input-text-form-inventory-create-case",
+				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting-edit div #div-form-inventory-create-min-price #input-text-form-inventory-create-min-price"
+				                            ]; 
+				
+				localStorage["checked_inventory_form_elements_id"] = JSON.stringify(checked_form_elements_id);
+				
+				var checked_form_edit_save_btn_id = ["#"+form_id+" #div-form-inventory-create-state-buttons div .btn-page-state-edit-main",
+				                                "#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main"];
+				
+				localStorage["checked_form_inventory_edit_save_btn_id"] = JSON.stringify(checked_form_edit_save_btn_id);
+				
+				var checked_inventory_id = JSON.parse(localStorage.getItem("current_checkbox_value_inventory"));
+				selectPickerScript();
+				//getInventoryBrowseDetails();
+				//createIventoryImageUpload();
+				//createInventoryCategoryModal();
+										
+			//filling toggle form details
+				var json_user_object = new Object();
+				json_user_object.id = checked_inventory_id;						
+				var json_inventory_text = JSON.stringify(json_user_object);			
+				$.ajax({
+					type: "POST",
+					url: "http://"+domain_name+":8080/rest.sellerapp/inventory/get/id",		
+					async: false,
+					contentType: "application/json; charset=utf-8",
+					data:json_inventory_text,
+					dataType: "json",						
+					success: function(response){
+					var inventory = response["data"];					
+						$(checked_form_elements_id[0]).prop("disabled",true).val(inventory.name);
+						//$(checked_form_elements_id[1]).prop("disabled",true).val(inventory.name_last);
+						
+						//need to make title attribut blank to set a value to select menu
+						//$(checked_form_elements_id[2]).attr("title","");										
+						//$(checked_form_elements_id[2]).prop("disabled",true).val(responseText["userCategoryDetails"].id);
+						$(checked_form_elements_id[2]).prop("disabled",true).val(inventory.sku);
+						$(checked_form_elements_id[5]).prop("disabled",true).val(inventory.available);
+						$(checked_form_elements_id[6]).prop("disabled",true).val(inventory.outgoing);
+						$(checked_form_elements_id[13]).prop("disabled",true).val(inventory.price_sell);
+						
+					},
+					error: function(request, error, data){
+						alert(error);				
+					}  						
+				});						
+//
+
+//				$("body").fadeTo("fast", 1);
+//				$("#spinner").hide();
+//				
+				$("#"+form_id).toggle();	
+//				$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-reset-main").css("display","none");
+//				$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").prop('disabled', true);
+//				
+//				var json_user_data = new Object();
+//				json_user_data.name_first = $(checked_form_elements_id[0]).val();					
+//				json_user_data.name_last = $(checked_form_elements_id[1]).val();
+//				json_user_data.id_user_category = $(checked_form_elements_id[2]).val();
+//				json_user_data.phone = $(checked_form_elements_id[3]).val();
+//				json_user_data.emailid = $(checked_form_elements_id[4]).val();
+//				json_user_data.address_line_one = $(checked_form_elements_id[5]).val();
+//				json_user_data.address_line_two = $(checked_form_elements_id[6]).val();
+//				json_user_data.city = $(checked_form_elements_id[7]).val();
+//				json_user_data.state = $(checked_form_elements_id[8]).val();
+//				json_user_data.zip = $(checked_form_elements_id[9]).val();				
+//				json_user_data.id = JSON.parse(localStorage.getItem("current_checkbox_value"));
+//				
+//				var json_user_text = JSON.stringify(json_user_data);			
+//				
+//			//user_form update script
+//				$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").click(function(){				
+//					var $btn = $("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").button('loading');																
+//					
+//					var json_user_updated_data = new Object();
+//					json_user_updated_data.name_first = $(checked_form_elements_id[0]).val();					
+//					json_user_updated_data.name_last = $(checked_form_elements_id[1]).val();
+//					json_user_updated_data.id_user_category = $(checked_form_elements_id[2]).val();
+//					json_user_updated_data.phone = $(checked_form_elements_id[3]).val();
+//					json_user_updated_data.emailid = $(checked_form_elements_id[4]).val();
+//					json_user_updated_data.address_line_one = $(checked_form_elements_id[5]).val();
+//					json_user_updated_data.address_line_two = $(checked_form_elements_id[6]).val();
+//					json_user_updated_data.city = $(checked_form_elements_id[7]).val();
+//					json_user_updated_data.state = $(checked_form_elements_id[8]).val();
+//					json_user_updated_data.zip = $(checked_form_elements_id[9]).val();				
+//					json_user_updated_data.id_user = JSON.parse(localStorage.getItem("current_checkbox_value"));
+//					
+//					var json_user_updated_text = JSON.stringify(json_user_updated_data);				
+//					
+//					var user_final_data = new Object();				
+//					for(var key in json_user_data){					
+//						if(json_user_data[key] != json_user_updated_data[key]){
+//							user_final_data[key] = json_user_updated_data[key];
+//						}
+//					}
+//					user_final_data["id"] = JSON.parse(localStorage.getItem("current_checkbox_value"));
+//					var user_final_text = JSON.stringify(user_final_data);									
+//					$.ajax({
+//						type: "POST",
+//						url: "http://"+domain_name+":8080/rest.sellerapp/user/update",
+//						async: false,	
+//						contentType :"application/json; charSet=UTF-8",
+//						data: user_final_text,			
+//						dataType: "json",			
+//						success: function(responseText){	
+//							alert('done');
+//							userTableRowEdit(form_id);
+//							$("#"+form_id).toggle();
+//							$btn.button('reset');						
+//						},
+//						error: function(request, error, data){						
+//							alert(request+" "+error+" "+data+" in user update");						
+//							$btn.button('reset');
+//						} 
+//					});
+//
+//				});				
+			});										
+		}
+		
+	}
+	
+//	$("#tbody-table-inventory").html("<tr><td><input id='td-inventory-temp-1' type='checkbox' value=''></input></td><td>10010458</td><td>A Black And Silver Case Watch</td><td>10</td><td>745</td><td>Jaipur</td></tr>" +
+//	"<tr><td id='td-inventory-temp-1-next' colspan='6'></td></tr>");
 
 		var inventoryTableRowEdit;
 		inventoryTableRowEdit = function(){			
