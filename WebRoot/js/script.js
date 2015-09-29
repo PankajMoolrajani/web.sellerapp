@@ -221,18 +221,18 @@ $(document).ready(function(){
 		});
 	}	
 	
-	//userCreatePageScript(domain_name); //calling of user-management page script
-	//userCreateFormVal(domain_name); //calling of user-mgmt validation page script
+	userCreatePageScript(domain_name); //calling of user-management page script
+	userCreateFormVal(domain_name); //calling of user-mgmt validation page script
 	
-	//userCatCreatePageScript(domain_name); //calling of user-category page script
-	//userCatCreateFormVal(domain_name); //calling of user-mgmt validation page script	
+	userCatCreatePageScript(domain_name); //calling of user-category page script
+	userCatCreateFormVal(domain_name); //calling of user-mgmt validation page script	
 	inventoryPageScript(domain_name);
 	
-	//orderPageScript(domain_name); 
+	orderPageScript(domain_name); 
 	
 	
-	//invoicePageScript(domain_name);
-	//invoiceCreateFormVal(domain_name);
+	invoicePageScript(domain_name);
+	invoiceCreateFormVal(domain_name);
 	
 	saveButtonScript(domain_name);	
 	resetButtonScript(domain_name);
@@ -450,7 +450,7 @@ function submitUserCatFormDetails(){
 
 function submitInventoryFormDetails(domain_name){
 	
-	var $btn = $("#div-form-inventory-create-state-buttons div .btn-page-state-save-main").button('loading');
+	//var $btn = $("#div-form-inventory-create-state-buttons div .btn-page-state-save-main").button('loading');
 	uploadInventoryImages();
 	
 	function uploadInventoryImages(){		
@@ -462,13 +462,17 @@ function submitInventoryFormDetails(domain_name){
 		}
 		$.ajax({
 			type: "POST",
-			url: "http://abc:8080/rest.sellerapp/inventory/upload_images",								
+			url: "http://"+domain_name+":8080/rest.sellerapp/inventory/upload_images",								
 			data: formData,
 			cache : false,
+			async : false,
 			contentType: false,
 	        processData: false,
-			success: function(responseText){							
-				alert(responseText);
+	        dataType:"json",
+			success: function(response){
+				var uploaded_images_dir = response["image_dir_path"];
+				sendInventoryFormData(uploaded_images_dir)				
+				
 			},
 			error: function(request, error, data){				
 				alert(JSON.stringify(request) +" "+error+" "+data);					
@@ -476,38 +480,43 @@ function submitInventoryFormDetails(domain_name){
 		});	
 	}
 	
-	$btn.button('reset');
 	
-	var selector = ["#input-text-form-inventory-create-base-sku",
-	                "#input-text-form-inventory-create-name",
-	                "#input-select-form-invenotry-create-brand",
-	                "#input-text-form-inventory-create-weight",
-	                "#input-text-form-inventory-create-maxprice", 
-	                "#input-text-form-invenotry-create-minprice", 
-	                "#input-text-form-invenotry-create-stock", 	  
-	                "#input-select-form-inventory-create-category", 
-	                "#input-text-form-inventory-create-stock-in-hand",
-	                "#input-text-form-inventory-create-stock-outgoing",
-	                "#input-text-form-inventory-create-stock-incoming",
-	                "#input-text-form-inventory-create-warehouse",
-	                "#input-text-form-inventory-create-aisle",
-	                "#input-text-form-inventory-create-rack",
-	                "#input-text-form-inventory-create-row",
-	                "#input-text-form-inventory-create-case",
-	                "#input-select-form-invenotry-create-procurement-type",
-	                "#input-select-form-invenotry-create-procurement-supplier",
-	                "#input-text-form-inventory-create-procurement-time",
-	                "#input-text-form-inventory-create-min-price",
-	                "#input-text-form-inventory-create-max-price",
-	                "#input-text-form-inventory-create-cost-price",
-	                "#input-text-form-inventory-create-tax"];
-		
+	function sendInventoryFormData(uploaded_images_dir){		
+		var selector = ["#input-text-form-inventory-create-base-sku",
+		                "#input-text-form-inventory-create-name",
+		                "#input-select-form-invenotry-create-brand",
+		                "#input-text-form-inventory-create-weight",
+		                "#input-text-form-inventory-create-maxprice", 
+		                "#input-text-form-invenotry-create-minprice", 
+		                "#input-text-form-invenotry-create-stock", 	  
+		                "#input-select-form-inventory-create-category", 
+		                "#input-text-form-inventory-create-stock-in-hand",
+		                "#input-text-form-inventory-create-stock-outgoing",
+		                "#input-text-form-inventory-create-stock-incoming",
+		                "#input-text-form-inventory-create-warehouse",
+		                "#input-text-form-inventory-create-aisle",
+		                "#input-text-form-inventory-create-rack",
+		                "#input-text-form-inventory-create-row",
+		                "#input-text-form-inventory-create-case",
+		                "#input-select-form-invenotry-create-procurement-type",
+		                "#input-select-form-invenotry-create-procurement-supplier",
+		                "#input-text-form-inventory-create-procurement-time",
+		                "#input-text-form-inventory-create-min-price",
+		                "#input-text-form-inventory-create-max-price",
+		                "#input-text-form-inventory-create-cost-price",
+		                "#input-text-form-inventory-create-tax",
+		                uploaded_images_dir];		
+		var temprory_market_place = 0;
+		//$btn.button('reset');
+		//,temprory_market_place
+		submitInventoryForm(selector);	
+	}
+	
 	//passing selector and marketplaceCount to the function
-	$.fn.inventoryEntryFormValid(selector,marketplaceCount);		
+	//$.fn.inventoryEntryFormValid(selector,marketplaceCount);		
 	
 	//validation of fields
-	$.fn.inventoryEntryFormValid = function(selector,marketplaceCount){				
-		
+	$.fn.inventoryEntryFormValid = function(selector,marketplaceCount){						
 		var inventoryFullSubmitState="false";
 		for(var i=0 ; i<selector.length ; i=i+1)
 		{		
@@ -531,70 +540,101 @@ function submitInventoryFormDetails(domain_name){
 		}						
 	}
 	
-	$.fn.submitInventoryForm = function(selector,marketplaceCount){						
-		var inventory_sku = $(selector[0]).val();
-		var inventory_name = $(selector[1]).val();
-		var inventory_maxPrice = $(selector[2]).val();
-		var inventory_minPrice = $(selector[3]).val();
-		var inventory_stock = $(selector[4]).val();
-		var inventory_status = $(selector[5]).val();
-		var category_search = $(selector[6]).val();
-		var inventory_tagId = $(selector[7]).val();
-					
-		var inventoryForm_json_txt = '{"inventory_sku":"'+inventory_sku+'","inventory_name":"'+inventory_name+'","inventory_maxPrice":"'+inventory_maxPrice+'","inventory_minPrice":"'+inventory_minPrice+'","inventory_stock":"'+inventory_stock+'","inventory_status":"'+inventory_status+'","category_search":"'+category_search+'","inventory_tagId":"'+inventory_tagId+'","selected_cat_id":"'+inventory_cat_id+'"}';		
-		var inventoryForm_json_obj = JSON.parse(inventoryForm_json_txt);			
+	function submitInventoryForm(selector){			
+		var jsonData = new Object();		
+		jsonData.available =$(selector[8]).val();			
+		jsonData.incoming = $(selector[10]).val();
+		jsonData.outgoing = $(selector[9]).val();
+		jsonData.price_sell = $(selector[19]).val();		
+		jsonData.price_mrp = $(selector[20]).val();		
+		jsonData.id_category = $(selector[7]).val();
+		jsonData.sku = $(selector[0]).val();
+		jsonData.image_dir = selector[23];
+		//jsonData.sku_replica = selector[0];
+		jsonData.name = $(selector[1]).val();
+		//jsonData.status_listing = selector[0];
+		var jsonText = JSON.stringify(jsonData);
 		
-		var data_jsonPre = '{"marketplaceEntries":[';
-		var data_jsonMid ="";
-		var data_jsonPost = ']}';		
-		for(var i=1 ; i<=marketplaceCount ; i=i+1)
-		{					
-			var product_marketplace_name = $("#span-form-inventory-mplaceName"+i).text();
-			var product_marketplace_id = $("#span-form-inventory-mplaceName"+i).attr("data-form-mplace"+i);			
-			var product_marketplace_url = $("#span-form-inventory-mplaceUrl"+i).text();			
-			var sell_price = $("#input-form-inventory-sellPrice"+i).val();
-			var stock = $("#input-text-form-invenotry-create-stock"+i).val();
-			var status = $("#input-form-inventory-status"+i).val();				
-			if(i<marketplaceCount)
-			{
-				data_jsonMid = data_jsonMid+'{"product_marketplace_id":"'+product_marketplace_id+'","product_marketplace_name":"'+product_marketplace_name+'","product_marketplace_url":"'+product_marketplace_url+'","sellPrice": "'+sell_price+'","stockPrice": "'+stock+'","status": "'+status+'"},';
-			}			
-			else // for last line without ','
-			{
-				data_jsonMid = data_jsonMid+'{"product_marketplace_id":"'+product_marketplace_id+'","product_marketplace_name":"'+product_marketplace_name+'","product_marketplace_url":"'+product_marketplace_url+'","sellPrice": "'+sell_price+'","stockPrice": "'+stock+'","status": "'+status+'"}';
-			}				
-		}		 
-		var marketplaceEntry_json_txt = data_jsonPre+data_jsonMid+data_jsonPost;		
-		var marketplaceEntry_json_obj = JSON.parse(marketplaceEntry_json_txt);							
+		
+		$.ajax({
+			type: "POST",
+			url: "http://"+domain_name+":8080/rest.sellerapp/inventory/create",
+			data: jsonText,
+			async : false,
+			contentType : "application/json",			
+			dataType: "json",			
+			success: function(responseText){			
+				
+			},
+			error: function(request, error, data){				
+				alert(error);				
+			}  						
+		});	
+		
+//		var inventory_sku = $(selector[0]).val();
+//		var inventory_name = $(selector[1]).val();
+//		var inventory_maxPrice = $(selector[2]).val();
+//		var inventory_minPrice = $(selector[3]).val();
+//		var inventory_stock = $(selector[4]).val();
+//		var inventory_status = $(selector[5]).val();
+//		var category_search = $(selector[6]).val();
+//		var inventory_tagId = $(selector[7]).val();
+					
+//		var inventoryForm_json_txt = '{"inventory_sku":"'+inventory_sku+'","inventory_name":"'+inventory_name+'","inventory_maxPrice":"'+inventory_maxPrice+'","inventory_minPrice":"'+inventory_minPrice+'","inventory_stock":"'+inventory_stock+'","inventory_status":"'+inventory_status+'","category_search":"'+category_search+'","inventory_tagId":"'+inventory_tagId+'","selected_cat_id":"'+inventory_cat_id+'"}';		
+//		var inventoryForm_json_obj = JSON.parse(inventoryForm_json_txt);			
+//		
+//		var data_jsonPre = '{"marketplaceEntries":[';
+//		var data_jsonMid ="";
+//		var data_jsonPost = ']}';		
+//		for(var i=1 ; i<=marketplaceCount ; i=i+1)
+//		{					
+//			var product_marketplace_name = $("#span-form-inventory-mplaceName"+i).text();
+//			var product_marketplace_id = $("#span-form-inventory-mplaceName"+i).attr("data-form-mplace"+i);			
+//			var product_marketplace_url = $("#span-form-inventory-mplaceUrl"+i).text();			
+//			var sell_price = $("#input-form-inventory-sellPrice"+i).val();
+//			var stock = $("#input-text-form-invenotry-create-stock"+i).val();
+//			var status = $("#input-form-inventory-status"+i).val();				
+//			if(i<marketplaceCount)
+//			{
+//				data_jsonMid = data_jsonMid+'{"product_marketplace_id":"'+product_marketplace_id+'","product_marketplace_name":"'+product_marketplace_name+'","product_marketplace_url":"'+product_marketplace_url+'","sellPrice": "'+sell_price+'","stockPrice": "'+stock+'","status": "'+status+'"},';
+//			}			
+//			else // for last line without ','
+//			{
+//				data_jsonMid = data_jsonMid+'{"product_marketplace_id":"'+product_marketplace_id+'","product_marketplace_name":"'+product_marketplace_name+'","product_marketplace_url":"'+product_marketplace_url+'","sellPrice": "'+sell_price+'","stockPrice": "'+stock+'","status": "'+status+'"}';
+//			}				
+//		}		 
+//		var marketplaceEntry_json_txt = data_jsonPre+data_jsonMid+data_jsonPost;		
+//		var marketplaceEntry_json_obj = JSON.parse(marketplaceEntry_json_txt);							
 		 
-//		$.ajax({
-//			type: "POST",
-//			url: "InventoryAjaxInsert",			
-//			dataType: "json",
-//			data: {"requestType": "makeFinalInventory",
-//					"inventoryForm_json_obj": JSON.stringify(inventoryForm_json_obj),
-//					"marketplaceEntry_json_obj": JSON.stringify(marketplaceEntry_json_obj),
-//					"marketplaceCount" : marketplaceCount
-//				 },
-//			success: function(responseText){			
-//					 var $btn = $("#input-btn-submit-form-inventory-create").button('reset');
-//					 //check if category is available there 
-//					 var error_code = responseText["error_code"];
-//					 if(error_code=="")
-//					 {
-//						 $("#div-inventory-page").load('inventory.jsp');
-//						alert('success');						
-//					 }
-//					 else
-//					 {
-//						 var error_message=getErrorMessage(error_code);
-//						 alert(error_message);
-//					 }
-//			},
-//			error: function(request, error, data){				
-//				alert(error);				
-//			}  						
-//		});	
+		$.ajax({
+			type: "POST",
+			url: "InventoryAjaxInsert",			
+			dataType: "json",
+			data: {"requestType": "makeFinalInventory",
+					"inventoryForm_json_obj": JSON.stringify(inventoryForm_json_obj),
+					"marketplaceEntry_json_obj": JSON.stringify(marketplaceEntry_json_obj),
+					"marketplaceCount" : marketplaceCount
+				 },
+			success: function(responseText){			
+					 var $btn = $("#input-btn-submit-form-inventory-create").button('reset');
+					 //check if category is available there 
+					 var error_code = responseText["error_code"];
+					 if(error_code=="")
+					 {
+						 $("#div-inventory-page").load('inventory.jsp');
+						alert('success');						
+					 }
+					 else
+					 {
+						 var error_message=getErrorMessage(error_code);
+						 alert(error_message);
+					 }
+			},
+			error: function(request, error, data){				
+				alert(error);				
+			}  						
+		});	
+		
 	}
 }
 
@@ -990,8 +1030,7 @@ function userCreatePageScript(domain_name)
 function userCreateSubScript(domain_name)
 {		
 	var row_attech_form_id;
-	$(".user-table-row-checkbox").click(function(){		
-		alert($(this).is(':checked'));
+	$(".user-table-row-checkbox").click(function(){				
 		if($(this).is(':checked')){
 			$("body").fadeTo("fast", 0.4);
 			$("#spinner").show();		
@@ -1548,7 +1587,7 @@ function inventoryPageScript(domain_name){
 		        	$("#div-img-form-inventory-create-image-main").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[0].name+"' height='100%' width='100%' />")
 		        	$("#div-img-form-inventory-create-image-thumbnail-1").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[1].name+"' height='100%' width='100%' />");
 		        	$("#div-img-form-inventory-create-image-thumbnail-2").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[2].name+"' height='100%' width='100%' />");
-		        	$("#div-img-form-inventory-create-image-thumbnail-3").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[2].name+"' height='100%' width='100%' />");
+		        	$("#div-img-form-inventory-create-image-thumbnail-3").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[3].name+"' height='100%' width='100%' />");
 		        },	        
 		        complete : function(response) {	        	
 		        	$("#span-img-form-inevntory-create-upload-message").html("<font color='blue'>uploaded Sccessfully!</font>");0	        		        
@@ -1567,7 +1606,7 @@ function inventoryPageScript(domain_name){
 		$("#btn-form-inventory-create-image-submit-show").click(function(){				
 			uploaded_image_names = $("#input-file-form-inventory-create-image-main")[0].files;
 		    var n = uploaded_image_names[0].name.indexOf("-");	    
-		    uploaded_pic_folder_name = uploaded_image_names[0].name.substring(0,n);	    
+		    uploaded_pic_folder_name = uploaded_image_names[0].name.substring(0,n);	  		    
 			$("#btn-form-inventory-create-image-submit").click();
 		});
 		// upload complete
