@@ -489,7 +489,7 @@ function submitInventoryFormDetails(domain_name){
 		                "#input-text-form-inventory-create-maxprice", 
 		                "#input-text-form-invenotry-create-minprice", 
 		                "#input-text-form-invenotry-create-stock", 	  
-		                "#input-select-form-inventory-create-category", 
+		                "#input-select-modal-form-inventory-category-create", 
 		                "#input-text-form-inventory-create-stock-in-hand",
 		                "#input-text-form-inventory-create-stock-outgoing",
 		                "#input-text-form-inventory-create-stock-incoming",
@@ -547,7 +547,8 @@ function submitInventoryFormDetails(domain_name){
 		jsonData.outgoing = $(selector[9]).val();
 		jsonData.price_sell = $(selector[19]).val();		
 		jsonData.price_mrp = $(selector[20]).val();		
-		jsonData.id_category = $(selector[7]).val();
+		alert($(selector[7]).attr('name'));
+		jsonData.id_category = $(selector[7]).attr('name');		
 		jsonData.sku = $(selector[0]).val();
 		jsonData.image_dir = selector[23];
 		//jsonData.sku_replica = selector[0];
@@ -555,16 +556,16 @@ function submitInventoryFormDetails(domain_name){
 		//jsonData.status_listing = selector[0];
 		var jsonText = JSON.stringify(jsonData);
 		
-		
+		alert(jsonText);
 		$.ajax({
 			type: "POST",
 			url: "http://"+domain_name+":8080/rest.sellerapp/inventory/create",
 			data: jsonText,
 			async : false,
 			contentType : "application/json",			
-			dataType: "json",			
+			dataType: "html",			
 			success: function(responseText){			
-				
+				alert(responseText);
 			},
 			error: function(request, error, data){				
 				alert(error);				
@@ -1637,14 +1638,16 @@ function inventoryPageScript(domain_name){
 						var html = "";
 						for(var i = 0 ; i<response_length ; i++){
 							html = html + "<div class='row'>" +
-							"<div class='col-md-4 col-md-offset-2'><p>"+response.data[i].name+"</p></div><div class='col-md-4'><button id='"+response.data[i].name+"' class='btn-inventory-cateogry-select btn btn-default btn-xs'>Select</button></div>" +
+							"<div class='col-md-4 col-md-offset-2'><p>"+response.data[i].name+"</p></div><div class='col-md-4'><button id='"+response.data[i].name+"' name='"+response.data[i].id+"' class='btn-inventory-cateogry-select btn btn-default btn-xs'>Select</button></div>" +
 							"</div> ";
 						}
 						
 						$("#div-modal-form-inventory-create-category-search-content").html("<br/>"+html);
 						$(".btn-inventory-cateogry-select").click(function(){
 							var root_category_name = $(this).attr("id");
+							var root_category_id = $(this).attr("name");							
 							$("#input-select-modal-form-inventory-category-create").val(root_category_name);
+							$("#input-select-modal-form-inventory-category-create").prop('name',root_category_id);
 						});
 						$("#btn-modal-form-inventory-category-create-close").click(function(){						
 							var selected_category = $("#input-select-modal-form-inventory-category-create").val();
