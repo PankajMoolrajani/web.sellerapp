@@ -1,6 +1,6 @@
 $(document).ready(function(){		
-	var domain_name = "localhost";
-	//var domainName = "dev.monoxor.com"
+	//var domain_name = "localhost";
+	var domainName = "dev.monoxor.com";
 		
 	/*................... Javascript for Index page ......................*/
 
@@ -300,7 +300,16 @@ function editUserCatFormDetails(domain_name){
 	$(checkedFormEditSaveBtnId[1]).prop('disabled', false);
 	$(checked_form_elements_id[2]).selectpicker('refresh');	
 }
-function editInventoryFormDetails(domain_name){	
+function editInventoryFormDetails(domain_name){		
+	var checked_form_elements_id = JSON.parse(localStorage["checked_inventory_form_elements_id"]);	
+	for(var i=0 ; i<checked_form_elements_id.length ; i=i+1)
+	{
+		$(checked_form_elements_id[i]).prop("disabled",false);				
+	}	
+	var checkedFormEditSaveBtnId = JSON.parse(localStorage["checked_form_inventory_edit_save_btn_id"]);	
+	
+	$(checkedFormEditSaveBtnId[1]).prop('disabled', false);
+	$(checked_form_elements_id[2]).selectpicker('refresh');		
 }
 function editOrderFormDetails(domain_name){	
 }
@@ -555,8 +564,7 @@ function submitInventoryFormDetails(domain_name){
 		jsonData.name = $(selector[1]).val();
 		//jsonData.status_listing = selector[0];
 		var jsonText = JSON.stringify(jsonData);
-		
-		alert(jsonText);
+				
 		$.ajax({
 			type: "POST",
 			url: "http://"+domain_name+":8080/rest.sellerapp/inventory/create",
@@ -1794,8 +1802,8 @@ function inventoryPageScript(domain_name){
 		var row_attech_form_id;
 		$(".inventory-table-row-checkbox").click(function(){	
 			if($(this).is(':checked')){
-				//$("body").fadeTo("fast", 0.4);
-				//$("#spinner").show();		
+				$("body").fadeTo("fast", 0.4);
+				$("#spinner").show();		
 				
 				//id of inventory						
 				var	current_checkbox_value = $(this).attr("value");							
@@ -1824,7 +1832,7 @@ function inventoryPageScript(domain_name){
 			$("#"+form_id).load('form_inventory_create.jsp',function(){		
 
 				//inventoryCreateFormVal(domain_name);
-				//editButtonScript(domain_name);
+				editButtonScript(domain_name);
 				
 				//change tab href and associated div id's 
 				$("#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab ul li #a-tab-form-inventory-create-stock").attr("href","#div-form-inventory-create-stock-edit");				
@@ -1857,13 +1865,17 @@ function inventoryPageScript(domain_name){
 				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock-edit div #div-form-inventory-create-rack #input-text-form-inventory-create-rack",
 				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock-edit div #div-form-inventory-create-row #input-text-form-inventory-create-row",
 				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock-edit div #div-form-inventory-create-case #input-text-form-inventory-create-case",
-				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting-edit div #div-form-inventory-create-min-price #input-text-form-inventory-create-min-price"
+				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting-edit div #div-form-inventory-create-min-price #input-text-form-inventory-create-min-price",
+				                            "#"+form_id+" #div-sub-form-inventory-create div #div-img-form-inventory-create-image div #div-img-form-inventory-create-image-main",
+				                            "#"+form_id+" #div-sub-form-inventory-create div #div-img-form-inventory-create-image div #div-img-form-inventory-create-image-thumbnail-1",
+				                            "#"+form_id+" #div-sub-form-inventory-create div #div-img-form-inventory-create-image div #div-img-form-inventory-create-image-thumbnail-2",
+				                            "#"+form_id+" #div-sub-form-inventory-create div #div-img-form-inventory-create-image div #div-img-form-inventory-create-image-thumbnail-3"				                            
 				                            ]; 
 				
 				localStorage["checked_inventory_form_elements_id"] = JSON.stringify(checked_form_elements_id);
 				
 				var checked_form_edit_save_btn_id = ["#"+form_id+" #div-form-inventory-create-state-buttons div .btn-page-state-edit-main",
-				                                "#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main"];
+				                                     "#"+form_id+" #div-form-inventory-create-state-buttons div .btn-page-state-save-main"];
 				
 				localStorage["checked_form_inventory_edit_save_btn_id"] = JSON.stringify(checked_form_edit_save_btn_id);
 				
@@ -1886,73 +1898,99 @@ function inventoryPageScript(domain_name){
 					dataType: "json",						
 					success: function(response){
 					var inventory = response["data"];					
-						$(checked_form_elements_id[0]).prop("disabled",true).val(inventory.name);
-						//$(checked_form_elements_id[1]).prop("disabled",true).val(inventory.name_last);
-						
-						//need to make title attribut blank to set a value to select menu
-						//$(checked_form_elements_id[2]).attr("title","");										
-						//$(checked_form_elements_id[2]).prop("disabled",true).val(responseText["userCategoryDetails"].id);
-						$(checked_form_elements_id[2]).prop("disabled",true).val(inventory.sku);
-						$(checked_form_elements_id[5]).prop("disabled",true).val(inventory.available);
-						$(checked_form_elements_id[6]).prop("disabled",true).val(inventory.outgoing);
-						$(checked_form_elements_id[13]).prop("disabled",true).val(inventory.price_sell);
-						
+						fillInventoryTableToggleForm(response);											
 					},
 					error: function(request, error, data){
 						alert(error);				
 					}  						
 				});						
 //
-
-//				$("body").fadeTo("fast", 1);
-//				$("#spinner").hide();
-//				
-				$("#"+form_id).toggle();	
-//				$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-reset-main").css("display","none");
-//				$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").prop('disabled', true);
-//				
-//				var json_user_data = new Object();
-//				json_user_data.name_first = $(checked_form_elements_id[0]).val();					
-//				json_user_data.name_last = $(checked_form_elements_id[1]).val();
-//				json_user_data.id_user_category = $(checked_form_elements_id[2]).val();
-//				json_user_data.phone = $(checked_form_elements_id[3]).val();
-//				json_user_data.emailid = $(checked_form_elements_id[4]).val();
-//				json_user_data.address_line_one = $(checked_form_elements_id[5]).val();
-//				json_user_data.address_line_two = $(checked_form_elements_id[6]).val();
-//				json_user_data.city = $(checked_form_elements_id[7]).val();
-//				json_user_data.state = $(checked_form_elements_id[8]).val();
-//				json_user_data.zip = $(checked_form_elements_id[9]).val();				
-//				json_user_data.id = JSON.parse(localStorage.getItem("current_checkbox_value"));
-//				
-//				var json_user_text = JSON.stringify(json_user_data);			
-//				
-//			//user_form update script
-//				$("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").click(function(){				
-//					var $btn = $("#"+form_id+" #div-form-user-create-state-buttons div .btn-page-state-save-main").button('loading');																
-//					
-//					var json_user_updated_data = new Object();
-//					json_user_updated_data.name_first = $(checked_form_elements_id[0]).val();					
-//					json_user_updated_data.name_last = $(checked_form_elements_id[1]).val();
-//					json_user_updated_data.id_user_category = $(checked_form_elements_id[2]).val();
-//					json_user_updated_data.phone = $(checked_form_elements_id[3]).val();
-//					json_user_updated_data.emailid = $(checked_form_elements_id[4]).val();
-//					json_user_updated_data.address_line_one = $(checked_form_elements_id[5]).val();
-//					json_user_updated_data.address_line_two = $(checked_form_elements_id[6]).val();
-//					json_user_updated_data.city = $(checked_form_elements_id[7]).val();
-//					json_user_updated_data.state = $(checked_form_elements_id[8]).val();
-//					json_user_updated_data.zip = $(checked_form_elements_id[9]).val();				
-//					json_user_updated_data.id_user = JSON.parse(localStorage.getItem("current_checkbox_value"));
-//					
-//					var json_user_updated_text = JSON.stringify(json_user_updated_data);				
-//					
-//					var user_final_data = new Object();				
-//					for(var key in json_user_data){					
-//						if(json_user_data[key] != json_user_updated_data[key]){
-//							user_final_data[key] = json_user_updated_data[key];
-//						}
-//					}
-//					user_final_data["id"] = JSON.parse(localStorage.getItem("current_checkbox_value"));
-//					var user_final_text = JSON.stringify(user_final_data);									
+				function fillInventoryTableToggleForm(response){					
+					var inventory = response["data"];	
+					
+					var json_inventory_cat_object = new Object();
+					json_inventory_cat_object.id = inventory.id_category;						
+					var json_inventory_text = JSON.stringify(json_inventory_cat_object);							
+//					$.ajax({
+//						type: "POST",
+//						url: "http://"+domain_name+":8080/rest.sellerapp/inventory/category/get/id",		
+//						async: false,
+//						contentType: "application/json; charset=utf-8",
+//						data:json_inventory_text,
+//						dataType: "json",						
+//						success: function(response){
+//						var inventory_cat_detail = response["data"];					
+//						$(checked_form_elements_id[3]).prop("disabled",true).val(inventory_cat_detail.name);							
+//						},
+//						error: function(request, error, data){
+//							alert(error);				
+//						}  						
+//					});			
+					
+					$(checked_form_elements_id[0]).prop("disabled",true).val(inventory.name);					
+					//$(checked_form_elements_id[1]).prop("disabled",true).val(inventory.name_last);
+					
+					//need to make title attribut blank to set a value to select menu
+					//$(checked_form_elements_id[2]).attr("title","");										
+					//$(checked_form_elements_id[2]).prop("disabled",true).val(responseText["userCategoryDetails"].id);
+					$(checked_form_elements_id[2]).prop("disabled",true).val(inventory.sku);
+					$(checked_form_elements_id[5]).prop("disabled",true).val(inventory.available);
+					$(checked_form_elements_id[6]).prop("disabled",true).val(inventory.outgoing);
+					$(checked_form_elements_id[7]).prop("disabled",true).val(inventory.outgoing);
+					$(checked_form_elements_id[13]).prop("disabled",true).val(inventory.price_sell);						
+					$(checked_form_elements_id[14]).html("<img src='pictures/100210/100210-1.jpg' height='100%' width='100%'/>");
+					$(checked_form_elements_id[15]).html("<img src='pictures/100210/100210-2.jpg' height='100%' width='100%'/>");
+					$(checked_form_elements_id[16]).html("<img src='pictures/100210/100210-3.jpg' height='100%' width='100%'/>");
+					$(checked_form_elements_id[17]).html("<img src='pictures/100210/100210-4.jpg' height='100%' width='100%'/>");
+					
+					$("body").fadeTo("fast", 1);
+					$("#spinner").hide();
+					
+					$("#"+form_id).toggle();					
+					$("#"+form_id+" #div-form-inventory-create-state-buttons div .btn-page-state-reset-main").css("display","none");
+					$("#"+form_id+" #div-form-inventory-create-state-buttons div .btn-page-state-save-main").prop('disabled', true);
+					
+					var json_inventory_updatable_data = new Object();
+					json_inventory_updatable_data.name = $(checked_form_elements_id[0]).val();					
+					json_inventory_updatable_data.sku = $(checked_form_elements_id[2]).val();
+					json_inventory_updatable_data.available= $(checked_form_elements_id[5]).val();
+					json_inventory_updatable_data.incoming= $(checked_form_elements_id[7]).val();
+					json_inventory_updatable_data.outgoing = $(checked_form_elements_id[6]).val();
+					json_inventory_updatable_data.price_sell = $(checked_form_elements_id[13]).val();
+					json_inventory_updatable_data.price_mrp = $(checked_form_elements_id[6]).val();
+					
+					
+					var json_inventory_updatable_text = JSON.stringify(json_inventory_updatable_data);			
+					alert(json_inventory_updatable_text);
+				}
+				
+				
+				
+			//user_form update script
+				$("#"+form_id+" #div-form-inventory-create-state-buttons div .btn-page-state-save-main").click(function(){
+					alert('hello');
+					//var $btn = $("#"+form_id+" #div-form-inventory-create-state-buttons div .btn-page-state-save-main").button('loading');																
+					
+					var json_inventory_updatable_data = new Object();
+					json_inventory_updated_data.name = $(checked_form_elements_id[0]).val();					
+					json_inventory_updated_data.sku = $(checked_form_elements_id[2]).val();
+					json_inventory_updated_data.available= $(checked_form_elements_id[5]).val();
+					json_inventory_updated_data.incoming= $(checked_form_elements_id[7]).val();
+					json_inventory_updated_data.outgoing = $(checked_form_elements_id[6]).val();
+					json_inventory_updated_data.price_sell = $(checked_form_elements_id[13]).val();
+					json_inventory_updated_data.price_mrp = $(checked_form_elements_id[6]).val();
+					//json_user_updated_data.id_user = JSON.parse(localStorage.getItem("current_checkbox_value"));
+					
+					var json_inventory_updated_text = JSON.stringify(json_inventory_updated_data);				
+					
+					var inventory_final_data = new Object();				
+					for(var key in json_inventory_data){					
+						if(json_inventory_data[key] != json_inventory_updated_data[key]){
+							inventory_final_data[key] = json_inventory_updated_data[key];
+						}
+					}
+					inventory_final_data["id"] = JSON.parse(localStorage.getItem("current_checkbox_value_inventory"));
+					var inventory_final_text = JSON.stringify(inventory_final_data);									
 //					$.ajax({
 //						type: "POST",
 //						url: "http://"+domain_name+":8080/rest.sellerapp/user/update",
@@ -1971,8 +2009,8 @@ function inventoryPageScript(domain_name){
 //							$btn.button('reset');
 //						} 
 //					});
-//
-//				});				
+
+				});				
 			});										
 		}
 		
