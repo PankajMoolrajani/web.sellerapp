@@ -10,7 +10,7 @@
 				<div id="div-modal-form-inventory-create-category-search" class="col-md-10 col-md-offset-1">
 					<label for="sel1">Inventory Category</label>
 					<div class="input-group">									
-						<input type="text" class="form-control" id="input-select-modal-form-inventory-category-create" placeholder="Search category"/>
+						<input type="text" class="form-control class-input-modal-form-inventory-category-create" id="input-select-modal-form-inventory-category-create" placeholder="Search category"/>
 						<span class="input-group-addon">
 							<i class="fa fa-search"></i>
 						</span>
@@ -18,7 +18,7 @@
 	     		</div>
 			</div>
 			<div class="row">
-				<div id="div-modal-form-inventory-create-category-search-content" class="col-md-10 col-md-offset-1">
+				<div id="div-modal-form-inventory-create-category-search-content" class="class-modal-create-category-search-content col-md-10 col-md-offset-1">
 														
 				</div>
 			</div>
@@ -38,7 +38,7 @@
 		</div>		
 		<br/>
 		<div id="div-modal-form-inventory-category-create-footer" class="modal-footer">
-			<button id="btn-modal-form-inventory-category-create-close" type="button" class="btn btn-primary">Ok</button>		    
+			<button id="btn-modal-form-inventory-category-create-close" type="button" class="inventory-category-create-modal-close-btn btn btn-primary">Ok</button>		    
 		</div>
 	</div>
 </div>

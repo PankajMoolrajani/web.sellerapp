@@ -58,7 +58,7 @@
 				<div class="input-group">					
 					<input type="text" id="input-text-form-inventory-choose-category" class="form-control" disabled>
 			      	<span class="input-group-btn">
-			        	<button id="input-btn-form-inventory-create-category" class="btn btn-default" type="button" data-toggle="modal" data-target="#div-modal-form-inventory-create-category">Select</button>
+			        	<button id="input-btn-form-inventory-create-category" class="btn btn-default" type="button">Select</button>
 			      	</span>
 				</div>				
 			</div>
@@ -102,6 +102,6 @@
 	</div>	
 </div>
 
-<div id="div-modal-form-inventory-create-category" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">    
+<div id="div-modal-form-inventory-create-category" class="inventory-category-create-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">    
         <jsp:include page="modal_inventory_category_create.jsp"></jsp:include>
 </div>
