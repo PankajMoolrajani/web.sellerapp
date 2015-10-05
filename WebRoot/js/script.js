@@ -227,7 +227,6 @@ $(document).ready(function(){
 	//userCatCreatePageScript(domain_name); //calling of user-category page script
 	//userCatCreateFormVal(domain_name); //calling of user-mgmt validation page script	
 	inventoryPageScript(domain_name);
-	
 	//orderPageScript(domain_name); 
 	
 	
@@ -1877,6 +1876,7 @@ function inventoryPageScript(domain_name){
 				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock-edit div #div-form-inventory-create-row #input-text-form-inventory-create-row",
 				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock-edit div #div-form-inventory-create-case #input-text-form-inventory-create-case",
 				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting-edit div #div-form-inventory-create-min-price #input-text-form-inventory-create-min-price",
+				                            "#"+form_id+" #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting-edit div #div-form-inventory-create-max-price #input-text-form-inventory-create-max-price",				                            
 				                            "#"+form_id+" #div-sub-form-inventory-create div #div-img-form-inventory-create-image div #div-img-form-inventory-create-image-main",
 				                            "#"+form_id+" #div-sub-form-inventory-create div #div-img-form-inventory-create-image div #div-img-form-inventory-create-image-thumbnail-1",
 				                            "#"+form_id+" #div-sub-form-inventory-create div #div-img-form-inventory-create-image div #div-img-form-inventory-create-image-thumbnail-2",
@@ -1940,6 +1940,9 @@ function inventoryPageScript(domain_name){
 //							alert(error);				
 //						}  						
 //					});			
+					//$(checked_form_elements_id[3]).attr("name",'name_cat');
+					//alert($(checked_form_elements_id[3]).attr("name"));
+					//alert(inventory.id_category);
 					$(checked_form_elements_id[3]).val("testing_inv_category");
 					$(checked_form_elements_id[0]).prop("disabled",true).val(inventory.name);					
 					//$(checked_form_elements_id[1]).prop("disabled",true).val(inventory.name_last);
@@ -1952,22 +1955,23 @@ function inventoryPageScript(domain_name){
 					$(checked_form_elements_id[6]).prop("disabled",true).val(inventory.outgoing);
 					$(checked_form_elements_id[7]).prop("disabled",true).val(inventory.outgoing);
 					$(checked_form_elements_id[13]).prop("disabled",true).val(inventory.price_sell);						
-					$(checked_form_elements_id[14]).html("<img src='pictures/100210/100210-1.jpg' height='100%' width='100%'/>");
-					$(checked_form_elements_id[15]).html("<img src='pictures/100210/100210-2.jpg' height='100%' width='100%'/>");
-					$(checked_form_elements_id[16]).html("<img src='pictures/100210/100210-3.jpg' height='100%' width='100%'/>");
-					$(checked_form_elements_id[17]).html("<img src='pictures/100210/100210-4.jpg' height='100%' width='100%'/>");					
+					$(checked_form_elements_id[15]).html("<img src='pictures/100210/100210-1.jpg' height='100%' width='100%'/>");
+					$(checked_form_elements_id[16]).html("<img src='pictures/100210/100210-2.jpg' height='100%' width='100%'/>");
+					$(checked_form_elements_id[17]).html("<img src='pictures/100210/100210-3.jpg' height='100%' width='100%'/>");
+					$(checked_form_elements_id[18]).html("<img src='pictures/100210/100210-4.jpg' height='100%' width='100%'/>");					
 					
 					
 					var parent_id_inventory_form = "#"+form_id+" #div-sub-form-inventory-create div div #div-form-inventory-create-line-2 #div-form-inventory-create-category div ";
-					var parent_id_inventory_modal = "#"+form_id+" #div-sub-form-inventory-create #div-modal-form-inventory-create-category";
+					var parent_id_inventory_modal = "#"+form_id+" #div-sub-form-inventory-create #div-modal-form-inventory-create-category ";
 					var parent_id_inventory_modal_content = "#"+form_id+" #div-sub-form-inventory-create #div-modal-form-inventory-create-category div div #div-modal-form-inventory-create-category-content ";					
 					$(parent_id_inventory_form+"span #input-btn-form-inventory-create-category").click(function(){							
 						$(parent_id_inventory_modal).modal('show');
 					});					
+//					alert($(parent_id_inventory_modal_content+"div #div-modal-form-inventory-create-category-content div #div-modal-form-inventory-create-category-search").html());
 					
 					//inventory-category-search 
-				$(parent_id_inventory_modal_content+"div #div-modal-form-inventory-create-category-search div #input-select-modal-form-inventory-category-create").keyup(function(){						
-						var identifier = $(this).val();							
+					$(parent_id_inventory_modal_content+"div #div-modal-form-inventory-create-category-search div #input-select-modal-form-inventory-category-create").keyup(function(){						
+						var identifier = $(this).val();													
 						if(!(identifier == "")){
 							$.ajax({
 								type: "GET",
@@ -1984,18 +1988,19 @@ function inventoryPageScript(domain_name){
 									"</div> ";
 								}
 								
-								$(parent_id_inventory_modal_content+"div #div-modal-form-inventory-create-category-search-content #div-modal-form-inventory-create-category-search-content").html("<br/>"+html);
-								$(".btn-inventory-cateogry-select").click(function(){
+								$(parent_id_inventory_modal_content+"div #div-modal-form-inventory-create-category-search-content").html("<br/>"+html);
+								$(parent_id_inventory_modal_content+"div #div-modal-form-inventory-create-category-search-content div div .btn-inventory-cateogry-select").click(function(){
 									var root_category_name = $(this).attr("id");
-									var root_category_id = $(this).attr("name");							
-									$("#input-select-modal-form-inventory-category-create").val(root_category_name);
-									$("#input-select-modal-form-inventory-category-create").prop('name',root_category_id);
-								});
-								$("#btn-modal-form-inventory-category-create-close").click(function(){						
-									var selected_category = $("#input-select-modal-form-inventory-category-create").val();
-									$("#input-text-form-inventory-choose-category").val(selected_category);										
-								});
-								
+									var root_category_id = $(this).attr("name");										
+									$(parent_id_inventory_modal_content+"div #div-modal-form-inventory-create-category-search div #input-select-modal-form-inventory-category-create").val(root_category_name);
+									$(parent_id_inventory_modal_content+"div #div-modal-form-inventory-create-category-search div #input-select-modal-form-inventory-category-create").prop('name',root_category_id);									
+								});								
+								$(parent_id_inventory_modal+"div div #div-modal-form-inventory-category-create-footer #btn-modal-form-inventory-category-create-close").click(function(){											
+									var selected_category = $(parent_id_inventory_modal_content+"div #div-modal-form-inventory-create-category-search div #input-select-modal-form-inventory-category-create").val();									
+									$(parent_id_inventory_form+"#input-text-form-inventory-choose-category").val(selected_category);
+									var id_category = $(parent_id_inventory_modal_content+"div #div-modal-form-inventory-create-category-search-content div div .btn-inventory-cateogry-select").attr('name');									
+									$(parent_id_inventory_form+"#input-text-form-inventory-choose-category").attr('name',id_category);
+								});								
 							},
 							error: function(request, error, data){						
 								alert(request+" "+error+" "+data+" in user update");										
@@ -2003,7 +2008,7 @@ function inventoryPageScript(domain_name){
 							});		
 						}
 						else{
-							$("#div-modal-form-inventory-create-category-search-content").html("");
+							$(parent_id_inventory_modal_content+"div #div-modal-form-inventory-create-category-search-content").html("");
 						}
 					});
 					
@@ -2018,15 +2023,14 @@ function inventoryPageScript(domain_name){
 					var json_inventory_updatable_data = new Object();
 					json_inventory_updatable_data.name = $(checked_form_elements_id[0]).val();					
 					json_inventory_updatable_data.sku = $(checked_form_elements_id[2]).val();
+					json_inventory_updatable_data.id_category = $(checked_form_elements_id[3]).attr('name');					
 					json_inventory_updatable_data.available= $(checked_form_elements_id[5]).val();
 					json_inventory_updatable_data.incoming= $(checked_form_elements_id[7]).val();
 					json_inventory_updatable_data.outgoing = $(checked_form_elements_id[6]).val();
 					json_inventory_updatable_data.price_sell = $(checked_form_elements_id[13]).val();
-					json_inventory_updatable_data.price_mrp = $(checked_form_elements_id[6]).val();
-					
-					
+					json_inventory_updatable_data.price_mrp = $(checked_form_elements_id[14]).val();										
 					var json_inventory_updatable_text = JSON.stringify(json_inventory_updatable_data);			
-					alert(json_inventory_updatable_text);
+					//alert(json_inventory_updatable_text);
 				}
 				
 				
@@ -2043,6 +2047,8 @@ function inventoryPageScript(domain_name){
 					json_inventory_updated_data.outgoing = $(checked_form_elements_id[6]).val();
 					json_inventory_updated_data.price_sell = $(checked_form_elements_id[13]).val();
 					json_inventory_updated_data.price_mrp = $(checked_form_elements_id[6]).val();
+					json_inventory_updated_data.id_category = $(checked_form_elements_id[3]).attr('name');
+					
 					//json_user_updated_data.id_user = JSON.parse(localStorage.getItem("current_checkbox_value"));
 					
 					var json_inventory_updated_text = JSON.stringify(json_inventory_updated_data);				
