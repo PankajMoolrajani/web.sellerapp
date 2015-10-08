@@ -1535,7 +1535,7 @@ function inventoryPageScript(domain_name){
 				html = html + "<div class='row'>";				
 				for(var j=1 ; j<5 ; j=j+1, k=k+1){					
 					if(k<size){						
-						html = html + "<div class='portfolio-item col-md-3'><div class='row'><div class='col-md-10 col-md-offset-1'><a data-toggle='modal' class='cursorPointer inventory-browse-items' data-target='#div-modal-form-inventory-browse-update'><img class='img-responsive' src='http://placehold.it/400x300' alt=''></a></div></div><br/>" +								
+						html = html + "<div class='portfolio-item col-md-3'><div class='row'><div class='col-md-10 col-md-offset-1'><a data-toggle='modal' id='"+inventory[k].id+"' class='cursorPointer inventory-browse-items' data-target='#div-modal-form-inventory-browse-update'><img class='img-responsive' src='http://placehold.it/400x300' alt=''></a></div></div><br/>" +								
 							"<div class='row'>" +
 								"<div class='col-md-11 col-md-offset-1'><p>Title : "+inventory[k].name+"</p></div>" +
 							"</div>" +
@@ -1555,8 +1555,11 @@ function inventoryPageScript(domain_name){
 				$("#div-inventory-browse-images").html(html);
 				
 				$(".inventory-browse-items").click(function(){
-					$("#div-modal-form-inventory-browse-update-body").load('sub_form_inventory_create.jsp',function(){
+					var id_inventory = $(this).attr('id');					
+					$("#div-modal-form-inventory-browse-update-body").load('sub_form_inventory_create.jsp',function(){						
+						inventoryBrowseModalFill(id_inventory);
 						createInventoryCategoryModal();
+						
 					});
 				});
 			}						
@@ -1566,7 +1569,73 @@ function inventoryPageScript(domain_name){
 		} 
 		});				
 	}
-			
+	function inventoryBrowseModalFill(id_inventory){
+		var browse_modal_fields_ids = ["#div-modal-form-inventory-browse-update-body div div #div-form-inventory-create-line-1 #div-form-inventory-create-name #input-text-form-inventory-create-name",
+		                               "#div-modal-form-inventory-browse-update-body div div #div-form-inventory-create-line-1 #div-form-inventory-brand #input-select-form-invenotry-create-brand",
+		                               "#div-modal-form-inventory-browse-update-body div div #div-form-inventory-create-line-2 #div-form-inventory-create-base-sku #input-text-form-inventory-create-base-sku",
+		                               "#div-modal-form-inventory-browse-update-body div div #div-form-inventory-create-line-2 #div-form-inventory-create-category #input-text-form-inventory-choose-category",
+		                               "#div-modal-form-inventory-browse-update-body div div #div-form-inventory-create-line-2 #div-form-inventory-create-weight #input-text-form-inventory-create-weight",
+		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock div #div-form-inventory-create-stock-in-hand #input-text-form-inventory-create-stock-in-hand",
+		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock div #div-form-inventory-create-stock-outgoing #input-text-form-inventory-create-stock-outgoing",
+		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock div #div-form-inventory-create-stock-incoming #input-text-form-inventory-create-stock-incoming",
+		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock div #div-form-inventory-create-warehouse #input-text-form-inventory-create-warehouse",
+		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock div #div-form-inventory-create-aisle #input-text-form-inventory-create-aisle",
+		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock div #div-form-inventory-create-rack #input-text-form-inventory-create-rack",
+		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock div #div-form-inventory-create-row #input-text-form-inventory-create-row",
+		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock div #div-form-inventory-create-case #input-text-form-inventory-create-case",
+		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-procurement div div #div-form-inventory-create-procurement-type div #input-select-form-invenotry-create-procurement-type",
+		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-procurement div div #div-form-inventory-create-procurement-supplier div #input-select-form-invenotry-create-procurement-supplier",
+		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-procurement div div div #div-form-inventory-create-procurement-time #input-text-form-inventory-create-procurement-time",		                              		                              
+		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting div #div-form-inventory-create-min-price #input-text-form-inventory-create-min-price",
+		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting div #div-form-inventory-create-max-price #input-text-form-inventory-create-max-price",
+		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting div #div-form-inventory-create-cost-price #input-text-form-inventory-create-cost-price",
+		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting div #div-form-inventory-create-tax #input-text-form-inventory-create-tax"
+		                              ];
+		var json_user_object = new Object();
+		json_user_object.id = id_inventory;						
+		var json_inventory_text = JSON.stringify(json_user_object);			
+		$.ajax({
+			type: "POST",
+			url: "http://"+domain_name+":8080/rest.sellerapp/inventory/get/id",		
+			async: false,
+			contentType: "application/json; charset=utf-8",
+			data:json_inventory_text,
+			dataType: "json",						
+			success: function(response){			
+			var inventory = response["data"];		
+			$(browse_modal_fields_ids[0]).val(inventory.name);
+			$(browse_modal_fields_ids[2]).val(inventory.sku);	
+			$(browse_modal_fields_ids[17]).val(inventory.price_mrp);
+			$(browse_modal_fields_ids[16]).val(inventory.price_sell);
+			$(browse_modal_fields_ids[6]).val(inventory.outgoing);
+			$(browse_modal_fields_ids[7]).val(inventory.incoming);
+			},
+			error: function(request, error, data){
+				alert(error);				
+			}  						
+		});			
+		
+		
+//		$(browse_modal_fields_ids[2]).val("amit");
+//		$(browse_modal_fields_ids[3]).val("amit");
+//		$(browse_modal_fields_ids[4]).val("amit");
+//		$(browse_modal_fields_ids[5]).val("amit");
+//		$(browse_modal_fields_ids[6]).val("amit");
+//		$(browse_modal_fields_ids[7]).val("amit");
+//		$(browse_modal_fields_ids[8]).val("amit");
+//		$(browse_modal_fields_ids[9]).val("amit");
+//		$(browse_modal_fields_ids[10]).val("amit");
+//		$(browse_modal_fields_ids[11]).val("amit");
+//		$(browse_modal_fields_ids[12]).val("amit");
+//		$(browse_modal_fields_ids[13]).val("amit");
+//		$(browse_modal_fields_ids[14]).val("amit");
+//		$(browse_modal_fields_ids[15]).val("amit");
+//		$(browse_modal_fields_ids[16]).val("amit");
+//		$(browse_modal_fields_ids[17]).val("amit");
+//		$(browse_modal_fields_ids[18]).val("amit");
+//		$(browse_modal_fields_ids[19]).val("amit");
+	}
+	
 	function createIventoryImageUpload(){		
 		/*............inventory browse work close...............*/
 		
@@ -1623,21 +1692,19 @@ function inventoryPageScript(domain_name){
 
 	function createInventoryCategoryModal(){		
 	//select and create inventory_category using modal
-		$("#input-btn-form-inventory-create-category").click(function(){			
-			$(".inventory-category-create-modal").modal('show');
-		});
+		
 		$(".inventory-category-create-modal-close-btn").click(function(){				
 			$(".inventory-category-create-modal").modal('hide');	
 		});
 		
 		$("#input-btn-form-inventory-create-category").click(function(){				
-			//$("#div-modal-form-inventory-create-category").modal('show');
+			$(".inventory-category-create-modal").modal('show');
 			$("#btn-modal-form-inventory-category-create-close").click(function(){				
 				$("#div-modal-form-inventory-create-category").modal('hide');	
 			});
 			
 			//inventory-category-search 
-			$("#input-select-modal-form-inventory-category-create").keyup(function(){				
+			$("#input-select-modal-form-inventory-category-create").keyup(function(){					
 				var identifier = $(this).val();	
 				if(!(identifier == "")){
 					$.ajax({
@@ -1908,7 +1975,7 @@ function inventoryPageScript(domain_name){
 					data:json_inventory_text,
 					dataType: "json",						
 					success: function(response){
-					var inventory = response["data"];					
+					var inventory = response["data"];							
 						fillInventoryTableToggleForm(response);											
 					},
 					error: function(request, error, data){
@@ -1919,31 +1986,29 @@ function inventoryPageScript(domain_name){
 				function fillInventoryTableToggleForm(response){					
 					var inventory = response["data"];	
 					
-//					var json_inventory_cat_object = new Object();
-//					alert(inventory.id_category);
-//					json_inventory_cat_object.id = inventory.id_category;						
-//					var json_inventory_text = JSON.stringify(json_inventory_cat_object);							
-//					$.ajax({
-//						type: "POST",
-//						url: "http://"+domain_name+":8080/rest.sellerapp/inventory/category/get/id",		
-//						async: false,
-//						contentType: "application/json; charset=utf-8",
-//						data:json_inventory_text,
-//						dataType: "html",						
-//						success: function(response){
-//						alert(response);
-//						var inventory_cat_detail = response["data"];		
-//						alert(inventory_cat_detail.name);
-//						$(checked_form_elements_id[3]).val(inventory_cat_detail.name);							
-//						},
-//						error: function(request, error, data){
-//							alert(error);				
-//						}  						
-//					});			
+					var json_inventory_cat_object = new Object();
+					alert(inventory.id_category);
+					json_inventory_cat_object.id = inventory.id_category;						
+					var json_inventory_text = JSON.stringify(json_inventory_cat_object);							
+					$.ajax({
+						type: "POST",
+						url: "http://"+domain_name+":8080/rest.sellerapp/inventory/category/get/id",		
+						async: false,
+						contentType: "application/json; charset=utf-8",
+						data:json_inventory_text,
+						dataType: "json",						
+						success: function(response){						
+						var inventory_cat_detail = response["data"];								
+						$(checked_form_elements_id[3]).val(inventory_cat_detail.name);							
+						},
+						error: function(request, error, data){
+							alert(error);				
+						}  						
+					});			
 					//$(checked_form_elements_id[3]).attr("name",'name_cat');
 					//alert($(checked_form_elements_id[3]).attr("name"));
 					//alert(inventory.id_category);
-					$(checked_form_elements_id[3]).val("testing_inv_category");
+					//$(checked_form_elements_id[3]).val("testing_inv_category");
 					$(checked_form_elements_id[0]).prop("disabled",true).val(inventory.name);					
 					//$(checked_form_elements_id[1]).prop("disabled",true).val(inventory.name_last);
 					
