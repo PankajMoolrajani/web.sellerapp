@@ -1,11 +1,11 @@
 $(document).ready(function(){		
 	var domain_name = "localhost";
+	//var domain_name = "45.79.129.71";
 	//var domainName = "dev.monoxor.com";
 		
 	/*................... Javascript for Index page ......................*/
 
-	$(".login-link").click(function(){	
-		
+	$("#a-home-page-nav-bar-login").click(function(){			
 		window.location.assign("login.jsp");
 	});
 
@@ -108,7 +108,8 @@ $(document).ready(function(){
 	$("#btn-submit-login-form").click(function(){			
 		var login_username = $("#input-text-login-username").val(); // changed variable name to login_username
 		var login_password = $("#input-text-login-password").val(); 
-		submitLoginForm(login_username,login_password);		
+		window.location.assign("dashboard.jsp");
+		//submitLoginForm(login_username,login_password);		
 	});
 	/*.....if enter pressed on password textbox..........*/
 	$("#input-text-login-password").keypress(function(event){
@@ -221,17 +222,17 @@ $(document).ready(function(){
 		});
 	}	
 	
-	//userCreatePageScript(domain_name); //calling of user-management page script
-	//userCreateFormVal(domain_name); //calling of user-mgmt validation page script
+	userCreatePageScript(domain_name); //calling of user-management page script
+	userCreateFormVal(domain_name); //calling of user-mgmt validation page script
 	
-	//userCatCreatePageScript(domain_name); //calling of user-category page script
-	//userCatCreateFormVal(domain_name); //calling of user-mgmt validation page script	
+	userCatCreatePageScript(domain_name); //calling of user-category page script
+	userCatCreateFormVal(domain_name); //calling of user-mgmt validation page script	
 	inventoryPageScript(domain_name);
-	//orderPageScript(domain_name); 
+	orderPageScript(domain_name); 
 	
 	
-	//invoicePageScript(domain_name);
-	//invoiceCreateFormVal(domain_name);
+	invoicePageScript(domain_name);
+	invoiceCreateFormVal(domain_name);
 	
 	saveButtonScript(domain_name);	
 	resetButtonScript(domain_name);
@@ -1514,6 +1515,7 @@ function inventoryPageScript(domain_name){
 	getInventoryBrowseDetails();
 	createIventoryImageUpload();
 	createInventoryCategoryModal();
+	inventoryUploadScript();
 	
 	function getInventoryBrowseDetails(){		
 		$.ajax({
@@ -1589,7 +1591,12 @@ function inventoryPageScript(domain_name){
 		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting div #div-form-inventory-create-min-price #input-text-form-inventory-create-min-price",
 		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting div #div-form-inventory-create-max-price #input-text-form-inventory-create-max-price",
 		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting div #div-form-inventory-create-cost-price #input-text-form-inventory-create-cost-price",
-		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting div #div-form-inventory-create-tax #input-text-form-inventory-create-tax"
+		                               "#div-modal-form-inventory-browse-update-body div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting div #div-form-inventory-create-tax #input-text-form-inventory-create-tax",
+		                               "#div-modal-form-inventory-browse-update-body div #div-img-form-inventory-create-image div #div-img-form-inventory-create-image-main",
+		                               "#div-modal-form-inventory-browse-update-body div #div-img-form-inventory-create-image div #div-img-form-inventory-create-image-thumbnail-1",
+		                               "#div-modal-form-inventory-browse-update-body div #div-img-form-inventory-create-image div #div-img-form-inventory-create-image-thumbnail-2",
+		                               "#div-modal-form-inventory-browse-update-body div #div-img-form-inventory-create-image div #div-img-form-inventory-create-image-thumbnail-3",
+		                               "#div-modal-form-inventory-browse-update div div div #div-modal-form-inventory-browse-update-save"
 		                              ];
 		var json_user_object = new Object();
 		json_user_object.id = id_inventory;						
@@ -1609,31 +1616,18 @@ function inventoryPageScript(domain_name){
 			$(browse_modal_fields_ids[16]).val(inventory.price_sell);
 			$(browse_modal_fields_ids[6]).val(inventory.outgoing);
 			$(browse_modal_fields_ids[7]).val(inventory.incoming);
+			$(browse_modal_fields_ids[20]).html("<img src='pictures/"+inventory.sku+"/"+inventory.sku+"-1.jpg' height='100%' width='100%' />");
+			$(browse_modal_fields_ids[21]).html("<img src='pictures/"+inventory.sku+"/"+inventory.sku+"-2.jpg' height='100%' width='100%' />");
+			$(browse_modal_fields_ids[22]).html("<img src='pictures/"+inventory.sku+"/"+inventory.sku+"-3.jpg' height='100%' width='100%' />");
+			$(browse_modal_fields_ids[23]).html("<img src='pictures/"+inventory.sku+"/"+inventory.sku+"-4.jpg' height='100%' width='100%' />");
+			$(browse_modal_fields_ids[24]).click(function(){
+				alert('ready to update');
+			});
 			},
 			error: function(request, error, data){
 				alert(error);				
 			}  						
-		});			
-		
-		
-//		$(browse_modal_fields_ids[2]).val("amit");
-//		$(browse_modal_fields_ids[3]).val("amit");
-//		$(browse_modal_fields_ids[4]).val("amit");
-//		$(browse_modal_fields_ids[5]).val("amit");
-//		$(browse_modal_fields_ids[6]).val("amit");
-//		$(browse_modal_fields_ids[7]).val("amit");
-//		$(browse_modal_fields_ids[8]).val("amit");
-//		$(browse_modal_fields_ids[9]).val("amit");
-//		$(browse_modal_fields_ids[10]).val("amit");
-//		$(browse_modal_fields_ids[11]).val("amit");
-//		$(browse_modal_fields_ids[12]).val("amit");
-//		$(browse_modal_fields_ids[13]).val("amit");
-//		$(browse_modal_fields_ids[14]).val("amit");
-//		$(browse_modal_fields_ids[15]).val("amit");
-//		$(browse_modal_fields_ids[16]).val("amit");
-//		$(browse_modal_fields_ids[17]).val("amit");
-//		$(browse_modal_fields_ids[18]).val("amit");
-//		$(browse_modal_fields_ids[19]).val("amit");
+		});							
 	}
 	
 	function createIventoryImageUpload(){		
@@ -1661,7 +1655,7 @@ function inventoryPageScript(domain_name){
 		            }
 		        },
 		        success : function() {
-		        	$("#div-img-form-inventory-create-image-main").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[0].name+"' height='100%' width='100%' />")
+		        	$("#div-img-form-inventory-create-image-main").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[0].name+"' height='100%' width='100%' />");
 		        	$("#div-img-form-inventory-create-image-thumbnail-1").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[1].name+"' height='100%' width='100%' />");
 		        	$("#div-img-form-inventory-create-image-thumbnail-2").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[2].name+"' height='100%' width='100%' />");
 		        	$("#div-img-form-inventory-create-image-thumbnail-3").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[3].name+"' height='100%' width='100%' />");
@@ -1804,11 +1798,11 @@ function inventoryPageScript(domain_name){
 		});	
 	}
 	
-	$("#td-inventory-temp-1").click(function(){						
-		inventoryTableRowEdit();
-		$("#td-inventory-temp-1-next").toggle();
-	});
-	
+//	$("#td-inventory-temp-1").click(function(){						
+//		inventoryTableRowEdit();
+//		$("#td-inventory-temp-1-next").toggle();
+//	});
+//	
 /*.............inventory table script open ...........*/
 	
 	if(($(window).width())>=750)
@@ -1850,8 +1844,6 @@ function inventoryPageScript(domain_name){
 			var inventoryTable="";
 			
 			for(var i=0 ; i<inventory.length ; i=i+1){	
-//				$("#tbody-table-inventory").html("<tr><td><input id='td-inventory-temp-1' type='checkbox' value=''></input></td><td>10010458</td><td>A Black And Silver Case Watch</td><td>10</td><td>745</td><td>Jaipur</td></tr>" +
-//				"<tr><td id='td-inventory-temp-1-next' colspan='6'></td></tr>");
 	    		inventoryTable = inventoryTable+"<tr><td id='td-inventory-form-create-table-"+inventory[i].id+"'><input class='inventory-table-row-checkbox' type='checkbox' value="+inventory[i].id+"></input>"+	    		
 				"</td><td>"+inventory[i].sku+    			
     			"</td><td>"+inventory[i].name+
@@ -2019,11 +2011,12 @@ function inventoryPageScript(domain_name){
 					$(checked_form_elements_id[5]).prop("disabled",true).val(inventory.available);
 					$(checked_form_elements_id[6]).prop("disabled",true).val(inventory.outgoing);
 					$(checked_form_elements_id[7]).prop("disabled",true).val(inventory.outgoing);
-					$(checked_form_elements_id[13]).prop("disabled",true).val(inventory.price_sell);						
-					$(checked_form_elements_id[15]).html("<img src='pictures/100210/100210-1.jpg' height='100%' width='100%'/>");
-					$(checked_form_elements_id[16]).html("<img src='pictures/100210/100210-2.jpg' height='100%' width='100%'/>");
-					$(checked_form_elements_id[17]).html("<img src='pictures/100210/100210-3.jpg' height='100%' width='100%'/>");
-					$(checked_form_elements_id[18]).html("<img src='pictures/100210/100210-4.jpg' height='100%' width='100%'/>");					
+					$(checked_form_elements_id[13]).prop("disabled",true).val(inventory.price_sell);
+					$(checked_form_elements_id[14]).prop("disabled",true).val(inventory.price_mrp);
+					$(checked_form_elements_id[15]).html("<img src='pictures/"+inventory.sku+"/"+inventory.sku+"-1.jpg' height='100%' width='100%' />");
+					$(checked_form_elements_id[16]).html("<img src='pictures/"+inventory.sku+"/"+inventory.sku+"-2.jpg' height='100%' width='100%' />");
+					$(checked_form_elements_id[17]).html("<img src='pictures/"+inventory.sku+"/"+inventory.sku+"-3.jpg' height='100%' width='100%' />");
+					$(checked_form_elements_id[18]).html("<img src='pictures/"+inventory.sku+"/"+inventory.sku+"-4.jpg' height='100%' width='100%' />");					
 					
 					
 					var parent_id_inventory_form = "#"+form_id+" #div-sub-form-inventory-create div div #div-form-inventory-create-line-2 #div-form-inventory-create-category div ";
@@ -2094,95 +2087,109 @@ function inventoryPageScript(domain_name){
 					json_inventory_updatable_data.outgoing = $(checked_form_elements_id[6]).val();
 					json_inventory_updatable_data.price_sell = $(checked_form_elements_id[13]).val();
 					json_inventory_updatable_data.price_mrp = $(checked_form_elements_id[14]).val();										
-					var json_inventory_updatable_text = JSON.stringify(json_inventory_updatable_data);			
-					//alert(json_inventory_updatable_text);
-				}
-				
-				
-				
-			//user_form update script
-				$("#"+form_id+" #div-form-inventory-create-state-buttons div .btn-page-state-save-main").click(function(){					
-					//var $btn = $("#"+form_id+" #div-form-inventory-create-state-buttons div .btn-page-state-save-main").button('loading');																
+					var json_inventory_updatable_text = JSON.stringify(json_inventory_updatable_data);								
 					
-					var json_inventory_updatable_data = new Object();
-					json_inventory_updated_data.name = $(checked_form_elements_id[0]).val();					
-					json_inventory_updated_data.sku = $(checked_form_elements_id[2]).val();
-					json_inventory_updated_data.available= $(checked_form_elements_id[5]).val();
-					json_inventory_updated_data.incoming= $(checked_form_elements_id[7]).val();
-					json_inventory_updated_data.outgoing = $(checked_form_elements_id[6]).val();
-					json_inventory_updated_data.price_sell = $(checked_form_elements_id[13]).val();
-					json_inventory_updated_data.price_mrp = $(checked_form_elements_id[6]).val();
-					json_inventory_updated_data.id_category = $(checked_form_elements_id[3]).attr('name');
-					
-					//json_user_updated_data.id_user = JSON.parse(localStorage.getItem("current_checkbox_value"));
-					
-					var json_inventory_updated_text = JSON.stringify(json_inventory_updated_data);				
-					
-					var inventory_final_data = new Object();				
-					for(var key in json_inventory_data){					
-						if(json_inventory_data[key] != json_inventory_updated_data[key]){
-							inventory_final_data[key] = json_inventory_updated_data[key];
+					//inventory_form update script
+					$("#"+form_id+" #div-form-inventory-create-state-buttons div .btn-page-state-save-main").click(function(){					
+						//var $btn = $("#"+form_id+" #div-form-inventory-create-state-buttons div .btn-page-state-save-main").button('loading');																						
+						var json_inventory_updated_data = new Object();
+						json_inventory_updated_data.name = $(checked_form_elements_id[0]).val();					
+						json_inventory_updated_data.sku = $(checked_form_elements_id[2]).val();
+						json_inventory_updated_data.available= $(checked_form_elements_id[5]).val();
+						json_inventory_updated_data.incoming= $(checked_form_elements_id[7]).val();
+						json_inventory_updated_data.outgoing = $(checked_form_elements_id[6]).val();
+						json_inventory_updated_data.price_sell = $(checked_form_elements_id[13]).val();
+						json_inventory_updated_data.price_mrp = $(checked_form_elements_id[14]).val();
+						json_inventory_updated_data.id_category = $(checked_form_elements_id[3]).attr('name');
+						
+						//json_user_updated_data.id_user = JSON.parse(localStorage.getItem("current_checkbox_value"));
+						
+						var json_inventory_updated_text = JSON.stringify(json_inventory_updated_data);										
+						
+						var inventory_final_data = new Object();				
+						for(var key in json_inventory_updatable_data){									
+							if(json_inventory_updatable_data[key] != json_inventory_updated_data[key]){
+								inventory_final_data[key] = json_inventory_updated_data[key];
+							}
 						}
-					}
-					inventory_final_data["id"] = JSON.parse(localStorage.getItem("current_checkbox_value_inventory"));
-					var inventory_final_text = JSON.stringify(inventory_final_data);									
-//					$.ajax({
-//						type: "POST",
-//						url: "http://"+domain_name+":8080/rest.sellerapp/user/update",
-//						async: false,	
-//						contentType :"application/json; charSet=UTF-8",
-//						data: user_final_text,			
-//						dataType: "json",			
-//						success: function(responseText){	
-//							alert('done');
-//							userTableRowEdit(form_id);
-//							$("#"+form_id).toggle();
-//							$btn.button('reset');						
-//						},
-//						error: function(request, error, data){						
-//							alert(request+" "+error+" "+data+" in user update");						
-//							$btn.button('reset');
-//						} 
-//					});
+						inventory_final_data["id"] = JSON.parse(localStorage.getItem("current_checkbox_value_inventory"));
+						var inventory_final_text = JSON.stringify(inventory_final_data);						
+						$.ajax({
+							type: "POST",
+							url: "http://"+domain_name+":8080/rest.sellerapp/inventory_other/update",
+							async: false,	
+							contentType :"application/json; charSet=UTF-8",
+							data: inventory_final_text,			
+							dataType: "json",			
+							success: function(responseText){	
+//								alert('done');
+//								userTableRowEdit(form_id);
+//								$("#"+form_id).toggle();
+//								$btn.button('reset');						
+							},
+							error: function(request, error, data){						
+								alert(request+" "+error+" "+data+" in user update");						
+								$btn.button('reset');
+							} 
+						});
 
-				});				
+					});	
+				}
+			
 			});										
-		}
-		
+		}		
 	}
 	
-//	$("#tbody-table-inventory").html("<tr><td><input id='td-inventory-temp-1' type='checkbox' value=''></input></td><td>10010458</td><td>A Black And Silver Case Watch</td><td>10</td><td>745</td><td>Jaipur</td></tr>" +
-//	"<tr><td id='td-inventory-temp-1-next' colspan='6'></td></tr>");
+	function inventoryUploadScript(){		
+		//ajax file upload
+		var options = {
+				beforeSend : function() {		                
+			// clear everything		                
+			$("#span-bulk-inventory-file-status").empty();		                
+		},
+		uploadProgress : function(event, position, total, percentComplete) {	
+			// change message text to red after 50%
+			if (percentComplete > 50) {
+				$("#span-bulk-inventory-file-status").html("<font color='red'>File Upload is in progress</font>");				
+			}	
+			
+			var file = $('input[name="inventory-upload-file"]').get(0).files[0];
 
-		var inventoryTableRowEdit;
-		inventoryTableRowEdit = function(){			
-			$("#td-inventory-temp-1-next").load('form_inventory_create.jsp',function(){
-				
-				$('.selectpicker').selectpicker();	
-				
-				$('.selectpicker').selectpicker({
-					style: 'btn-info',
-					size: 4
-				});
-				
-				//change tab href and associated div id's 
-				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab #tabs li #a-tab-form-inventory-create-stock").attr("href","#div-form-inventory-create-stock-edit");				
-				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-stock").attr("id","div-form-inventory-create-stock-edit");
-				
-				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab #tabs li #a-tab-form-inventory-create-procurement").attr("href","#div-form-inventory-create-procurement-edit");				
-				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-form-inventory-create-procurement").attr("id","div-form-inventory-create-procurement-edit");
-
-				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab #tabs li #a-tab-form-inventory-create-sales").attr("href","#div-tab-form-inventory-create-sales-edit");				
-				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-sales").attr("id","div-tab-form-inventory-create-sales-edit");
-
-				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab #tabs li #a-tab-form-inventory-create-variants").attr("href","#div-tab-form-inventory-create-variants-edit");				
-				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-variants").attr("id","div-tab-form-inventory-create-variants-edit");
-
-				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab #tabs li #a-tab-form-inventory-create-accounting").attr("href","#div-tab-form-inventory-create-accounting-edit");				
-				$("#td-inventory-temp-1-next #div-sub-form-inventory-create div div div #div-form-inventory-create-tab-pages #div-tab-form-inventory-create-accounting").attr("id","div-tab-form-inventory-create-accounting-edit");
-
-			});				
+		    var formData = new FormData();		    
+		    formData.append('file', file);		
+			$.ajax({
+				type: "POST",
+				url: "http://"+domain_name+":8080/rest.sellerapp/inventory/upload_file",								
+				data: formData,
+				cache : false,
+				async : false,
+				contentType: false,
+		        processData: false,
+		        dataType:"json",
+				success: function(response){
+					var uploaded_images_dir = response["image_dir_path"];
+					sendInventoryFormData(uploaded_images_dir)				
+					
+				},
+				error: function(request, error, data){				
+					alert(JSON.stringify(request) +" "+error+" "+data);					
+				}  						
+			});					
+		},
+		success : function() {		                		                
+		},
+		complete : function(response) {
+			$("#span-bulk-inventory-file-status").html("<font color='blue'>Order file has been uploaded!</font>");
+			showPacketTable();
+		},
+		error : function() {
+			$("#span-bulk-inventory-file-status").html("<font color='red'> ERROR: unable to upload files</font>");
+		}
 		};
+		
+		$("#form-bulk-inventory-upload").ajaxForm(options);
+	}
+
 	if($(window).width()<=380)
 	{				
 		$("#div-form-inventory-create-save").removeClass("col-md-3 col-sm-2 col-xs-6 col-md-offset-1 col-sm-offset-1").addClass('row');		
@@ -2255,89 +2262,7 @@ function inventoryPageScript(domain_name){
 			
 		});
 	}
-	//inventory category inserted to list
-//	$.ajax({ 						
-//		type: "GET",
-//		url: "InventoryAjaxFetch",			
-//		dataType: "json",
-//		data: {"fetch":"categories","var": "empty"},
-//		success: function(responseText){			
-//			var productCategoryList="<a id='a-inventory-create-listItem' data-toggle='modal' data-target='.productcategory-create-modal' class='list-group-item cursorPointer'>Create Category</a>";			
-//			for(var i=0 ; i<responseText["ProductCategory"].length ; i=i+1)
-//    		{				        		
-//				productCategoryList =	productCategoryList+"<a id="+responseText["ProductCategory"][i].id+" class='inventory-search-text list-group-item cursorPointer'>"+responseText["ProductCategory"][i].name+"</a>";
-//			}		  				
-//			$("#div-inventory-category-item-list").html(productCategoryList);
-//			$(".inventory-search-text").click(function(e){
-//				  $.fn.setInventoryText(e);
-//			});			
-//			$("#a-inventory-create-listItem").click(function(){		
-//				$.fn.setTaxPercentTxtScript();
-//			});
-//		},
-//		error: function(request, error, data){
-//			alert(error);
-//			alert(data); 
-//		}  						
-//	});
-	
-	//inventory category fetching according to typed text 
-	$("#input-select-form-inventory-create-category").keyup(function(){					
-		var user_category_search_text = $("#input-select-form-inventory-create-category").val();	 				
-		if(!(user_category_search_text==""))  //if a character typed in search-bar
-		{	 	 				 					  					
-//			$.ajax({ 						
-//				type: "GET",
-//				url: "InventoryAjaxFetch",			
-//				dataType: "json",
-//				data: {"fetch":"categories","var": "filled", "textChar": user_category_search_text},
-//				success: function(responseText){							
-//					var productCategoryList="<a data-toggle='modal' data-target='.productcategory-create-modal' class='list-group-item cursorPointer'>Create Category</a>";
-//					//alert(responseText);
-//					for(var i=0 ; i<responseText["ProductCategory"].length ; i=i+1)
-//	        		{				        		
-//						productCategoryList =	productCategoryList+"<a id="+responseText["ProductCategory"][i].id+" class='inventory-search-text list-group-item cursorPointer'>"+responseText["ProductCategory"][i].name+"</a>";
-//					}		  						
-//					$("#div-inventory-category-item-list").html(productCategoryList);
-//					$(".inventory-search-text").click(function(e){
-//						  $.fn.setInventoryText(e);
-//					});
-//					
-//				},
-//				error: function(request, error, data){
-//					alert(error);
-//					alert(data);
-//				}  						
-//			});		
-		} 
-		else
-		{
-//			$.ajax({ 						
-//				type: "GET",
-//				url: "InventoryAjaxFetch",			
-//				dataType: "json",
-//				data: {"fetch":"categories","var": "empty","textChar": user_category_search_text},
-//				success: function(responseText){							
-//					var productCategoryList="<a data-toggle='modal' data-target='.productcategory-create-modal'class='list-group-item cursorPointer'>Create Category</a>";
-//					//alert(responseText);
-//					for(var i=0 ; i<responseText["ProductCategory"].length ; i=i+1)
-//	        		{				        		
-//						productCategoryList = productCategoryList+"<a id="+responseText["ProductCategory"][i].id+" class='inventory-search-text list-group-item cursorPointer'>"+responseText["ProductCategory"][i].name+"</a>";
-//					}		  						
-//					$("#div-inventory-category-item-list").html(productCategoryList);					
-//					$(".inventory-search-text").click(function(e){												
-//						 $.fn.setInventoryText(e);
-//					});
-//					
-//				},
-//				error: function(request, error, data){
-//					alert(error);
-//					alert(data);
-//				}  						
-//			});
-		}												
-	});
-	
+
 	
 	//set selected text to Search Category textbox
 	var inventory_cat_id; //selected category id
