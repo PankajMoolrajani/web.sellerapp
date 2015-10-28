@@ -2082,11 +2082,11 @@ function inventoryPageScript(domain_name){
 					json_inventory_updatable_data.name = $(checked_form_elements_id[0]).val();					
 					json_inventory_updatable_data.sku = $(checked_form_elements_id[2]).val();
 					json_inventory_updatable_data.id_category = $(checked_form_elements_id[3]).attr('name');					
-					json_inventory_updatable_data.available= $(checked_form_elements_id[5]).val();
-					json_inventory_updatable_data.incoming= $(checked_form_elements_id[7]).val();
-					json_inventory_updatable_data.outgoing = $(checked_form_elements_id[6]).val();
-					json_inventory_updatable_data.price_sell = $(checked_form_elements_id[13]).val();
-					json_inventory_updatable_data.price_mrp = $(checked_form_elements_id[14]).val();										
+//					json_inventory_updatable_data.available= $(checked_form_elements_id[5]).val();
+//					json_inventory_updatable_data.incoming= $(checked_form_elements_id[7]).val();
+//					json_inventory_updatable_data.outgoing = $(checked_form_elements_id[6]).val();
+//					json_inventory_updatable_data.price_sell = $(checked_form_elements_id[13]).val();
+//					json_inventory_updatable_data.price_mrp = $(checked_form_elements_id[14]).val();										
 					var json_inventory_updatable_text = JSON.stringify(json_inventory_updatable_data);								
 					
 					//inventory_form update script
@@ -2095,11 +2095,11 @@ function inventoryPageScript(domain_name){
 						var json_inventory_updated_data = new Object();
 						json_inventory_updated_data.name = $(checked_form_elements_id[0]).val();					
 						json_inventory_updated_data.sku = $(checked_form_elements_id[2]).val();
-						json_inventory_updated_data.available= $(checked_form_elements_id[5]).val();
-						json_inventory_updated_data.incoming= $(checked_form_elements_id[7]).val();
-						json_inventory_updated_data.outgoing = $(checked_form_elements_id[6]).val();
-						json_inventory_updated_data.price_sell = $(checked_form_elements_id[13]).val();
-						json_inventory_updated_data.price_mrp = $(checked_form_elements_id[14]).val();
+//						json_inventory_updated_data.available= $(checked_form_elements_id[5]).val();
+//						json_inventory_updated_data.incoming= $(checked_form_elements_id[7]).val();
+//						json_inventory_updated_data.outgoing = $(checked_form_elements_id[6]).val();
+//						json_inventory_updated_data.price_sell = $(checked_form_elements_id[13]).val();
+//						json_inventory_updated_data.price_mrp = $(checked_form_elements_id[14]).val();
 						json_inventory_updated_data.id_category = $(checked_form_elements_id[3]).attr('name');
 						
 						//json_user_updated_data.id_user = JSON.parse(localStorage.getItem("current_checkbox_value"));
@@ -2111,7 +2111,13 @@ function inventoryPageScript(domain_name){
 							if(json_inventory_updatable_data[key] != json_inventory_updated_data[key]){
 								inventory_final_data[key] = json_inventory_updated_data[key];
 							}
-						}
+						}						
+						inventory_final_data.price_sell = $(checked_form_elements_id[13]).val();
+						inventory_final_data.price_mrp = $(checked_form_elements_id[14]).val();						
+						inventory_final_data.available = $(checked_form_elements_id[5]).val();
+						inventory_final_data.incoming= $(checked_form_elements_id[7]).val();
+						inventory_final_data.outgoing = $(checked_form_elements_id[6]).val();
+						
 						inventory_final_data["id"] = JSON.parse(localStorage.getItem("current_checkbox_value_inventory"));
 						var inventory_final_text = JSON.stringify(inventory_final_data);						
 						$.ajax({
