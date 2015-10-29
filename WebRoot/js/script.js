@@ -2119,7 +2119,8 @@ function inventoryPageScript(domain_name){
 						inventory_final_data.outgoing = $(checked_form_elements_id[6]).val();
 						
 						inventory_final_data["id"] = JSON.parse(localStorage.getItem("current_checkbox_value_inventory"));
-						var inventory_final_text = JSON.stringify(inventory_final_data);						
+						var inventory_final_text = JSON.stringify(inventory_final_data);	
+						alert(inventory_final_text);
 						$.ajax({
 							type: "POST",
 							url: "http://"+domain_name+":8080/rest.sellerapp/inventory_other/update",
