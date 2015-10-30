@@ -241,7 +241,7 @@ $(document).ready(function(){
 });
 
 function selectPickerScript()
-{		
+{			
 	$('.selectpicker').selectpicker();	
 	
 	$('.selectpicker').selectpicker({
@@ -1513,6 +1513,7 @@ function inventoryPageScript(domain_name){
 	localStorage.setItem("current_checkbox_value_inventory", JSON.stringify(""));
 	/*............inventory browse work open...............*/
 	getInventoryBrowseDetails();
+	inventoryMarketplaceScript();
 	createIventoryImageUpload();
 	createInventoryCategoryModal();
 	inventoryUploadScript();
@@ -1570,6 +1571,29 @@ function inventoryPageScript(domain_name){
 			alert(request+" "+error+" "+data+" in getInventoryBrowseDetails");										
 		} 
 		});				
+	}
+	function inventoryMarketplaceScript(){
+		$("#input-btn-inventory-create-table-add-marketplace").click(function(){
+			$.ajax({
+				type: "GET",
+				url: "http://"+domain_name+":8080/rest.sellerapp/inventory_other/get/all",		
+				async: false,
+				dataType: "json",			
+				success: function(responseText){										    	
+			    	var marketplace_list = ""; 
+			    	var marketplaces = responseText["data"];
+			    	for(var i=0 ; i<marketplaces.length ; i=i+1)
+			    	{
+			    		marketplace_list = marketplace_list+"<option value='"+marketplaces[i].id+"'>"+marketplaces[i].name+"</option>";
+			    	}	    	 			    				    			    	
+					$("#input-select-form-marketplace-create-marketplace-name").html(marketplace_list);
+					$("#input-select-form-marketplace-create-marketplace-name").selectpicker('refresh');
+				},
+				error: function(request, error, data){
+						alert(error+" in inventory marketplace feching");				
+				}  						
+			});
+		});
 	}
 	function inventoryBrowseModalFill(id_inventory){
 		var browse_modal_fields_ids = ["#div-modal-form-inventory-browse-update-body div div #div-form-inventory-create-line-1 #div-form-inventory-create-name #input-text-form-inventory-create-name",
@@ -1978,8 +2002,7 @@ function inventoryPageScript(domain_name){
 				function fillInventoryTableToggleForm(response){					
 					var inventory = response["data"];	
 					
-					var json_inventory_cat_object = new Object();
-					alert(inventory.id_category);
+					var json_inventory_cat_object = new Object();					
 					json_inventory_cat_object.id = inventory.id_category;						
 					var json_inventory_text = JSON.stringify(json_inventory_cat_object);							
 					$.ajax({
@@ -2091,7 +2114,7 @@ function inventoryPageScript(domain_name){
 					
 					//inventory_form update script
 					$("#"+form_id+" #div-form-inventory-create-state-buttons div .btn-page-state-save-main").click(function(){					
-						//var $btn = $("#"+form_id+" #div-form-inventory-create-state-buttons div .btn-page-state-save-main").button('loading');																						
+						var $btn = $("#"+form_id+" #div-form-inventory-create-state-buttons div .btn-page-state-save-main").button('loading');																						
 						var json_inventory_updated_data = new Object();
 						json_inventory_updated_data.name = $(checked_form_elements_id[0]).val();					
 						json_inventory_updated_data.sku = $(checked_form_elements_id[2]).val();
@@ -2130,9 +2153,9 @@ function inventoryPageScript(domain_name){
 							dataType: "json",			
 							success: function(responseText){	
 //								alert('done');
-//								userTableRowEdit(form_id);
-//								$("#"+form_id).toggle();
-//								$btn.button('reset');						
+								inventoryTableRowEdit(form_id);
+								$("#"+form_id).toggle();
+								$btn.button('reset');						
 							},
 							error: function(request, error, data){						
 								alert(request+" "+error+" "+data+" in user update");						
