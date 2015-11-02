@@ -24,7 +24,7 @@ $(document).ready(function(){
 	}
 	
 	function getAccessTokenUrl(){
-		var access_token_url;
+	var access_token_url;
 		$.ajax({
 				type: "GET",
 				url: "http://"+domain_name+":8080/rest.sellerapp/auth/access-token-url",
@@ -458,9 +458,46 @@ function submitUserCatFormDetails(){
 }
 
 function submitInventoryFormDetails(domain_name){
+	var current_marketplace_count = JSON.parse(localStorage.getItem("current_marketplace_count"));	
+	var marketplace_objects_array = [];
+	
+	//Test-code	enter		
+		//create new object for marketplace and put it into inventory_marketplaces object	
+	 ["#input-select-form-marketplace-create-marketplace-name",
+      "#input-text-form-marketplace-create-marketplace-url"];
+	 	
+		for(var count = 1 ; count <= current_marketplace_count ; count=count+1 ){					
+			var marketplace_object = new Object();
+			
+			marketplace_object.id_marketplace = $("#input-text-form-invenotry-create-table-marketplace-name"+count).val();			
+			
+			marketplace_object.marketplace_url = $("#input-text-form-invenotry-create-table-link"+count).val();			
+			
+			marketplace_object.sell_price = $("#input-text-form-invenotry-create-table-sellprice"+count).val();			
+			
+			marketplace_object.stock = $("#input-text-form-invenotry-create-table-link"+count).val();			
+			
+			marketplace_object.status = $("#input-select-form-invenotry-create-table-status"+count+" option:selected").val();			
+			
+			marketplace_objects_array.push(marketplace_object);			
+		}
+		for(var count = 0 ; count<current_marketplace_count ; count=count+1){			
+			var marketplace_detail = marketplace_objects_array[count];
+			alert(marketplace_detail.id_marketplace +" "+marketplace_detail.marketplace_url+" "+marketplace_detail.sell_price+" "+marketplace_detail.stock+" "+marketplace_detail.status);
+			
+//			marketplace_object.id_marketplace = id_marketplace;
+//			marketplace_object.marketplace_url = marketplace_url;
+//			marketplace_object.sell_price = $("#input-text-form-invenotry-create-table-sellprice"+count).val;
+//			marketplace_object.stock = $("#input-text-form-invenotry-create-table-sellprice"+count).val;
+//			marketplace_object.status = $("#input-select-form-invenotry-create-table-status"+count+" option:selected");									
+//			marketplace_objects_array.push(marketplace_object);			
+		}
+	//Test-code exit 
+	
+	var inventory_marketplace_objects = [];
 	
 	//var $btn = $("#div-form-inventory-create-state-buttons div .btn-page-state-save-main").button('loading');
-	uploadInventoryImages();
+	//uploadInventoryImages();
 	
 	function uploadInventoryImages(){		
 		var files = $('input[name="name_inventory_create_images"]').get(0).files;			
@@ -1572,7 +1609,8 @@ function inventoryPageScript(domain_name){
 		} 
 		});				
 	}
-	function inventoryMarketplaceScript(){
+	function inventoryMarketplaceScript(){		
+		
 		$("#input-btn-inventory-create-table-add-marketplace").click(function(){
 			$.ajax({
 				type: "GET",
@@ -1587,13 +1625,83 @@ function inventoryPageScript(domain_name){
 			    		marketplace_list = marketplace_list+"<option value='"+marketplaces[i].id+"'>"+marketplaces[i].name+"</option>";
 			    	}	    	 			    				    			    	
 					$("#input-select-form-marketplace-create-marketplace-name").html(marketplace_list);
-					$("#input-select-form-marketplace-create-marketplace-name").selectpicker('refresh');
+					$("#input-select-form-marketplace-create-marketplace-name").selectpicker('refresh');					
 				},
 				error: function(request, error, data){
 						alert(error+" in inventory marketplace feching");				
 				}  						
 			});
 		});
+		
+		// submit create market place form
+		 $("#btn-form-marketplace-create-submit").click(function(){				
+			var selector = ["#input-select-form-marketplace-create-marketplace-name",
+			                "#input-text-form-marketplace-create-marketplace-url"];
+			$.fn.createMarketplaceFormValid(selector);		
+		});	
+		 
+		// no. of marketplaces for each product 
+			var marketplaceCount=0;
+		//validation of marketplace form submission
+		$.fn.createMarketplaceFormValid = function(selector){
+			var marketplaceCreateState="false";		
+			for(var i=0 ; i<selector.length ; i=i+1)
+			{					
+				if($(selector[i]).parent().hasClass("has-error") || $(selector[i]).val()=="")
+				{
+					marketplaceCreateState= "false";						  
+					break;
+				}
+				else
+				{				 
+					marketplaceCreateState="true";			 
+				}
+			}
+							 	
+			if(marketplaceCreateState=="true")
+			{		
+				//alert(marketplaceCount);			
+				marketplaceCount=marketplaceCount+1;
+				
+				
+				var mplaceName = $(selector[0]+" option:selected").text();				
+				var id_marketplace = $(selector[0]+" option:selected").val();				
+				var marketplace_url = $(selector[1]).val();
+				
+
+				var row_edit = "<tr class='active to-diplay'>" +
+									"<td id='td-form-invenotry-create-table-marketplace"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-marketplace-name"+marketplaceCount+"' class='form-control' value='"+mplaceName+"'/></td>" +
+									"<td id='td-form-invenotry-create-table-link"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-link"+marketplaceCount+"' class='form-control' value='"+marketplace_url+"'/></td>" +
+									"<td id='td-form-invenotry-create-table-sellprice"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-sellprice"+marketplaceCount+"' class='form-control val-empty'/></td>" +
+									"<td id='td-form-invenotry-create-table-stock"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-stock"+marketplaceCount+"' class='form-control val-empty'/></td>" +
+									"<td id='td-form-invenotry-create-table-status"+marketplaceCount+"'><select id='input-select-form-invenotry-create-table-status"+marketplaceCount+"' class='form-control selectpicker' ><option>Active</option><option>InActive</option></select></td>" +
+									"<td id='td-form-invenotry-create-table-health"+marketplaceCount+"'><div class='progress'><div class='progress-bar progress-bar-success progress-bar-striped"+marketplaceCount+"' role='progressbar'aria-valuenow='40' aria-valuemin='0' aria-valuemax='100' style='width:40%'>40% Complete (success)</div></div></td>" +
+									"<td id='td-form-invenotry-create-table-submit-edit"+marketplaceCount+"'>" +
+											"<div class='form-group col-md-6 col-sm-6 col-xs-6'><button type='button' id='input-btn-edit-form-inventory-create"+marketplaceCount+"' class='form-control btn btn-primary'>Edit</button></div>" +
+											"<div class='form-group col-md-6 col-sm-6 col-xs-6'><button type='button' id='input-btn-save-form-inventory-create"+marketplaceCount+"' class='form-control btn btn-primary class-inventory-marketplace-save'>Save</button></div></td>" +								
+							   "</tr>";		
+				
+				//set current marketplace count for submit
+				localStorage.setItem("current_marketplace_count", JSON.stringify(marketplaceCount));				
+				$('.marketplace-create-modal').modal('hide');				
+				//refresh modal content after successfully submission
+				$("#div-form-invMarketplace-fields").load('sub_form_create_marketplace.jsp');
+				
+				//assign scirpt again to refreshed elements  
+				inventoryFormValid();						
+				
+				$("#tbody-table-form-inventory-create").append(row_edit);				
+				selectPickerScript();						 			
+				
+//				$(".class-inventory-marketplace-save").click(function(){
+//					alert('hello');
+//				});
+			}
+			else
+			{
+				alert("First Fill all the fields Properly");					
+			}					
+		}		
 	}
 	function inventoryBrowseModalFill(id_inventory){
 		var browse_modal_fields_ids = ["#div-modal-form-inventory-browse-update-body div div #div-form-inventory-create-line-1 #div-form-inventory-create-name #input-text-form-inventory-create-name",
@@ -2404,77 +2512,77 @@ function inventoryPageScript(domain_name){
 		}
 	}
 		
-	// submit create market place form
-	 $("#btn-form-marketplace-create-submit").click(function(){				
-		var selector = ["#input-select-form-marketplace-create-marketplace-name",
-		                "#input-text-form-marketplace-create-marketplace-url"];
-		$.fn.createMarketplaceFormValid(selector);		
-	});	
-	 
-	// no. of marketplaces for each product 
-		var marketplaceCount=0;
-	//validation of marketplace form submission
-	$.fn.createMarketplaceFormValid = function(selector){
-		var marketplaceCreateState="false";		
-		for(var i=0 ; i<selector.length ; i=i+1)
-		{					
-			if($(selector[i]).parent().hasClass("has-error") || $(selector[i]).val()=="")
-			{
-				marketplaceCreateState= "false";						  
-				break;
-			}
-			else
-			{				 
-				marketplaceCreateState="true";			 
-			}
-		}
-						 	
-		if(marketplaceCreateState=="true")
-		{		
-			//alert(marketplaceCount);			
-			marketplaceCount=marketplaceCount+1;
-			
-			
-			var mplaceName = $(selector[0]+" option:selected").text();
-			var mplaceId = $(selector[0]).val();
-			var mplaceUrl = $(selector[1]).val();
-			//alert(mplaceName+ " "+ mplaceUrl);
-//			var RowShow = "<tr class='active to-diplay'>" +			
-//							"<td>"+mplaceName+"</td>" +
-//							"<td>"+mplaceUrl+"</td>" +							
-//							"<td><input type='text' id='input-form-inventory-sellPrice"+marketplaceCount+"' class='form-control val-empty'/></td>" +
-//							"<td><input type='text' id='input-text-form-invenotry-create-stock"+marketplaceCount+"' class='form-control val-empty'/></td>" +
-//							"<td><td><select id='input-form-inventory-status"+marketplaceCount+"' class='form-control val-empty'><option>Active</option><option>Inactive</option></td>" +
-//							"<td></td>" +
-//						"</tr>";
-			
-			var RowEdit = "<tr class='active to-diplay'>" +
-								"<td id='td-form-invenotry-create-table-marketplace"+marketplaceCount+"'><select id='input-select-form-invenotry-create-table-marketplace"+marketplaceCount+"' class='form-control selectpicker'><option selected>"+mplaceName+"</option></select></td>" +
-								"<td id='td-form-invenotry-create-table-link"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-link"+marketplaceCount+"' class='form-control' value='"+mplaceUrl+"'/></td>" +
-								"<td id='td-form-invenotry-create-table-sellprice"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-sellprice"+marketplaceCount+"' class='form-control val-empty'/></td>" +
-								"<td id='td-form-invenotry-create-table-stock"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-stock"+marketplaceCount+"' class='form-control val-empty'/></td>" +
-								"<td id='td-form-invenotry-create-table-status"+marketplaceCount+"'><select id='input-select-form-invenotry-create-table-status"+marketplaceCount+"' class='form-control selectpicker' ><option>Active</option><option>InActive</option></select></td>" +
-								"<td id='td-form-invenotry-create-table-health"+marketplaceCount+"'><div class='progress'><div class='progress-bar progress-bar-success progress-bar-striped"+marketplaceCount+"' role='progressbar'aria-valuenow='40' aria-valuemin='0' aria-valuemax='100' style='width:40%'>40% Complete (success)</div></div></td>" +
-								"<td id='td-form-invenotry-create-table-submit-edit"+marketplaceCount+"'>" +
-										"<div class='form-group col-md-6 col-sm-6 col-xs-6'><button type='button' id='input-btn-edit-form-inventory-create"+marketplaceCount+"' class='form-control btn btn-primary'>Edit</button></div>" +
-										"<div class='form-group col-md-6 col-sm-6 col-xs-6'><button type='button' id='input-btn-save-form-inventory-create"+marketplaceCount+"' class='form-control btn btn-primary'>Save</button></div></td>" +								
-						   "</tr>";			
-			$('.marketplace-create-modal').modal('hide');
-			
-			//refresh modal content after successfully submission
-			$("#div-form-invMarketplace-fields").load('sub_form_create_marketplace.jsp');
-			
-			//assign scirpt again to refreshed elements  
-			inventoryFormValid();						
-			
-			$("#tbody-table-form-inventory-create").append(RowEdit);
-			selectPickerScript();						 								
-		}
-		else
-		{
-			alert("First Fill all the fields Properly");					
-		}	
-	}
+//	// submit create market place form
+//	 $("#btn-form-marketplace-create-submit").click(function(){				
+//		var selector = ["#input-select-form-marketplace-create-marketplace-name",
+//		                "#input-text-form-marketplace-create-marketplace-url"];
+//		$.fn.createMarketplaceFormValid(selector);		
+//	});	
+//	 
+//	// no. of marketplaces for each product 
+//		var marketplaceCount=0;
+//	//validation of marketplace form submission
+//	$.fn.createMarketplaceFormValid = function(selector){
+//		var marketplaceCreateState="false";		
+//		for(var i=0 ; i<selector.length ; i=i+1)
+//		{					
+//			if($(selector[i]).parent().hasClass("has-error") || $(selector[i]).val()=="")
+//			{
+//				marketplaceCreateState= "false";						  
+//				break;
+//			}
+//			else
+//			{				 
+//				marketplaceCreateState="true";			 
+//			}
+//		}
+//						 	
+//		if(marketplaceCreateState=="true")
+//		{		
+//			//alert(marketplaceCount);			
+//			marketplaceCount=marketplaceCount+1;
+//			
+//			
+//			var mplaceName = $(selector[0]+" option:selected").text();
+//			var mplaceId = $(selector[0]).val();
+//			var mplaceUrl = $(selector[1]).val();
+//			//alert(mplaceName+ " "+ mplaceUrl);
+////			var RowShow = "<tr class='active to-diplay'>" +			
+////							"<td>"+mplaceName+"</td>" +
+////							"<td>"+mplaceUrl+"</td>" +							
+////							"<td><input type='text' id='input-form-inventory-sellPrice"+marketplaceCount+"' class='form-control val-empty'/></td>" +
+////							"<td><input type='text' id='input-text-form-invenotry-create-stock"+marketplaceCount+"' class='form-control val-empty'/></td>" +
+////							"<td><td><select id='input-form-inventory-status"+marketplaceCount+"' class='form-control val-empty'><option>Active</option><option>Inactive</option></td>" +
+////							"<td></td>" +
+////						"</tr>";
+//			
+//			var RowEdit = "<tr class='active to-diplay'>" +
+//								"<td id='td-form-invenotry-create-table-marketplace"+marketplaceCount+"'><select id='input-select-form-invenotry-create-table-marketplace"+marketplaceCount+"' class='form-control selectpicker'><option selected>"+mplaceName+"</option></select></td>" +
+//								"<td id='td-form-invenotry-create-table-link"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-link"+marketplaceCount+"' class='form-control' value='"+mplaceUrl+"'/></td>" +
+//								"<td id='td-form-invenotry-create-table-sellprice"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-sellprice"+marketplaceCount+"' class='form-control val-empty'/></td>" +
+//								"<td id='td-form-invenotry-create-table-stock"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-stock"+marketplaceCount+"' class='form-control val-empty'/></td>" +
+//								"<td id='td-form-invenotry-create-table-status"+marketplaceCount+"'><select id='input-select-form-invenotry-create-table-status"+marketplaceCount+"' class='form-control selectpicker' ><option>Active</option><option>InActive</option></select></td>" +
+//								"<td id='td-form-invenotry-create-table-health"+marketplaceCount+"'><div class='progress'><div class='progress-bar progress-bar-success progress-bar-striped"+marketplaceCount+"' role='progressbar'aria-valuenow='40' aria-valuemin='0' aria-valuemax='100' style='width:40%'>40% Complete (success)</div></div></td>" +
+//								"<td id='td-form-invenotry-create-table-submit-edit"+marketplaceCount+"'>" +
+//										"<div class='form-group col-md-6 col-sm-6 col-xs-6'><button type='button' id='input-btn-edit-form-inventory-create"+marketplaceCount+"' class='form-control btn btn-primary'>Edit</button></div>" +
+//										"<div class='form-group col-md-6 col-sm-6 col-xs-6'><button type='button' id='input-btn-save-form-inventory-create"+marketplaceCount+"' class='form-control btn btn-primary'>Save</button></div></td>" +								
+//						   "</tr>";			
+//			$('.marketplace-create-modal').modal('hide');
+//			
+//			//refresh modal content after successfully submission
+//			$("#div-form-invMarketplace-fields").load('sub_form_create_marketplace.jsp');
+//			
+//			//assign scirpt again to refreshed elements  
+//			inventoryFormValid();						
+//			
+//			$("#tbody-table-form-inventory-create").append(RowEdit);
+//			selectPickerScript();						 								
+//		}
+//		else
+//		{
+//			alert("First Fill all the fields Properly");					
+//		}	
+//	}
 	
 	//refresh inventory-Category create form after clicking on close button
 	$("#btn-modal-inventory-category-create-close").click(function(){		
