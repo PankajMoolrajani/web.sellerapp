@@ -1923,8 +1923,8 @@ function inventoryPageScript(domain_name){
 		var row_attech_form_id;
 		$(".inventory-table-row-checkbox").click(function(){	
 			if($(this).is(':checked')){
-				//$("body").fadeTo("fast", 0.4);
-				//$("#spinner").show();		
+				$("body").fadeTo("fast", 0.4);
+				$("#spinner").show();		
 				
 				//id of inventory						
 				var	current_checkbox_value = $(this).attr("value");							
@@ -2081,7 +2081,56 @@ function inventoryPageScript(domain_name){
 					$(parent_id_inventory_form+"span #input-btn-form-inventory-create-category").click(function(){							
 						$(parent_id_inventory_modal).modal('show');
 					});					
-//					alert($(parent_id_inventory_modal_content+"div #div-modal-form-inventory-create-category-content div #div-modal-form-inventory-create-category-search").html());
+					
+			//update image when check a perticular inventory list
+					updateInventoryImage();
+					function updateInventoryImage(){
+						var uploaded_image_names;
+						var uploaded_pic_folder_name;	
+						var updatable_inventory_div_path = "#"+form_id+" #div-sub-form-inventory-create div #div-img-form-inventory-create-image div";
+						//ajax file upload
+						var options = {
+								beforeSend : function() {		                
+									// clear everything		                
+						            $(updatable_inventory_div_path+" #span-img-form-inevntory-create-upload-message").empty();		                
+						        },
+						        uploadProgress : function(event, position, total, percentComplete) {		                		                	
+						        	// change message text to red after 50%
+						            if (percentComplete > 50) {
+						            	$(updatable_inventory_div_path+" #span-img-form-inevntory-create-upload-message").html("<font color='red'>Uploading in progress</font>");
+						            }
+						        },
+						        success : function() {						        	
+						        	$(updatable_inventory_div_path+" #div-img-form-inventory-create-image-main").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[0].name+"' height='100%' width='100%' />");
+						        	$(updatable_inventory_div_path+" #div-img-form-inventory-create-image-thumbnail-1").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[1].name+"' height='100%' width='100%' />");
+						        	$(updatable_inventory_div_path+" #div-img-form-inventory-create-image-thumbnail-2").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[2].name+"' height='100%' width='100%' />");
+						        	$(updatable_inventory_div_path+" #div-img-form-inventory-create-image-thumbnail-3").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[3].name+"' height='100%' width='100%' />");
+						        },	        
+						        complete : function(response) {	        	
+						        	$(updatable_inventory_div_path+" #span-img-form-inevntory-create-upload-message").html("<font color='blue'>uploaded Sccessfully!</font>");0	        		        
+						        },	        
+						        error : function() {
+						        }
+						};
+						$(updatable_inventory_div_path+" #form-inventory-create-image-main").ajaxForm(options);
+//						$(updatable_inventory_div_path+" #btn-form-inventory-create-image-submit-show").click(function(){
+//							$(updatable_inventory_div_path+" #form-inventory-create-image-main").submit();
+//						});
+						$(updatable_inventory_div_path+" #div-img-form-inventory-create-image-main").click(function(){
+							$(updatable_inventory_div_path+" #form-inventory-create-image-main").attr("action","UpdateInventoryImageServlet");
+							$(updatable_inventory_div_path+" #btn-form-inventory-create-image-submit-show").addClass("to-display");
+							$(updatable_inventory_div_path+" #span-img-form-inevntory-create-upload-message").addClass("to-display");
+							$(updatable_inventory_div_path+" #input-file-form-inventory-create-image-main").click();
+							
+						});
+						
+						$(updatable_inventory_div_path+" #btn-form-inventory-create-image-submit-show").click(function(){				
+							uploaded_image_names = $(updatable_inventory_div_path+" #input-file-form-inventory-create-image-main")[0].files;
+						    var n = uploaded_image_names[0].name.indexOf("-");	    
+						    uploaded_pic_folder_name = uploaded_image_names[0].name.substring(0,n);	  		    
+							$(updatable_inventory_div_path+" #btn-form-inventory-create-image-submit").click();
+						});
+					}
 					
 					//inventory-category-search 
 					$(parent_id_inventory_modal_content+"div #div-modal-form-inventory-create-category-search div #input-select-modal-form-inventory-category-create").keyup(function(){						
@@ -2127,8 +2176,8 @@ function inventoryPageScript(domain_name){
 					});
 					
 					
-					///$("body").fadeTo("fast", 1);
-					//$("#spinner").hide();
+					$("body").fadeTo("fast", 1);
+					$("#spinner").hide();
 					
 					$("#"+form_id).toggle();					
 					$("#"+form_id+" #div-form-inventory-create-state-buttons div .btn-page-state-reset-main").css("display","none");
