@@ -26,8 +26,7 @@ public class UpdateInventoryImageServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("other called now");
+			HttpServletResponse response) throws ServletException, IOException {		
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);	    
 	    // process only if its multipart content
 		if (isMultipart) {

@@ -2100,14 +2100,39 @@ function inventoryPageScript(domain_name){
 						            	$(updatable_inventory_div_path+" #span-img-form-inevntory-create-upload-message").html("<font color='red'>Uploading in progress</font>");
 						            }
 						        },
-						        success : function() {						        	
-						        	$(updatable_inventory_div_path+" #div-img-form-inventory-create-image-main").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[0].name+"' height='100%' width='100%' />");
-						        	$(updatable_inventory_div_path+" #div-img-form-inventory-create-image-thumbnail-1").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[1].name+"' height='100%' width='100%' />");
-						        	$(updatable_inventory_div_path+" #div-img-form-inventory-create-image-thumbnail-2").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[2].name+"' height='100%' width='100%' />");
-						        	$(updatable_inventory_div_path+" #div-img-form-inventory-create-image-thumbnail-3").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[3].name+"' height='100%' width='100%' />");
+						        success : function() {	
+						       //update on server also
+						        	//uploaded_image_names = $(updatable_inventory_div_path+" #input-file-form-inventory-create-image-main")[0].files;
+						        	var files = $(updatable_inventory_div_path+" #form-inventory-create-image-main input[name='name_inventory_create_images']").get(0).files;			
+						    		var formData = new FormData();						    		
+						    		for (var i = 0; i < files.length; i++)
+						    		{									    			
+						    			formData.append('file', files[i]);
+						    		}
+						    		$.ajax({
+						    			type: "POST",
+						    			url: "http://"+domain_name+":8080/rest.sellerapp/inventory_other/upload_images",								
+						    			data: formData,
+						    			cache : false,
+						    			async : false,
+						    			contentType: false,
+						    	        processData: false,
+						    	        dataType:"json",
+						    			success: function(response){
+						    				var uploaded_images_dir = response["image_dir_path"];				
+						    				$(updatable_inventory_div_path+" #div-img-form-inventory-create-image-main").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[0].name+"' height='100%' width='100%' />");						        	
+								        	$("#"+form_id+" #div-sub-form-inventory-create div div #div-img-form-inventory-create-image-thumbnail-1").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[1].name+"' height='100%' width='100%' />");
+								        	$("#"+form_id+" #div-sub-form-inventory-create div div #div-img-form-inventory-create-image-thumbnail-2").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[2].name+"' height='100%' width='100%' />");
+								        	$("#"+form_id+" #div-sub-form-inventory-create div div #div-img-form-inventory-create-image-thumbnail-3").html("<img src='pictures/"+uploaded_pic_folder_name+"/"+uploaded_image_names[3].name+"' height='100%' width='100%' />");
+						    				
+						    			},
+						    			error: function(request, error, data){				
+						    				alert(JSON.stringify(request) +" "+error+" "+data);						    				
+						    			}  						
+						    		});							        	
 						        },	        
 						        complete : function(response) {	        	
-						        	$(updatable_inventory_div_path+" #span-img-form-inevntory-create-upload-message").html("<font color='blue'>uploaded Sccessfully!</font>");0	        		        
+						        	$(updatable_inventory_div_path+" #span-img-form-inevntory-create-upload-message").html("<font color='blue'>uploaded Sccessfully!</font>");	        		        
 						        },	        
 						        error : function() {
 						        }
@@ -2224,8 +2249,7 @@ function inventoryPageScript(domain_name){
 						inventory_final_data.outgoing = $(checked_form_elements_id[6]).val();
 						
 						inventory_final_data["id"] = JSON.parse(localStorage.getItem("current_checkbox_value_inventory"));
-						var inventory_final_text = JSON.stringify(inventory_final_data);	
-						alert(inventory_final_text);
+						var inventory_final_text = JSON.stringify(inventory_final_data);							
 						$.ajax({
 							type: "POST",
 							url: "http://"+domain_name+":8080/rest.sellerapp/inventory_other/update",
