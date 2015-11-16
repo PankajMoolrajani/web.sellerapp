@@ -1,6 +1,6 @@
 $(document).ready(function(){		
-	var domain_name = "localhost";
-	//var domain_name = "45.79.129.71";
+	//var domain_name = "localhost";
+	var domain_name = "45.79.129.71";
 	//var domainName = "dev.monoxor.com";
 		
 	/*................... Javascript for Index page ......................*/
@@ -588,7 +588,8 @@ function submitInventoryFormDetails(domain_name){
 			contentType : "application/json",			
 			dataType: "json",			
 			success: function(responseText){			
-				var resp = responseText["response_message"];						
+				var resp = responseText["response_message"];
+				alert()
 				if(resp == "success: create inventory"){
 					$("#div-inventory-management-page").load("inventory_management.jsp");									
 					inventoryPageScript(domain_name);
@@ -1495,8 +1496,8 @@ function inventoryPageScript(domain_name){
 			for(var i=0,k=0 ; i<lines ; i=i+1){
 				html = html + "<div class='row'>";				
 				for(var j=1 ; j<5 ; j=j+1, k=k+1){					
-					if(k<size){						
-						html = html + "<div class='portfolio-item col-md-3'><div class='row'><div class='col-md-10 col-md-offset-1'><a data-toggle='modal' id='"+inventory[k].id+"' class='cursorPointer inventory-browse-items' data-target='#div-modal-form-inventory-browse-update'><img class='img-responsive' src='http://placehold.it/400x300' alt=''></a></div></div><br/>" +								
+					if(k<size){										
+						html = html + "<div class='portfolio-item col-md-3'><div class='row'><div class='col-md-10 col-md-offset-1'><a data-toggle='modal' id='"+inventory[k].id+"' class='cursorPointer inventory-browse-items' data-target='#div-modal-form-inventory-browse-update'><img class='img-responsive' src='pictures/"+inventory[k].sku+"/"+inventory[k].sku+"-1.jpg' height='100%' width='100%' alt=''></a></div></div><br/>" +								
 							"<div class='row'>" +
 								"<div class='col-md-11 col-md-offset-1'><p>Title : "+inventory[k].name+"</p></div>" +
 							"</div>" +
@@ -1509,7 +1510,7 @@ function inventoryPageScript(domain_name){
 							"<div class='row'>" +
 								"<div class='col-md-11 col-md-offset-1'><p>Stock-in-hand : "+inventory[k].available+"</p></div>" +
 							"</div>" +			
-						"</div>";
+						"</div>";	
 					}
 				}								
 				html = html + "</div>";							
@@ -1517,9 +1518,13 @@ function inventoryPageScript(domain_name){
 				
 				$(".inventory-browse-items").click(function(){
 					var id_inventory = $(this).attr('id');					
-					$("#div-modal-form-inventory-browse-update-body").load('sub_form_inventory_create.jsp',function(){						
+					$("#div-modal-form-inventory-browse-update-body").load('sub_form_inventory_create.jsp',function(){							
+						$("#spinner").show();		
+						
 						inventoryBrowseModalFill(id_inventory);
 						createInventoryCategoryModal();
+												
+						$("#spinner").hide();
 						
 					});
 				});
@@ -1629,6 +1634,10 @@ function inventoryPageScript(domain_name){
 		}		
 	}
 	function inventoryBrowseModalFill(id_inventory){
+		//this obj. is used for inventory_browse modal update
+		var json_inventory_browse_updatable_data = new Object();		
+		var json_inventory_browse_updated_data = new Object();
+		
 		var browse_modal_fields_ids = ["#div-modal-form-inventory-browse-update-body div div #div-form-inventory-create-line-1 #div-form-inventory-create-name #input-text-form-inventory-create-name",
 		                               "#div-modal-form-inventory-browse-update-body div div #div-form-inventory-create-line-1 #div-form-inventory-brand #input-select-form-invenotry-create-brand",
 		                               "#div-modal-form-inventory-browse-update-body div div #div-form-inventory-create-line-2 #div-form-inventory-create-base-sku #input-text-form-inventory-create-base-sku",
@@ -1666,9 +1675,17 @@ function inventoryPageScript(domain_name){
 			data:json_inventory_text,
 			dataType: "json",						
 			success: function(response){			
-			var inventory = response["data"];		
+			var inventory = response["data"];				
+			
+			var browse_inventory_category_search_path = "#div-modal-form-inventory-browse-update-body #div-modal-form-inventory-create-category div div #div-modal-form-inventory-create-category-content div #div-modal-form-inventory-create-category-search div #input-select-modal-form-inventory-category-create";			
+			var inventory_category_name = getInventoryCategoryName(inventory.id_category);	
+			$(browse_inventory_category_search_path).attr('name',inventory.id_category);
 			$(browse_modal_fields_ids[0]).val(inventory.name);
-			$(browse_modal_fields_ids[2]).val(inventory.sku);	
+			
+			$(browse_modal_fields_ids[2]).val(inventory.sku);
+			$(browse_modal_fields_ids[3]).prop("disabled",true).val(inventory_category_name);
+			//$(browse_modal_fields_ids[3]).attr('name',inventory.id_category);			
+			$(browse_modal_fields_ids[5]).val(inventory.available);
 			$(browse_modal_fields_ids[17]).val(inventory.price_mrp);
 			$(browse_modal_fields_ids[16]).val(inventory.price_sell);
 			$(browse_modal_fields_ids[6]).val(inventory.outgoing);
@@ -1677,14 +1694,75 @@ function inventoryPageScript(domain_name){
 			$(browse_modal_fields_ids[21]).html("<img src='pictures/"+inventory.sku+"/"+inventory.sku+"-2.jpg' height='100%' width='100%' />");
 			$(browse_modal_fields_ids[22]).html("<img src='pictures/"+inventory.sku+"/"+inventory.sku+"-3.jpg' height='100%' width='100%' />");
 			$(browse_modal_fields_ids[23]).html("<img src='pictures/"+inventory.sku+"/"+inventory.sku+"-4.jpg' height='100%' width='100%' />");
-			$(browse_modal_fields_ids[24]).click(function(){
-				alert('ready to update');
+			
+			//filling inventory_browse object for update modal
+			json_inventory_browse_updatable_data.name = inventory.name; 
+			json_inventory_browse_updatable_data.sku = inventory.sku;
+			json_inventory_browse_updatable_data.inventory_category_name = inventory_category_name;
+			json_inventory_browse_updatable_data.available = inventory.available;		
+			json_inventory_browse_updatable_data.price_mrp = inventory.price_mrp;
+			json_inventory_browse_updatable_data.price_sell = inventory.price_sell;
+			json_inventory_browse_updatable_data.outgoing = inventory.outgoing;	
+			json_inventory_browse_updatable_data.incoming = inventory.incoming;
+			
+			$(browse_modal_fields_ids[24]).click(function(){				
+				json_inventory_browse_updated_data.name = $(browse_modal_fields_ids[0]).val(); 				
+				json_inventory_browse_updated_data.sku = $(browse_modal_fields_ids[2]).val();
+				json_inventory_browse_updated_data.id_inventory = $(browse_inventory_category_search_path).attr('name');
+				json_inventory_browse_updated_data.available = $(browse_modal_fields_ids[5]).val();		
+				json_inventory_browse_updated_data.price_mrp = $(browse_modal_fields_ids[17]).val();
+				json_inventory_browse_updated_data.price_sell = $(browse_modal_fields_ids[16]).val();				
+				json_inventory_browse_updated_data.outgoing = $(browse_modal_fields_ids[6]).val();	
+				json_inventory_browse_updated_data.incoming = $(browse_modal_fields_ids[7]).val();
+				
+//				var inventory_browse_update_status = false;
+//				var inventory_browse_final_data = new Object();				
+//				for(var key in json_inventory_browse_updatable_data){									
+//					if(json_inventory_browse_updatable_data[key] != json_inventory_browse_updated_data[key]){
+//						inventory_browse_update_status = true;
+//						inventory_browse_final_data[key] = json_inventory_browse_updated_data[key];
+//					}
+//				}						
+				alert(inventory_browse_update_status);
+//				if(inventory_browse_update_status){
+//					inventory_browse_final_data.price_sell = $(checked_form_elements_id[13]).val();
+//					inventory_browse_final_data.price_mrp = $(checked_form_elements_id[14]).val();						
+//					inventory_browse_final_data.available = $(checked_form_elements_id[5]).val();
+//					inventory_browse_final_data.incoming= $(checked_form_elements_id[7]).val();					
+//					updateInventoryBrowseItem(inventory_browse_final_data);
+//				}
 			});
 			},
 			error: function(request, error, data){
 				alert(error);				
 			}  						
-		});							
+		});		
+		
+		function getInventoryCategoryName(inventory_category_id){
+			var inventory_category_name;
+			
+			var json_inventory_cat_object = new Object();					
+			json_inventory_cat_object.id = inventory_category_id;						
+			var json_inventory_text = JSON.stringify(json_inventory_cat_object);				
+					
+			$.ajax({
+				type: "POST",
+				url: "http://"+domain_name+":8080/rest.sellerapp/inventory/category/get/id",		
+				async: false,
+				contentType: "application/json; charset=utf-8",
+				data:json_inventory_text,
+				dataType: "json",						
+				success: function(response){						
+				var inventory_cat_detail = response["data"];								
+//				$(checked_form_elements_id[3]).val(inventory_cat_detail.name);				
+				inventory_category_name =  inventory_cat_detail.name;
+				},
+				error: function(request, error, data){
+					alert(error);				
+				}  						
+			});	
+			return inventory_category_name;
+		}
 	}
 	
 	function createIventoryImageUpload(){		
