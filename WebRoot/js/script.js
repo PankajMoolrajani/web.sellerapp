@@ -1708,6 +1708,7 @@ function inventoryPageScript(domain_name){
 			$(browse_modal_fields_ids[24]).click(function(){				
 				json_inventory_browse_updated_data.name = $(browse_modal_fields_ids[0]).val(); 				
 				json_inventory_browse_updated_data.sku = $(browse_modal_fields_ids[2]).val();
+				json_inventory_browse_updated_data.inventory_category_name = $(browse_modal_fields_ids[3]).val();
 				json_inventory_browse_updated_data.id_inventory = $(browse_inventory_category_search_path).attr('name');
 				json_inventory_browse_updated_data.available = $(browse_modal_fields_ids[5]).val();		
 				json_inventory_browse_updated_data.price_mrp = $(browse_modal_fields_ids[17]).val();
@@ -1715,22 +1716,43 @@ function inventoryPageScript(domain_name){
 				json_inventory_browse_updated_data.outgoing = $(browse_modal_fields_ids[6]).val();	
 				json_inventory_browse_updated_data.incoming = $(browse_modal_fields_ids[7]).val();
 				
-//				var inventory_browse_update_status = false;
-//				var inventory_browse_final_data = new Object();				
-//				for(var key in json_inventory_browse_updatable_data){									
-//					if(json_inventory_browse_updatable_data[key] != json_inventory_browse_updated_data[key]){
-//						inventory_browse_update_status = true;
-//						inventory_browse_final_data[key] = json_inventory_browse_updated_data[key];
-//					}
-//				}						
+				var inventory_browse_update_status = false;
+				var inventory_browse_final_data = new Object();				
+				for(var key in json_inventory_browse_updatable_data){	
+					//alert(json_inventory_browse_updatable_data[key] +" "+ json_inventory_browse_updated_data[key]);
+					if(json_inventory_browse_updatable_data[key] != json_inventory_browse_updated_data[key]){
+						inventory_browse_update_status = true;
+						inventory_browse_final_data[key] = json_inventory_browse_updated_data[key];
+					}
+				}						
 				alert(inventory_browse_update_status);
-//				if(inventory_browse_update_status){
-//					inventory_browse_final_data.price_sell = $(checked_form_elements_id[13]).val();
-//					inventory_browse_final_data.price_mrp = $(checked_form_elements_id[14]).val();						
-//					inventory_browse_final_data.available = $(checked_form_elements_id[5]).val();
-//					inventory_browse_final_data.incoming= $(checked_form_elements_id[7]).val();					
-//					updateInventoryBrowseItem(inventory_browse_final_data);
-//				}
+				if(inventory_browse_update_status){					
+					inventory_browse_final_data.price_sell = $(browse_modal_fields_ids[16]).val();					
+					inventory_browse_final_data.price_mrp = $(browse_modal_fields_ids[17]).val();					
+					inventory_browse_final_data.available = $(browse_modal_fields_ids[5]).val();					
+					inventory_browse_final_data.incoming= $(browse_modal_fields_ids[7]).val();					
+					//updateInventoryBrowseItem(inventory_browse_final_data);					
+					var inventory_browse_final_text = JSON.stringify(inventory_browse_final_data);
+					$.ajax({
+						type: "POST",
+						url: "http://"+domain_name+":8080/rest.sellerapp/inventory_other/update",
+						async: false,	
+						contentType :"application/json; charSet=UTF-8",
+						data: inventory_browse_final_text,			
+						dataType: "json",			
+						success: function(responseText){	
+							alert('done');
+							inventoryTableRowEdit(form_id);							
+												
+						},
+						error: function(request, error, data){						
+							alert(request+" "+error+" "+data+" in user update");						
+							$btn.button('reset');
+						} 
+					});
+
+				}
+				inventory_browse_update_status = false;
 			});
 			},
 			error: function(request, error, data){
@@ -2342,7 +2364,7 @@ function inventoryPageScript(domain_name){
 								$btn.button('reset');						
 							},
 							error: function(request, error, data){						
-								alert(request+" "+error+" "+data+" in user update");						
+								alert(request+" "+error+" "+data+" in inventory update");						
 								$btn.button('reset');
 							} 
 						});
