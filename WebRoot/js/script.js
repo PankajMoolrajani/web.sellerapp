@@ -1,6 +1,6 @@
 $(document).ready(function(){		
-	//var domain_name = "localhost";
-	var domain_name = "45.79.129.71";
+	var domain_name = "localhost";
+	//var domain_name = "45.79.129.71";
 	//var domainName = "dev.monoxor.com";
 		
 	/*................... Javascript for Index page ......................*/
@@ -655,8 +655,18 @@ function resetUserCatFormDetails(domain_name)
 		});
 	});			
 }
-function resetInventoryFormDetails()
-{}
+function resetInventoryFormDetails(domain_name)
+{		
+	$("#div-sub-form-inventory-create").load('sub_form_inventory_create.jsp',function(){		
+		inventoryPageScript(domain_name);
+		
+		$("#btn-inventory-create").click(function(){			
+			$("#div-form-inventory-create").toggle();			 	
+			$( "#div-form-inventory-create-save" ).removeClass("col-md-offset-4 col-sm-offset-4").addClass( "col-md-offset-5 col-sm-offset-5" );
+			$("#input-btn-edit-form-inventory-create").css("display","none");		
+		});
+	});		
+}
 function resetOrderFormDetails()
 {}
 function resetInvoiceFormDetails()
@@ -1434,7 +1444,7 @@ function userCatCreateSubScript(domain_name)
 						$btn.button('reset');						
 					},
 					error: function(request, error, data){						
-						alert(request+" "+error+" "+data+" in user update");						
+						alert(request+" "+error+" "+data+" in user category update");						
 						$btn.button('reset');
 					} 
 				});
@@ -1484,31 +1494,31 @@ function inventoryPageScript(domain_name){
 			async: false,	
 			contentType :"application/json; charSet=UTF-8",					
 			dataType: "json",			
-			success: function(response){				
+			success: function(response){			
 			var inventory = response["data"];				
 			var size = inventory.length;					
-			var lines = size/5;
-			var remain = size - (lines*5);			
+			var lines = size/4;
+			var remain = size - (lines*4);			
 			if(remain != 0 ){
 				lines = lines+1;
 			}
-			var html = "";				
+			var html = "";						
 			for(var i=0,k=0 ; i<lines ; i=i+1){
 				html = html + "<div class='row'>";				
 				for(var j=1 ; j<5 ; j=j+1, k=k+1){					
 					if(k<size){										
 						html = html + "<div class='portfolio-item col-md-3'><div class='row'><div class='col-md-10 col-md-offset-1'><a data-toggle='modal' id='"+inventory[k].id+"' class='cursorPointer inventory-browse-items' data-target='#div-modal-form-inventory-browse-update'><img class='img-responsive' src='pictures/"+inventory[k].sku+"/"+inventory[k].sku+"-1.jpg' height='100%' width='100%' alt=''></a></div></div><br/>" +								
 							"<div class='row'>" +
-								"<div class='col-md-11 col-md-offset-1'><p>Title : "+inventory[k].name+"</p></div>" +
+								"<div class='col-md-11 col-md-offset-1 inventory-browse-items-font'><p>Title : "+inventory[k].name+"</p></div>" +
 							"</div>" +
 							"<div class='row'>" +
-								"<div class='col-md-11 col-md-offset-1'><p>MRP : "+inventory[k].price_mrp+"</p></div>" +
+								"<div class='col-md-11 col-md-offset-1 inventory-browse-items-font'><p>MRP : "+inventory[k].price_mrp+"</p></div>" +
 							"</div>" +
 							"<div class='row'>" +
-								"<div class='col-md-11 col-md-offset-1'><p>Selling Price : "+inventory[k].price_sell+"</p></div>" +
+								"<div class='col-md-11 col-md-offset-1 inventory-browse-items-font'><p>Selling Price : "+inventory[k].price_sell+"</p></div>" +
 							"</div>" +
 							"<div class='row'>" +
-								"<div class='col-md-11 col-md-offset-1'><p>Stock-in-hand : "+inventory[k].available+"</p></div>" +
+								"<div class='col-md-11 col-md-offset-1 inventory-browse-items-font'><p>Stock-in-hand : "+inventory[k].available+"</p></div>" +
 							"</div>" +			
 						"</div>";	
 					}
@@ -1746,7 +1756,7 @@ function inventoryPageScript(domain_name){
 												
 						},
 						error: function(request, error, data){						
-							alert(request+" "+error+" "+data+" in user update");						
+							alert(request+" "+error+" "+data+" in inventory_other update");						
 							$btn.button('reset');
 						} 
 					});
@@ -1855,7 +1865,7 @@ function inventoryPageScript(domain_name){
 			});
 			
 			//inventory-category-search 
-			$("#input-select-modal-form-inventory-category-create").keyup(function(){					
+			$("#input-select-modal-form-inventory-category-create").keyup(function(){				
 				var identifier = $(this).val();	
 				if(!(identifier == "")){
 					$.ajax({
@@ -1887,7 +1897,7 @@ function inventoryPageScript(domain_name){
 						
 					},
 					error: function(request, error, data){						
-						alert(request+" "+error+" "+data+" in user update");										
+						alert(request+" "+error+" "+data+" in inventory category search");										
 					} 
 					});		
 				}
@@ -1915,7 +1925,7 @@ function inventoryPageScript(domain_name){
 				selectPickerScript();
 			},
 			error: function(request, error, data){						
-				alert(request+" "+error+" "+data+" in user update");										
+				alert(request+" "+error+" "+data+" in inventory category get all");										
 			} 
 		});					
 		$("#input-btn-inventory-category-create-submit").click(function(){
@@ -1948,7 +1958,7 @@ function inventoryPageScript(domain_name){
 					selectPickerScript();
 				},
 				error: function(request, error, data){						
-					alert(request+" "+error+" "+data+" in user update");										
+					alert(request+" "+error+" "+data+" in inventory category create");										
 				} 
 			});		
 			
@@ -2291,7 +2301,7 @@ function inventoryPageScript(domain_name){
 								});								
 							},
 							error: function(request, error, data){						
-								alert(request+" "+error+" "+data+" in user update");										
+								alert(request+" "+error+" "+data+" in inventory category get search");										
 							} 
 							});		
 						}

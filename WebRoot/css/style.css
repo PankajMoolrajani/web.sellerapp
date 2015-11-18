@@ -315,6 +315,10 @@ nav.sidebar ul >li > ul > li
 {
 	border:1px dotted gray;padding:10px; margin-top:2%; display:none; border-radius:4px;	
 }
+.inventory-browse-items-font
+{
+	font-size:small;
+}
 
 /*...............order_management script OPEN..........................*/
 #div-form-order-create
