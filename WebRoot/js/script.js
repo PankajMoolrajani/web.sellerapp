@@ -2162,7 +2162,47 @@ function inventoryPageScript(domain_name){
 						error: function(request, error, data){
 							alert(error);				
 						}  						
-					});			
+					});
+					
+		//Testing-Zone-start
+					var json_inventory_marketplace_object = new Object();					
+					json_inventory_marketplace_object.id_inventory = inventory.id;						
+					var json_inventory_marketplace_text = JSON.stringify(json_inventory_marketplace_object);
+					$.ajax({
+						type: "POST",
+						url: "http://"+domain_name+":8080/rest.sellerapp/inventory_other/marketplaces/get/id",		
+						async: false,
+						contentType: "application/json; charset=utf-8",
+						data:json_inventory_marketplace_text,
+						dataType: "json",						
+						success: function(response){					
+							var inventory_marketplaces_detail = response["data"];	
+							createInventoryMarketplaces(inventory_marketplaces_detail);
+						},
+						error: function(request, error, data){
+							alert(error);				
+						}  						
+					});
+					//for update_inventory_marketplaces
+					function createInventoryMarketplaces(marketplaces_detail){
+						for(var i=0 ; i< marketplaces_detail.length ; i=i+1 ){
+							alert('hello');
+						}
+						var row_edit = "<tr class='active to-diplay'>" +
+						"<td id='td-form-invenotry-create-table-marketplace-"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-marketplace-name"+marketplaceCount+"' name='"+id_marketplace+"' class='form-control' value='"+mplaceName+"'/></td>" +
+						"<td id='td-form-invenotry-create-table-link"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-link"+marketplaceCount+"' class='form-control' value='"+marketplace_url+"'/></td>" +
+						"<td id='td-form-invenotry-create-table-sellprice"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-sellprice"+marketplaceCount+"' class='form-control val-empty'/></td>" +
+						"<td id='td-form-invenotry-create-table-stock"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-stock"+marketplaceCount+"' class='form-control val-empty'/></td>" +
+						"<td id='td-form-invenotry-create-table-status"+marketplaceCount+"'><select id='input-select-form-invenotry-create-table-status"+marketplaceCount+"' class='form-control selectpicker' ><option>Active</option><option>InActive</option></select></td>" +
+						"<td id='td-form-invenotry-create-table-health"+marketplaceCount+"'><div class='progress'><div class='progress-bar progress-bar-success progress-bar-striped"+marketplaceCount+"' role='progressbar'aria-valuenow='40' aria-valuemin='0' aria-valuemax='100' style='width:40%'>40% Complete (success)</div></div></td>" +
+						"<td id='td-form-invenotry-create-table-submit-edit"+marketplaceCount+"'>" +
+								"<div class='form-group col-md-6 col-sm-6 col-xs-6'><button type='button' id='input-btn-edit-form-inventory-create"+marketplaceCount+"' class='form-control btn btn-primary'>Edit</button></div>" +
+								"<div class='form-group col-md-6 col-sm-6 col-xs-6'><button type='button' id='input-btn-save-form-inventory-create"+marketplaceCount+"' class='form-control btn btn-primary class-inventory-marketplace-save'>Save</button></div></td>" +								
+				   "</tr>";		
+					}
+		//Testing-Zone-end
+					
+					
 					//$(checked_form_elements_id[3]).attr("name",'name_cat');
 					//alert($(checked_form_elements_id[3]).attr("name"));
 					//alert(inventory.id_category);
