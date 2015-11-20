@@ -2170,7 +2170,7 @@ function inventoryPageScript(domain_name){
 					var json_inventory_marketplace_text = JSON.stringify(json_inventory_marketplace_object);
 					$.ajax({
 						type: "POST",
-						url: "http://"+domain_name+":8080/rest.sellerapp/inventory_other/marketplaces/get/id",		
+						url: "http://"+domain_name+":8080/rest.sellerapp/inventory_other/inventory_marketplaces/get/id",		
 						async: false,
 						contentType: "application/json; charset=utf-8",
 						data:json_inventory_marketplace_text,
@@ -2185,20 +2185,44 @@ function inventoryPageScript(domain_name){
 					});
 					//for update_inventory_marketplaces
 					function createInventoryMarketplaces(marketplaces_detail){
+						var marketplace_list;
+						$.ajax({
+							type: "GET",
+							url: "http://"+domain_name+":8080/rest.sellerapp/inventory_other/marketplaces/get/all",		
+							async: false,
+							dataType: "json",			
+							success: function(responseText){	
+							//starts from here
+								marketplace_list = responseText["data"];																
+							},
+							error: function(request, error, data){
+								alert(error+" "+error+" "+data);				
+							}  						
+						});
+						var row_edit = "";
 						for(var i=0 ; i< marketplaces_detail.length ; i=i+1 ){
-							alert('hello');
-						}
-						var row_edit = "<tr class='active to-diplay'>" +
-						"<td id='td-form-invenotry-create-table-marketplace-"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-marketplace-name"+marketplaceCount+"' name='"+id_marketplace+"' class='form-control' value='"+mplaceName+"'/></td>" +
-						"<td id='td-form-invenotry-create-table-link"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-link"+marketplaceCount+"' class='form-control' value='"+marketplace_url+"'/></td>" +
-						"<td id='td-form-invenotry-create-table-sellprice"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-sellprice"+marketplaceCount+"' class='form-control val-empty'/></td>" +
-						"<td id='td-form-invenotry-create-table-stock"+marketplaceCount+"'><input type='text' id='input-text-form-invenotry-create-table-stock"+marketplaceCount+"' class='form-control val-empty'/></td>" +
-						"<td id='td-form-invenotry-create-table-status"+marketplaceCount+"'><select id='input-select-form-invenotry-create-table-status"+marketplaceCount+"' class='form-control selectpicker' ><option>Active</option><option>InActive</option></select></td>" +
-						"<td id='td-form-invenotry-create-table-health"+marketplaceCount+"'><div class='progress'><div class='progress-bar progress-bar-success progress-bar-striped"+marketplaceCount+"' role='progressbar'aria-valuenow='40' aria-valuemin='0' aria-valuemax='100' style='width:40%'>40% Complete (success)</div></div></td>" +
-						"<td id='td-form-invenotry-create-table-submit-edit"+marketplaceCount+"'>" +
-								"<div class='form-group col-md-6 col-sm-6 col-xs-6'><button type='button' id='input-btn-edit-form-inventory-create"+marketplaceCount+"' class='form-control btn btn-primary'>Edit</button></div>" +
-								"<div class='form-group col-md-6 col-sm-6 col-xs-6'><button type='button' id='input-btn-save-form-inventory-create"+marketplaceCount+"' class='form-control btn btn-primary class-inventory-marketplace-save'>Save</button></div></td>" +								
-				   "</tr>";		
+							row_edit = row_edit + "<tr class='active to-diplay'>" +
+							"<td id='td-form-invenotry-update-table-marketplace-"+i+"'><input type='text' id='input-text-form-invenotry-update-table-marketplace-name-"+i+"' name='"+marketplaces_detail[i].id_marketplace+"' class='form-control' value='"+marketplaces_detail[i].marketplace+"'/></td>" +
+							"<td id='td-form-invenotry-update-table-link-"+i+"'><input type='text' id='input-text-form-invenotry-update-table-link-"+i+"' class='form-control' value='"+marketplaces_detail[i].url_inventory_marketplace+"'/></td>" +
+							"<td id='td-form-invenotry-update-table-sellprice-"+i+"'><input type='text' id='input-text-form-invenotry-update-table-sellprice-"+i+"' value='"+marketplaces_detail[i].sell_price_inventory_marketplace+"' class='form-control val-empty'/></td>" +
+							"<td id='td-form-invenotry-update-table-stock-"+i+"'><input type='text' id='input-text-form-invenotry-update-table-stock-"+i+"' value='"+marketplaces_detail[i].stock_inventory_marketplace+"' class='form-control val-empty'/></td>" +
+							"<td id='td-form-invenotry-update-table-status-"+i+"'><select id='input-select-form-invenotry-update-table-status-"+i+"' class='form-control selectpicker' >" ;
+								if(marketplaces_detail[i].status_inventory_marketplace == "Active"){
+									row_edit = row_edit +"<option selected>Active</option><option>InActive</option></select></td>";
+								}
+								else{
+									row_edit = row_edit + "<option>Active</option><option selected>InActive</option></select></td>";
+								}
+																	
+								row_edit = row_edit + "<td id='td-form-invenotry-update-table-health-"+i+"'><div class='progress'><div class='progress-bar progress-bar-success progress-bar-striped-"+i+"' role='progressbar'aria-valuenow='40' aria-valuemin='0' aria-valuemax='100' style='width:40%'>40% Complete (success)</div></div></td>" +
+							"<td id='td-form-invenotry-update-table-submit-edit-"+i+"'>" +
+									"<div class='form-group col-md-6 col-sm-6 col-xs-6'><button type='button' id='input-btn-edit-form-inventory-update-"+i+"' class='form-control btn btn-primary'>Edit</button></div>" +
+									"<div class='form-group col-md-6 col-sm-6 col-xs-6'><button type='button' id='input-btn-save-form-inventory-update-"+i+"' class='form-control btn btn-primary class-inventory-marketplace-save'>Save</button></div></td>" +								
+							"</tr>";		
+						}		
+						$("#td-inventory-form-create-table-"+inventory.id+"-form div div #table-form-inventory-create-table #tbody-table-form-inventory-create").append(row_edit);				
+						selectPickerScript();	
+						
 					}
 		//Testing-Zone-end
 					
