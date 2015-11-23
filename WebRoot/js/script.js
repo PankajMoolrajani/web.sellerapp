@@ -1,6 +1,6 @@
 $(document).ready(function(){		
-	var domain_name = "localhost";
-	//var domain_name = "45.79.129.71";
+	//var domain_name = "localhost";
+	var domain_name = "45.79.129.71";
 	//var domainName = "dev.monoxor.com";
 		
 	/*................... Javascript for Index page ......................*/
@@ -2198,22 +2198,24 @@ function inventoryPageScript(domain_name){
 							error: function(request, error, data){
 								alert(error+" "+error+" "+data);				
 							}  						
-						});
-						alert(marketplace_list+"  ******")
+						});		
+						
+						var checked_inventory_marketplace_js_id_obj;
+						var checked_inventory_marketplace_js_id_array = [];
 						var row_edit = "";
 						for(var i=0 ; i< inventory_marketplaces_detail.length ; i=i+1 ){
+							checked_inventory_marketplace_js_id_obj = new Object()
+							
 							row_edit = row_edit + "<tr class='active to-diplay'>"+							
-							"<td id='td-form-invenotry-update-table-marketplace-"+i+"'><select id='input-select-form-invenotry-update-table-marketplace-name-"+i+"' class='form-control selectpicker'>";
-							for(var j=0 ; j< marketplace_list.length ; j=j+1 ){
-								alert('marketplace_list j'+j);
-								if(inventory_marketplaces_detail.id_marketplace == marketplaces_list.id_marketplace){
+							"<td id='td-form-invenotry-update-table-marketplace-"+i+"'><select id='input-select-form-invenotry-update-table-marketplace-name-"+i+"' class='form-control selectpicker'>";							
+							for(var j=0 ; j< marketplace_list.length ; j=j+1 ){																
+								if(inventory_marketplaces_detail[i].id_marketplace == marketplace_list[j].id_marketplace){
 									
-									row_edit = row_edit + "<option value='"+marketplace_list.id_marketplace+"' selected>'"+marketplace_list.name+"'</option>";
+									row_edit = row_edit + "<option value='"+marketplace_list[j].id_marketplace+"' selected>"+marketplace_list[j].name+"</option>";
 								}else{
-									row_edit = row_edit + "<option value='"+marketplace_list.id_marketplace+"'>'"+marketplace_list.name+"'</option>";
+									row_edit = row_edit + "<option value='"+marketplace_list[j].id_marketplace+"'>"+marketplace_list[j].name+"</option>";
 								}
-							}
-							alert(row_edit);
+							}							
 							row_edit = row_edit + "</select></td>" +
 							"<td id='td-form-invenotry-update-table-link-"+i+"'><input type='text' id='input-text-form-invenotry-update-table-link-"+i+"' class='form-control' value='"+inventory_marketplaces_detail[i].url_inventory_marketplace+"'/></td>" +
 							"<td id='td-form-invenotry-update-table-sellprice-"+i+"'><input type='text' id='input-text-form-invenotry-update-table-sellprice-"+i+"' value='"+inventory_marketplaces_detail[i].sell_price_inventory_marketplace+"' class='form-control val-empty'/></td>" +
@@ -2230,26 +2232,33 @@ function inventoryPageScript(domain_name){
 							"<td id='td-form-invenotry-update-table-submit-edit-"+i+"'>" +
 									"<div class='form-group col-md-6 col-sm-6 col-xs-6'><button type='button' id='input-btn-edit-form-inventory-update-"+i+"' class='form-control btn btn-primary'>Edit</button></div>" +
 									"<div class='form-group col-md-6 col-sm-6 col-xs-6'><button type='button' id='input-btn-save-form-inventory-update-"+i+"' class='form-control btn btn-primary class-inventory-marketplace-save'>Save</button></div></td>" +								
-							"</tr>";		
+							"</tr>";	
+								checked_inventory_marketplace_js_id_obj.name_marketplace = "#"+form_id+" #div-form-inventory-create-table div #table-form-inventory-create-table #tbody-table-form-inventory-create tr #td-form-invenotry-update-table-marketplace-"+i+" #input-select-form-invenotry-update-table-marketplace-name-"+i;
+								checked_inventory_marketplace_js_id_obj.url_inventory_marketplace = "#"+form_id+" #div-form-inventory-create-table div #table-form-inventory-create-table #tbody-table-form-inventory-create tr #td-form-invenotry-update-table-link-"+i+" #input-text-form-invenotry-update-table-link-"+i; 
+								checked_inventory_marketplace_js_id_obj.sell_price = "#"+form_id+" #div-form-inventory-create-table div #table-form-inventory-create-table #tbody-table-form-inventory-create tr #td-form-invenotry-update-table-sellprice-"+i+" #input-text-form-invenotry-update-table-sellprice-"+i;
+								checked_inventory_marketplace_js_id_obj.stock_price = "#"+form_id+" #div-form-inventory-create-table div #table-form-inventory-create-table #tbody-table-form-inventory-create tr #td-form-invenotry-update-table-stock-"+i+" #input-text-form-invenotry-update-table-stock-"+i;
+								checked_inventory_marketplace_js_id_obj.status = "#"+form_id+" #div-form-inventory-create-table div #table-form-inventory-create-table #tbody-table-form-inventory-create tr #td-form-invenotry-update-table-status-"+i+" #input-select-form-invenotry-update-table-status-"+i;
+								
+								checked_inventory_marketplace_js_id_array.push(checked_inventory_marketplace_js_id_obj);
 						}	
-						alert(row_edit);
+												
 						$("#td-inventory-form-create-table-"+inventory.id+"-form div div #table-form-inventory-create-table #tbody-table-form-inventory-create").append(row_edit);				
 						selectPickerScript();	
+				//making marketplaces disable							
+						for(var i=0 ; i< inventory_marketplaces_detail.length ; i=i+1 ){
+							$(checked_inventory_marketplace_js_id_array[i].name_marketplace).prop("disabled",true);
+							$(checked_inventory_marketplace_js_id_array[i].name_marketplace).selectpicker('refresh');
+							$(checked_inventory_marketplace_js_id_array[i].url_inventory_marketplace).prop("disabled",true);
+							$(checked_inventory_marketplace_js_id_array[i].sell_price).prop("disabled",true);
+							$(checked_inventory_marketplace_js_id_array[i].stock_price).prop("disabled",true);
+							$(checked_inventory_marketplace_js_id_array[i].status).prop("disabled",true);
+							$(checked_inventory_marketplace_js_id_array[i].status).selectpicker('refresh');
+						}
 						
+					// push ids of inventory marketplaces into arrays of ids						
 					}
-		//Testing-Zone-end
-					
-					
-					//$(checked_form_elements_id[3]).attr("name",'name_cat');
-					//alert($(checked_form_elements_id[3]).attr("name"));
-					//alert(inventory.id_category);
-					//$(checked_form_elements_id[3]).val("testing_inv_category");
-					$(checked_form_elements_id[0]).prop("disabled",true).val(inventory.name);					
-					//$(checked_form_elements_id[1]).prop("disabled",true).val(inventory.name_last);
-					
-					//need to make title attribut blank to set a value to select menu
-					//$(checked_form_elements_id[2]).attr("title","");										
-					//$(checked_form_elements_id[2]).prop("disabled",true).val(responseText["userCategoryDetails"].id);
+		//Testing-Zone-end														
+					$(checked_form_elements_id[0]).prop("disabled",true).val(inventory.name);										
 					$(checked_form_elements_id[2]).prop("disabled",true).val(inventory.sku);
 					$(checked_form_elements_id[5]).prop("disabled",true).val(inventory.available);
 					$(checked_form_elements_id[6]).prop("disabled",true).val(inventory.outgoing);
