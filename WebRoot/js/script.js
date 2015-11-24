@@ -310,6 +310,17 @@ function editInventoryFormDetails(domain_name){
 	
 	$(checkedFormEditSaveBtnId[1]).prop('disabled', false);
 	$(checked_form_elements_id[2]).selectpicker('refresh');		
+	
+	var checked_form_elements_marketplaces_ids_array = JSON.parse(localStorage["checked_inventory_form_elements_marketplce_id"]);
+	for(var i=0 ; i<checked_form_elements_marketplaces_ids_array.length ; i=i+1){
+		$(checked_form_elements_marketplaces_ids_array[i].name_marketplace).prop("disabled",false);
+		$(checked_form_elements_marketplaces_ids_array[i].name_marketplace).selectpicker('refresh');
+		$(checked_form_elements_marketplaces_ids_array[i].url_inventory_marketplace).prop("disabled",false);
+		$(checked_form_elements_marketplaces_ids_array[i].sell_price).prop("disabled",false);
+		$(checked_form_elements_marketplaces_ids_array[i].stock_price).prop("disabled",false);
+		$(checked_form_elements_marketplaces_ids_array[i].status).prop("disabled",false);
+		$(checked_form_elements_marketplaces_ids_array[i].status).selectpicker('refresh');
+	}
 }
 function editOrderFormDetails(domain_name){	
 }
@@ -2244,6 +2255,8 @@ function inventoryPageScript(domain_name){
 												
 						$("#td-inventory-form-create-table-"+inventory.id+"-form div div #table-form-inventory-create-table #tbody-table-form-inventory-create").append(row_edit);				
 						selectPickerScript();	
+						
+						localStorage["checked_inventory_form_elements_marketplce_id"] = JSON.stringify(checked_inventory_marketplace_js_id_array);
 				//making marketplaces disable							
 						for(var i=0 ; i< inventory_marketplaces_detail.length ; i=i+1 ){
 							$(checked_inventory_marketplace_js_id_array[i].name_marketplace).prop("disabled",true);
